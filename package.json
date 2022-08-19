@@ -1,0 +1,23 @@
+{
+    "name": "senselogic-gist",
+    "description": "Core functions library.",
+    "version": "0.1.0",
+    "main": "src/index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/senselogic/GIST.git"
+    },
+    "keywords": [
+        "gist"
+    ],
+    "author": "Eric Pelzer <ecstatic.coder@gmail.com>",
+    "files": [
+        "src/",
+        "README.md"
+    ],
+    "license": "LGPL-3.0-only",
+    "bugs": {
+        "url": "https://github.com/senselogic/GIST/issues"
+    },
+    "homepage": "https://github.com/senselogic/GIST"
+}
