@@ -1,6 +1,6 @@
 ![](https://github.com/senselogic/GIST/blob/master/LOGO/gist.png)
 
-# Eureka
+# Gist
 
 Core functions library.
 
