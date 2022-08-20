@@ -7,6 +7,11 @@ export const NullDate = {
     Month : 1,
     Day : 1
     };
+export const NullTime = {
+    Hour : 0,
+    Minute : 0,
+    Second : 0.0
+    };
 export const NullDateTime = {
     Year : 1000,
     Month : 1,
@@ -18,7 +23,7 @@ export const NullDateTime = {
 
 // -- FUNCTIONS
 
-export function GetQuotedName(
+export function GetEncodedName(
     name
     )
 {
@@ -27,7 +32,7 @@ export function GetQuotedName(
 
 // ~~
 
-export function GetQuotedValue(
+export function GetEncodedText(
     value
     )
 {
@@ -72,7 +77,7 @@ export function GetTuid(
     uuid
     )
 {
-    return GetEncodedBase64( uuid.split( "-" ).join( "" ) ).split( "=" ).join( "" );
+    return GetEncodedBase64( uuid.replaceAll( "-", "" ) ).replaceAll( "=", "" );
 }
 
 // ~~
@@ -104,10 +109,7 @@ export function GetMillisecondTimestamp(
 export function GetLocalDate(
     )
 {
-    var
-        date;
-
-    date = new Date();
+    let date = new Date();
 
     return {
         Year : date.getFullYear(),
@@ -118,13 +120,24 @@ export function GetLocalDate(
 
 // ~~
 
+export function GetLocalTime(
+    )
+{
+    let date = new Date();
+
+    return {
+        Hour : date.getHours(),
+        Minute : date.getMinutes(),
+        Second : date.getSeconds()
+        };
+}
+
+// ~~
+
 export function GetLocalDateTime(
     )
 {
-    var
-        date;
-
-    date = new Date();
+    let date = new Date();
 
     return {
         Year : date.getFullYear(),
@@ -141,10 +154,7 @@ export function GetLocalDateTime(
 export function GetUniversalDate(
     )
 {
-    var
-        date;
-
-    date = new Date();
+    let date = new Date();
 
     return {
         Year : date.getUTCFullYear(),
@@ -155,13 +165,24 @@ export function GetUniversalDate(
 
 // ~~
 
+export function GetUniversalTime(
+    )
+{
+    let date = new Date();
+
+    return {
+        Hour : date.getUTCHours(),
+        Minute : date.getUTCMinutes(),
+        Second : date.getUTCSeconds()
+        };
+}
+
+// ~~
+
 export function GetUniversalDateTime(
     )
 {
-    var
-        date;
-
-    date = new Date();
+    let date = new Date();
 
     return {
         Year : date.getUTCFullYear(),
@@ -190,21 +211,36 @@ export function GetEncodedDate(
 
 // ~~
 
-export function GetEncodedDateTime(
-    date
+export function GetEncodedTime(
+    time
     )
 {
     return (
-        GetLeftPaddedText( date.Year.toString(), 4, "0" )
+        GetLeftPaddedText( time.Hour.toString(), 2, "0" )
+        + "-"
+        + GetLeftPaddedText( time.Minute.toString(), 2, "0" )
+        + "-"
+        + GetLeftPaddedText( time.Second.toString(), 2, "0" )
+        );
+}
+
+// ~~
+
+export function GetEncodedDateTime(
+    date_time
+    )
+{
+    return (
+        GetLeftPaddedText( date_time.Year.toString(), 4, "0" )
         + ":"
-        + GetLeftPaddedText( date.Month.toString(), 2, "0" )
+        + GetLeftPaddedText( date_time.Month.toString(), 2, "0" )
         + ":"
-        + GetLeftPaddedText( date.Day.toString(), 2, "0" )
+        + GetLeftPaddedText( date_time.Day.toString(), 2, "0" )
         + " "
-        + GetLeftPaddedText( date.Hour.toString(), 2, "0" )
+        + GetLeftPaddedText( date_time.Hour.toString(), 2, "0" )
         + "-"
-        + GetLeftPaddedText( date.Minute.toString(), 2, "0" )
+        + GetLeftPaddedText( date_time.Minute.toString(), 2, "0" )
         + "-"
-        + GetLeftPaddedText( date.Second.toString(), 2, "0" )
+        + GetLeftPaddedText( date_time.Second.toString(), 2, "0" )
         );
 }

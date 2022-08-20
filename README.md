@@ -2,7 +2,7 @@
 
 # Gist
 
-Core functions library.
+Base library.
 
 ## Version
 
