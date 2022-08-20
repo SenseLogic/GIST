@@ -23,6 +23,77 @@ export const NullDateTime = {
 
 // -- FUNCTIONS
 
+export function RemovePrefix(
+    text,
+    prefix
+    )
+{
+    if ( prefix !== ""
+         && text.HasPrefix( prefix ) )
+    {
+        return text.substring( prefix.length );
+    }
+    else
+    {
+        return text;
+    }
+}
+
+// ~~
+
+export function RemoveSuffix(
+    text,
+    suffix
+    )
+{
+    if ( suffix !== ""
+         && text.HasSuffix( suffix ) )
+    {
+        return text.substring( 0, text.length - suffix.length );
+    }
+    else
+    {
+        return text;
+    }
+}
+
+// ~~
+
+export function GetLeftPaddedText(
+    text,
+    minimum_character_count,
+    padding_character = " "
+    )
+{
+    if ( text.length < minimum_character_count )
+    {
+        return padding_character.repeat( minimum_character_count - text.length ) + text;
+    }
+    else
+    {
+        return text;
+    }
+}
+
+// ~~
+
+export function GetRightPaddedText(
+    text,
+    minimum_character_count,
+    padding_character = " "
+    )
+{
+    if ( text.length < minimum_character_count )
+    {
+        return text + padding_character.repeat( minimum_character_count - text.length );
+    }
+    else
+    {
+        return text;
+    }
+}
+
+
 export function GetEncodedName(
     name
     )
