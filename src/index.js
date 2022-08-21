@@ -178,97 +178,122 @@ export function GetMillisecondTimestamp(
 // ~~
 
 export function GetLocalDate(
+    system_date
     )
 {
-    let date = new Date();
+    if ( system_date === undefined )
+    {
+        system_date = new Date();
+    }
 
     return {
-        Year : date.getFullYear(),
-        Month : date.getMonth(),
-        Day : date.getDay()
+        Year : system_date.getFullYear(),
+        Month : system_date.getMonth(),
+        Day : system_date.getDay()
         };
 }
 
 // ~~
 
 export function GetLocalTime(
+    system_date
     )
 {
-    let date = new Date();
+    if ( system_date === undefined )
+    {
+        system_date = new Date();
+    }
 
     return {
-        Hour : date.getHours(),
-        Minute : date.getMinutes(),
-        Second : date.getSeconds()
+        Hour : system_date.getHours(),
+        Minute : system_date.getMinutes(),
+        Second : system_date.getSeconds()
         };
 }
 
 // ~~
 
 export function GetLocalDateTime(
+    system_date
     )
 {
-    let date = new Date();
+    if ( system_date === undefined )
+    {
+        system_date = new Date();
+    }
 
     return {
-        Year : date.getFullYear(),
-        Month : date.getMonth(),
-        Day : date.getDay(),
-        Hour : date.getHours(),
-        Minute : date.getMinutes(),
-        Second : date.getSeconds()
+        Year : system_date.getFullYear(),
+        Month : system_date.getMonth(),
+        Day : system_date.getDay(),
+        Hour : system_date.getHours(),
+        Minute : system_date.getMinutes(),
+        Second : system_date.getSeconds()
         };
 }
 
 // ~~
 
 export function GetUniversalDate(
+    system_date
     )
 {
-    let date = new Date();
+    if ( system_date === undefined )
+    {
+        system_date = new Date();
+    }
 
     return {
-        Year : date.getUTCFullYear(),
-        Month : date.getUTCMonth(),
-        Day : date.getUTCDay()
+        Year : system_date.getUTCFullYear(),
+        Month : system_date.getUTCMonth(),
+        Day : system_date.getUTCDay()
         };
 }
 
 // ~~
 
 export function GetUniversalTime(
+    system_date
     )
 {
-    let date = new Date();
+    if ( system_date === undefined )
+    {
+        system_date = new Date();
+    }
 
     return {
-        Hour : date.getUTCHours(),
-        Minute : date.getUTCMinutes(),
-        Second : date.getUTCSeconds()
+        Hour : system_date.getUTCHours(),
+        Minute : system_date.getUTCMinutes(),
+        Second : system_date.getUTCSeconds()
         };
 }
 
 // ~~
 
 export function GetUniversalDateTime(
+    system_date
     )
 {
-    let date = new Date();
+    if ( system_date === undefined )
+    {
+        system_date = new Date();
+    }
 
     return {
-        Year : date.getUTCFullYear(),
-        Month : date.getUTCMonth(),
-        Day : date.getUTCDay(),
-        Hour : date.getUTCHours(),
-        Minute : date.getUTCMinutes(),
-        Second : date.getUTCSeconds()
+        Year : system_date.getUTCFullYear(),
+        Month : system_date.getUTCMonth(),
+        Day : system_date.getUTCDay(),
+        Hour : system_date.getUTCHours(),
+        Minute : system_date.getUTCMinutes(),
+        Second : system_date.getUTCSeconds()
         };
 }
 
 // ~~
 
 export function GetEncodedDate(
-    date
+    date,
+    suffix = ""
     )
 {
     return (
@@ -277,13 +302,15 @@ export function GetEncodedDate(
         + GetLeftPaddedText( date.Month.toString(), 2, "0" )
         + ":"
         + GetLeftPaddedText( date.Day.toString(), 2, "0" )
+        + suffix
         );
 }
 
 // ~~
 
 export function GetEncodedTime(
-    time
+    time,
+    suffix = ""
     )
 {
     return (
@@ -292,26 +319,30 @@ export function GetEncodedTime(
         + GetLeftPaddedText( time.Minute.toString(), 2, "0" )
         + "-"
         + GetLeftPaddedText( time.Second.toString(), 2, "0" )
+        + suffix
         );
 }
 
 // ~~
 
 export function GetEncodedDateTime(
-    date_time
+    date_time,
+    infix = " ",
+    suffix = ""
     )
 {
     return (
         GetLeftPaddedText( date_time.Year.toString(), 4, "0" )
-        + ":"
+        + "-"
         + GetLeftPaddedText( date_time.Month.toString(), 2, "0" )
-        + ":"
+        + "-"
         + GetLeftPaddedText( date_time.Day.toString(), 2, "0" )
-        + " "
+        + infix
         + GetLeftPaddedText( date_time.Hour.toString(), 2, "0" )
-        + "-"
+        + ":"
         + GetLeftPaddedText( date_time.Minute.toString(), 2, "0" )
-        + "-"
+        + ":"
         + GetLeftPaddedText( date_time.Second.toString(), 2, "0" )
+        + suffix
         );
 }
