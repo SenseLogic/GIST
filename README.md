@@ -2,7 +2,7 @@
 
 # Gist
 
-Base library.
+Reusable base functions.
 
 ## Version
 

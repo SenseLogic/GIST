@@ -1,23 +1,23 @@
 {
     "name": "senselogic-gist",
-    "description": "Base library.",
-    "version": "0.1.3",
-    "main": "src/index.js",
+    "description": "Reusable base functions.",
+    "version": "0.1.4",
+    "author": "Eric Pelzer <ecstatic.coder@gmail.com>",
+    "license": "LGPL-3.0-only",
+    "keywords": [
+        "gist"
+    ],
+    "homepage": "https://github.com/senselogic/GIST",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/senselogic/GIST.git"
     },
-    "keywords": [
-        "gist"
-    ],
-    "author": "Eric Pelzer <ecstatic.coder@gmail.com>",
-    "files": [
-        "src/",
-        "README.md"
-    ],
-    "license": "LGPL-3.0-only",
     "bugs": {
         "url": "https://github.com/senselogic/GIST/issues"
     },
-    "homepage": "https://github.com/senselogic/GIST"
+    "main": "src/index.js",
+    "files": [
+        "src/",
+        "README.md"
+    ]
 }
