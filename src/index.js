@@ -112,33 +112,52 @@ export function GetEncodedText(
 
 // ~~
 
-export function GetEncodedBase64(
-    text
+export function GetBase64FromHexadecimal(
+    hexadecimal_buffer
     )
 {
     try
     {
-        return btoa( text );
+        let buffer = "";
+
+        for ( let byte_index = 0;
+              byte_index < hexadecimal_buffer.length;
+              byte_index += 2 )
+        {
+            buffer += String.fromCharCode( parseInt( hexadecimal_buffer.slice( byte_index, byte_index + 2 ), 16 ) );
+        }
+
+        return btoa( buffer );
     }
     catch ( error )
     {
-        return Buffer.from( text, "binary" ).toString( "base64" );
+        return Buffer.from( hexadecimal_buffer, "hex" ).toString( "base64" );
     }
 }
 
 // ~~
 
-export function GetDecodedBase64(
-    text
+export function GetHexadecimalFromBase64(
+    base_64_buffer
     )
 {
     try
     {
-        return atob( text );
+        let buffer = atob( base_64_buffer );
+        let hexadecimal_buffer = "";
+
+        for ( let character_index = 0;
+              character_index < buffer.length;
+              ++character_index )
+        {
+            hexadecimal_buffer += ( "000" + this.charCodeAt( character_index ).toString( 16 ) ).slice( -4 );
+        }
+
+        return hexadecimal_buffer;
     }
     catch ( error )
     {
-        return Buffer.from( text , 'base64').toString( "binary" );
+        return Buffer.from( base_64_buffer , 'base64' ).toString( "hex" );
     }
 }
 
