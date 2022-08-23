@@ -103,7 +103,7 @@ export function GetEncodedName(
 
 // ~~
 
-export function GetEncodedText(
+export function GetQuotedText(
     value
     )
 {
@@ -167,20 +167,17 @@ export function GetTuid(
     uuid
     )
 {
-    return GetEncodedBase64( uuid.replaceAll( "-", "" ) ).replaceAll( "=", "" );
+    if ( uuid === undefined )
+    {
+        uuid = crypto.randomUUID();
+    }
+
+    return GetBase64FromHexadecimal( uuid.replaceAll( "-", "" ) ).replaceAll( "=", "" );
 }
 
 // ~~
 
-export function MakeTuid(
-    )
-{
-    return GetTuid( crypto.randomUUID() );
-}
-
-// ~~
-
-export function MakeUuid(
+export function GetUuid(
     )
 {
     return crypto.randomUUID();
@@ -310,7 +307,7 @@ export function GetUniversalDateTime(
 
 // ~~
 
-export function GetEncodedDate(
+export function GetDateText(
     date,
     suffix = ""
     )
@@ -327,7 +324,7 @@ export function GetEncodedDate(
 
 // ~~
 
-export function GetEncodedTime(
+export function GetTimeText(
     time,
     suffix = ""
     )
@@ -344,7 +341,7 @@ export function GetEncodedTime(
 
 // ~~
 
-export function GetEncodedDateTime(
+export function GetDateTimeText(
     date_time,
     infix = " ",
     suffix = ""
