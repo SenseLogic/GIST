@@ -1,13 +1,9 @@
 {
     "name": "senselogic-gist",
+    "version": "0.1.8",
     "description": "Reusable base functions.",
-    "version": "0.1.7",
-    "author": "Eric Pelzer <ecstatic.coder@gmail.com>",
     "license": "LGPL-3.0-only",
-    "keywords": [
-        "gist"
-    ],
-    "homepage": "https://github.com/senselogic/GIST",
+    "author": "Eric Pelzer <ecstatic.coder@gmail.com>",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/senselogic/GIST.git"
@@ -15,9 +11,14 @@
     "bugs": {
         "url": "https://github.com/senselogic/GIST/issues"
     },
+    "homepage": "https://github.com/senselogic/GIST",
+    "type": "module",
     "main": "src/index.js",
     "files": [
         "src/",
         "README.md"
+    ],
+    "keywords": [
+        "gist"
     ]
 }
