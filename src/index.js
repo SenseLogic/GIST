@@ -1,7 +1,7 @@
 // -- CONSTANTS
 
-export const nullTuid = "AAAAAAAAAAAAAAAAAAAAAA";
-export const nullUuid = "00000000-0000-0000-0000-000000000000";
+export const nullTuid = 'AAAAAAAAAAAAAAAAAAAAAA';
+export const nullUuid = '00000000-0000-0000-0000-000000000000';
 export const NullDate = {
     year : 1000,
     month : 1,
@@ -28,7 +28,7 @@ export function removePrefix(
     prefix
     )
 {
-    if ( prefix !== ""
+    if ( prefix !== ''
          && text.startsWith( prefix ) )
     {
         return text.substring( prefix.length );
@@ -46,7 +46,7 @@ export function removeSuffix(
     suffix
     )
 {
-    if ( suffix !== ""
+    if ( suffix !== ''
          && text.endsWith( suffix ) )
     {
         return text.substring( 0, text.length - suffix.length );
@@ -62,7 +62,7 @@ export function removeSuffix(
 export function getLeftPaddedText(
     text,
     minimumCharacterCount,
-    paddingCharacter = " "
+    paddingCharacter = ' '
     )
 {
     if ( text.length < minimumCharacterCount )
@@ -80,7 +80,7 @@ export function getLeftPaddedText(
 export function getRightPaddedText(
     text,
     minimumCharacterCount,
-    paddingCharacter = " "
+    paddingCharacter = ' '
     )
 {
     if ( text.length < minimumCharacterCount )
@@ -98,7 +98,7 @@ export function getEncodedName(
     name
     )
 {
-    return "`" + name + "`";
+    return '`' + name + '`';
 }
 
 // ~~
@@ -107,7 +107,7 @@ export function getQuotedText(
     value
     )
 {
-    return "\"" + value.toString().replaceAll( "\"", "\\\"" ) + "\"";
+    return '"' + value.toString().replaceAll( '"', '\\"' ) + '"';
 }
 
 // ~~
@@ -118,7 +118,7 @@ export function getBase64FromHexadecimal(
 {
     try
     {
-        let buffer = "";
+        let buffer = '';
 
         for ( let byteIndex = 0;
               byteIndex < hexadecimalBuffer.length;
@@ -131,7 +131,7 @@ export function getBase64FromHexadecimal(
     }
     catch ( error )
     {
-        return Buffer.from( hexadecimalBuffer, "hex" ).toString( "base64" );
+        return Buffer.from( hexadecimalBuffer, 'hex' ).toString( 'base64' );
     }
 }
 
@@ -144,20 +144,20 @@ export function getHexadecimalFromBase64(
     try
     {
         let buffer = atob( base64Buffer );
-        let hexadecimalBuffer = "";
+        let hexadecimalBuffer = '';
 
         for ( let characterIndex = 0;
               characterIndex < buffer.length;
               ++characterIndex )
         {
-            hexadecimalBuffer += ( "000" + this.charCodeAt( characterIndex ).toString( 16 ) ).slice( -4 );
+            hexadecimalBuffer += ( '000' + this.charCodeAt( characterIndex ).toString( 16 ) ).slice( -4 );
         }
 
         return hexadecimalBuffer;
     }
     catch ( error )
     {
-        return Buffer.from( base64Buffer , 'base64' ).toString( "hex" );
+        return Buffer.from( base64Buffer , 'base64' ).toString( 'hex' );
     }
 }
 
@@ -172,7 +172,7 @@ export function getTuid(
         uuid = crypto.randomUUID();
     }
 
-    return getBase64FromHexadecimal( uuid.replaceAll( "-", "" ) ).replaceAll( "=", "" );
+    return getBase64FromHexadecimal( uuid.replaceAll( '-', '' ) ).replaceAll( '=', '' );
 }
 
 // ~~
@@ -309,15 +309,15 @@ export function getUniversalDateTime(
 
 export function getDateText(
     date,
-    suffix = ""
+    suffix = ''
     )
 {
     return (
-        getLeftPaddedText( date.year.toString(), 4, "0" )
-        + ":"
-        + getLeftPaddedText( date.month.toString(), 2, "0" )
-        + ":"
-        + getLeftPaddedText( date.day.toString(), 2, "0" )
+        getLeftPaddedText( date.year.toString(), 4, '0' )
+        + ':'
+        + getLeftPaddedText( date.month.toString(), 2, '0' )
+        + ':'
+        + getLeftPaddedText( date.day.toString(), 2, '0' )
         + suffix
         );
 }
@@ -326,15 +326,15 @@ export function getDateText(
 
 export function getTimeText(
     time,
-    suffix = ""
+    suffix = ''
     )
 {
     return (
-        getLeftPaddedText( time.hour.toString(), 2, "0" )
-        + "-"
-        + getLeftPaddedText( time.minute.toString(), 2, "0" )
-        + "-"
-        + getLeftPaddedText( time.second.toString(), 2, "0" )
+        getLeftPaddedText( time.hour.toString(), 2, '0' )
+        + '-'
+        + getLeftPaddedText( time.minute.toString(), 2, '0' )
+        + '-'
+        + getLeftPaddedText( time.second.toString(), 2, '0' )
         + suffix
         );
 }
@@ -343,22 +343,22 @@ export function getTimeText(
 
 export function getDateTimeText(
     dateTime,
-    infix = " ",
-    suffix = ""
+    infix = ' ',
+    suffix = ''
     )
 {
     return (
-        getLeftPaddedText( dateTime.year.toString(), 4, "0" )
-        + "-"
-        + getLeftPaddedText( dateTime.month.toString(), 2, "0" )
-        + "-"
-        + getLeftPaddedText( dateTime.day.toString(), 2, "0" )
+        getLeftPaddedText( dateTime.year.toString(), 4, '0' )
+        + '-'
+        + getLeftPaddedText( dateTime.month.toString(), 2, '0' )
+        + '-'
+        + getLeftPaddedText( dateTime.day.toString(), 2, '0' )
         + infix
-        + getLeftPaddedText( dateTime.hour.toString(), 2, "0" )
-        + ":"
-        + getLeftPaddedText( dateTime.minute.toString(), 2, "0" )
-        + ":"
-        + getLeftPaddedText( dateTime.second.toString(), 2, "0" )
+        + getLeftPaddedText( dateTime.hour.toString(), 2, '0' )
+        + ':'
+        + getLeftPaddedText( dateTime.minute.toString(), 2, '0' )
+        + ':'
+        + getLeftPaddedText( dateTime.second.toString(), 2, '0' )
         + suffix
         );
 }
