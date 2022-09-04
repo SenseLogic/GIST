@@ -1,29 +1,29 @@
 // -- CONSTANTS
 
-export const NullTuid = "AAAAAAAAAAAAAAAAAAAAAA";
-export const NullUuid = "00000000-0000-0000-0000-000000000000";
+export const nullTuid = "AAAAAAAAAAAAAAAAAAAAAA";
+export const nullUuid = "00000000-0000-0000-0000-000000000000";
 export const NullDate = {
-    Year : 1000,
-    Month : 1,
-    Day : 1
+    year : 1000,
+    month : 1,
+    day : 1
     };
-export const NullTime = {
-    Hour : 0,
-    Minute : 0,
-    Second : 0.0
+export const nullTime = {
+    hour : 0,
+    minute : 0,
+    second : 0.0
     };
-export const NullDateTime = {
-    Year : 1000,
-    Month : 1,
-    Day : 1,
-    Hour : 0,
-    Minute : 0,
-    Second : 0.0
+export const nullDateTime = {
+    year : 1000,
+    month : 1,
+    day : 1,
+    hour : 0,
+    minute : 0,
+    second : 0.0
     };
 
 // -- FUNCTIONS
 
-export function RemovePrefix(
+export function removePrefix(
     text,
     prefix
     )
@@ -41,7 +41,7 @@ export function RemovePrefix(
 
 // ~~
 
-export function RemoveSuffix(
+export function removeSuffix(
     text,
     suffix
     )
@@ -59,15 +59,15 @@ export function RemoveSuffix(
 
 // ~~
 
-export function GetLeftPaddedText(
+export function getLeftPaddedText(
     text,
-    minimum_character_count,
-    padding_character = " "
+    minimumCharacterCount,
+    paddingCharacter = " "
     )
 {
-    if ( text.length < minimum_character_count )
+    if ( text.length < minimumCharacterCount )
     {
-        return padding_character.repeat( minimum_character_count - text.length ) + text;
+        return paddingCharacter.repeat( minimumCharacterCount - text.length ) + text;
     }
     else
     {
@@ -77,15 +77,15 @@ export function GetLeftPaddedText(
 
 // ~~
 
-export function GetRightPaddedText(
+export function getRightPaddedText(
     text,
-    minimum_character_count,
-    padding_character = " "
+    minimumCharacterCount,
+    paddingCharacter = " "
     )
 {
-    if ( text.length < minimum_character_count )
+    if ( text.length < minimumCharacterCount )
     {
-        return text + padding_character.repeat( minimum_character_count - text.length );
+        return text + paddingCharacter.repeat( minimumCharacterCount - text.length );
     }
     else
     {
@@ -94,7 +94,7 @@ export function GetRightPaddedText(
 }
 
 
-export function GetEncodedName(
+export function getEncodedName(
     name
     )
 {
@@ -103,7 +103,7 @@ export function GetEncodedName(
 
 // ~~
 
-export function GetQuotedText(
+export function getQuotedText(
     value
     )
 {
@@ -112,8 +112,8 @@ export function GetQuotedText(
 
 // ~~
 
-export function GetBase64FromHexadecimal(
-    hexadecimal_buffer
+export function getBase64FromHexadecimal(
+    hexadecimalBuffer
     )
 {
     try
@@ -121,49 +121,49 @@ export function GetBase64FromHexadecimal(
         let buffer = "";
 
         for ( let byte_index = 0;
-              byte_index < hexadecimal_buffer.length;
+              byte_index < hexadecimalBuffer.length;
               byte_index += 2 )
         {
-            buffer += String.fromCharCode( parseInt( hexadecimal_buffer.slice( byte_index, byte_index + 2 ), 16 ) );
+            buffer += String.fromCharCode( parseInt( hexadecimalBuffer.slice( byte_index, byte_index + 2 ), 16 ) );
         }
 
         return btoa( buffer );
     }
     catch ( error )
     {
-        return Buffer.from( hexadecimal_buffer, "hex" ).toString( "base64" );
+        return Buffer.from( hexadecimalBuffer, "hex" ).toString( "base64" );
     }
 }
 
 // ~~
 
-export function GetHexadecimalFromBase64(
-    base_64_buffer
+export function getHexadecimalFromBase64(
+    base64Buffer
     )
 {
     try
     {
-        let buffer = atob( base_64_buffer );
-        let hexadecimal_buffer = "";
+        let buffer = atob( base64Buffer );
+        let hexadecimalBuffer = "";
 
-        for ( let character_index = 0;
-              character_index < buffer.length;
-              ++character_index )
+        for ( let characterIndex = 0;
+              characterIndex < buffer.length;
+              ++characterIndex )
         {
-            hexadecimal_buffer += ( "000" + this.charCodeAt( character_index ).toString( 16 ) ).slice( -4 );
+            hexadecimalBuffer += ( "000" + this.charCodeAt( characterIndex ).toString( 16 ) ).slice( -4 );
         }
 
-        return hexadecimal_buffer;
+        return hexadecimalBuffer;
     }
     catch ( error )
     {
-        return Buffer.from( base_64_buffer , 'base64' ).toString( "hex" );
+        return Buffer.from( base64Buffer , 'base64' ).toString( "hex" );
     }
 }
 
 // ~~
 
-export function GetTuid(
+export function getTuid(
     uuid
     )
 {
@@ -172,12 +172,12 @@ export function GetTuid(
         uuid = crypto.randomUUID();
     }
 
-    return GetBase64FromHexadecimal( uuid.replaceAll( "-", "" ) ).replaceAll( "=", "" );
+    return getBase64FromHexadecimal( uuid.replaceAll( "-", "" ) ).replaceAll( "=", "" );
 }
 
 // ~~
 
-export function GetUuid(
+export function getUuid(
     )
 {
     return crypto.randomUUID();
@@ -185,7 +185,7 @@ export function GetUuid(
 
 // ~~
 
-export function GetMillisecondTimestamp(
+export function getMillisecondTimestamp(
     )
 {
     return window.performance.timing.navigationStart + window.performance.now();
@@ -193,172 +193,172 @@ export function GetMillisecondTimestamp(
 
 // ~~
 
-export function GetLocalDate(
-    system_date
+export function getLocalDate(
+    systemDate
     )
 {
-    if ( system_date === undefined )
+    if ( systemDate === undefined )
     {
-        system_date = new Date();
+        systemDate = new Date();
     }
 
     return {
-        Year : system_date.getFullYear(),
-        Month : system_date.getMonth(),
-        Day : system_date.getDay()
+        year : systemDate.getFullYear(),
+        month : systemDate.getMonth(),
+        day : systemDate.getDay()
         };
 }
 
 // ~~
 
-export function GetLocalTime(
-    system_date
+export function getLocalTime(
+    systemDate
     )
 {
-    if ( system_date === undefined )
+    if ( systemDate === undefined )
     {
-        system_date = new Date();
+        systemDate = new Date();
     }
 
     return {
-        Hour : system_date.getHours(),
-        Minute : system_date.getMinutes(),
-        Second : system_date.getSeconds()
+        hour : systemDate.getHours(),
+        minute : systemDate.getMinutes(),
+        second : systemDate.getSeconds()
         };
 }
 
 // ~~
 
-export function GetLocalDateTime(
-    system_date
+export function getLocalDateTime(
+    systemDate
     )
 {
-    if ( system_date === undefined )
+    if ( systemDate === undefined )
     {
-        system_date = new Date();
+        systemDate = new Date();
     }
 
     return {
-        Year : system_date.getFullYear(),
-        Month : system_date.getMonth(),
-        Day : system_date.getDay(),
-        Hour : system_date.getHours(),
-        Minute : system_date.getMinutes(),
-        Second : system_date.getSeconds()
+        year : systemDate.getFullYear(),
+        month : systemDate.getMonth(),
+        day : systemDate.getDay(),
+        hour : systemDate.getHours(),
+        minute : systemDate.getMinutes(),
+        second : systemDate.getSeconds()
         };
 }
 
 // ~~
 
-export function GetUniversalDate(
-    system_date
+export function getUniversalDate(
+    systemDate
     )
 {
-    if ( system_date === undefined )
+    if ( systemDate === undefined )
     {
-        system_date = new Date();
+        systemDate = new Date();
     }
 
     return {
-        Year : system_date.getUTCFullYear(),
-        Month : system_date.getUTCMonth(),
-        Day : system_date.getUTCDay()
+        year : systemDate.getUTCFullYear(),
+        month : systemDate.getUTCMonth(),
+        day : systemDate.getUTCDay()
         };
 }
 
 // ~~
 
-export function GetUniversalTime(
-    system_date
+export function getUniversalTime(
+    systemDate
     )
 {
-    if ( system_date === undefined )
+    if ( systemDate === undefined )
     {
-        system_date = new Date();
+        systemDate = new Date();
     }
 
     return {
-        Hour : system_date.getUTCHours(),
-        Minute : system_date.getUTCMinutes(),
-        Second : system_date.getUTCSeconds()
+        hour : systemDate.getUTCHours(),
+        minute : systemDate.getUTCMinutes(),
+        second : systemDate.getUTCSeconds()
         };
 }
 
 // ~~
 
-export function GetUniversalDateTime(
-    system_date
+export function getUniversalDateTime(
+    systemDate
     )
 {
-    if ( system_date === undefined )
+    if ( systemDate === undefined )
     {
-        system_date = new Date();
+        systemDate = new Date();
     }
 
     return {
-        Year : system_date.getUTCFullYear(),
-        Month : system_date.getUTCMonth(),
-        Day : system_date.getUTCDay(),
-        Hour : system_date.getUTCHours(),
-        Minute : system_date.getUTCMinutes(),
-        Second : system_date.getUTCSeconds()
+        year : systemDate.getUTCFullYear(),
+        month : systemDate.getUTCMonth(),
+        day : systemDate.getUTCDay(),
+        hour : systemDate.getUTCHours(),
+        minute : systemDate.getUTCMinutes(),
+        second : systemDate.getUTCSeconds()
         };
 }
 
 // ~~
 
-export function GetDateText(
+export function getDateText(
     date,
     suffix = ""
     )
 {
     return (
-        GetLeftPaddedText( date.Year.toString(), 4, "0" )
+        getLeftPaddedText( date.year.toString(), 4, "0" )
         + ":"
-        + GetLeftPaddedText( date.Month.toString(), 2, "0" )
+        + getLeftPaddedText( date.month.toString(), 2, "0" )
         + ":"
-        + GetLeftPaddedText( date.Day.toString(), 2, "0" )
+        + getLeftPaddedText( date.day.toString(), 2, "0" )
         + suffix
         );
 }
 
 // ~~
 
-export function GetTimeText(
+export function getTimeText(
     time,
     suffix = ""
     )
 {
     return (
-        GetLeftPaddedText( time.Hour.toString(), 2, "0" )
+        getLeftPaddedText( time.hour.toString(), 2, "0" )
         + "-"
-        + GetLeftPaddedText( time.Minute.toString(), 2, "0" )
+        + getLeftPaddedText( time.minute.toString(), 2, "0" )
         + "-"
-        + GetLeftPaddedText( time.Second.toString(), 2, "0" )
+        + getLeftPaddedText( time.second.toString(), 2, "0" )
         + suffix
         );
 }
 
 // ~~
 
-export function GetDateTimeText(
-    date_time,
+export function getDateTimeText(
+    dateTime,
     infix = " ",
     suffix = ""
     )
 {
     return (
-        GetLeftPaddedText( date_time.Year.toString(), 4, "0" )
+        getLeftPaddedText( dateTime.year.toString(), 4, "0" )
         + "-"
-        + GetLeftPaddedText( date_time.Month.toString(), 2, "0" )
+        + getLeftPaddedText( dateTime.month.toString(), 2, "0" )
         + "-"
-        + GetLeftPaddedText( date_time.Day.toString(), 2, "0" )
+        + getLeftPaddedText( dateTime.day.toString(), 2, "0" )
         + infix
-        + GetLeftPaddedText( date_time.Hour.toString(), 2, "0" )
+        + getLeftPaddedText( dateTime.hour.toString(), 2, "0" )
         + ":"
-        + GetLeftPaddedText( date_time.Minute.toString(), 2, "0" )
+        + getLeftPaddedText( dateTime.minute.toString(), 2, "0" )
         + ":"
-        + GetLeftPaddedText( date_time.Second.toString(), 2, "0" )
+        + getLeftPaddedText( dateTime.second.toString(), 2, "0" )
         + suffix
         );
 }
