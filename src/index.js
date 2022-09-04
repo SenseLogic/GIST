@@ -29,7 +29,7 @@ export function removePrefix(
     )
 {
     if ( prefix !== ""
-         && text.HasPrefix( prefix ) )
+         && text.startsWith( prefix ) )
     {
         return text.substring( prefix.length );
     }
@@ -47,7 +47,7 @@ export function removeSuffix(
     )
 {
     if ( suffix !== ""
-         && text.HasSuffix( suffix ) )
+         && text.endsWith( suffix ) )
     {
         return text.substring( 0, text.length - suffix.length );
     }
@@ -120,11 +120,11 @@ export function getBase64FromHexadecimal(
     {
         let buffer = "";
 
-        for ( let byte_index = 0;
-              byte_index < hexadecimalBuffer.length;
-              byte_index += 2 )
+        for ( let byteIndex = 0;
+              byteIndex < hexadecimalBuffer.length;
+              byteIndex += 2 )
         {
-            buffer += String.fromCharCode( parseInt( hexadecimalBuffer.slice( byte_index, byte_index + 2 ), 16 ) );
+            buffer += String.fromCharCode( parseInt( hexadecimalBuffer.slice( byteIndex, byteIndex + 2 ), 16 ) );
         }
 
         return btoa( buffer );
