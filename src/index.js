@@ -1,5 +1,7 @@
 // -- CONSTANTS
 
+export const isBrowser = ( typeof window !== "undefined" && typeof window.document !== "undefined" );
+export const crypto = ( isBrowser && window.crypto ) || require( 'crypto' );
 export const nullTuid = 'AAAAAAAAAAAAAAAAAAAAAA';
 export const nullUuid = '00000000-0000-0000-0000-000000000000';
 export const NullDate = {
@@ -112,72 +114,115 @@ export function getQuotedText(
 
 // ~~
 
-export function getBase64FromHexadecimal(
-    hexadecimalBuffer
+export function getHexadecimalTextFromInteger(
+    integer
+    )
+{
+    return parseInt( integer ).toString( 'hex' );
+}
+
+// ~~
+
+export function getBase64TextFromHexadecimalText(
+    hexadecimalText
     )
 {
     try
     {
-        let buffer = '';
+        let text = '';
 
         for ( let byteIndex = 0;
-              byteIndex < hexadecimalBuffer.length;
+              byteIndex < hexadecimalText.length;
               byteIndex += 2 )
         {
-            buffer += String.fromCharCode( parseInt( hexadecimalBuffer.slice( byteIndex, byteIndex + 2 ), 16 ) );
+            text += String.fromCharCode( parseInt( hexadecimalText.slice( byteIndex, byteIndex + 2 ), 16 ) );
         }
 
-        return btoa( buffer );
+        return btoa( text );
     }
     catch ( error )
     {
-        return Buffer.from( hexadecimalBuffer, 'hex' ).toString( 'base64' );
+        return Buffer.from( hexadecimalText, 'hex' ).toString( 'base64' );
     }
 }
 
 // ~~
 
-export function getHexadecimalFromBase64(
-    base64Buffer
+export function getHexadecimalTextFromBase64Text(
+    base64Text
     )
 {
     try
     {
-        let buffer = atob( base64Buffer );
-        let hexadecimalBuffer = '';
+        let text = atob( base64Text );
+        let hexadecimalText = '';
 
         for ( let characterIndex = 0;
-              characterIndex < buffer.length;
+              characterIndex < text.length;
               ++characterIndex )
         {
-            hexadecimalBuffer += ( '000' + this.charCodeAt( characterIndex ).toString( 16 ) ).slice( -4 );
+            hexadecimalText += ( '000' + this.charCodeAt( characterIndex ).toString( 16 ) ).slice( -4 );
         }
 
-        return hexadecimalBuffer;
+        return hexadecimalText;
     }
     catch ( error )
     {
-        return Buffer.from( base64Buffer , 'base64' ).toString( 'hex' );
+        return Buffer.from( base64Text , 'base64' ).toString( 'hex' );
     }
 }
 
 // ~~
 
-export function getTuid(
-    uuid
+export function getUuidFromHexadecimalText(
+    hexadecimalText
     )
 {
-    if ( uuid === undefined )
-    {
-        uuid = crypto.randomUUID();
-    }
-
-    return getBase64FromHexadecimal( uuid.replaceAll( '-', '' ) ).replaceAll( '=', '' );
+    return (
+        hexadecimalText.substring( 0, 8 )
+        + "-"
+        + hexadecimalText.substring( 8, 12 )
+        + "-"
+        + hexadecimalText.substring( 12, 16 )
+        + "-"
+        + hexadecimalText.substring( 16, 20 )
+        + "-"
+        + hexadecimalText.substring( 20, 32 )
+        );
 }
 
 // ~~
 
-export function getUuid(
+export function getRandomByteArray(
+    byteCount
+    )
+{
+    return crypto.randomBytes( byteCount );
+}
+
+// ~~
+
+export function getRandomHexadecimalText(
+    byteCount
+    )
+{
+    return crypto.randomBytes( byteCount ).toString( 'hex' );
+}
+
+// ~~
+
+export function getTimeUuid(
+    )
+{
+    return getUuidFromHexadecimalText(
+        getHexadecimalTextFromInteger( ( getMillisecondTimestamp() + 12219292800000 ) * 10000 )
+        + getRandomHexadecimalText( 16 )
+        );
+}
+
+// ~~
+
+export function getRandomUuid(
     )
 {
     return crypto.randomUUID();
@@ -185,10 +230,46 @@ export function getUuid(
 
 // ~~
 
+export function getUuidFromTuid(
+    tuid
+    )
+{
+    return getUuidFromHexadecimalText( getHexadecimalTextFromBase64Text( tuid ) );
+}
+
+// ~~
+
+export function getRandomTuid(
+    uuid
+    )
+{
+    return getBase64TextFromHexadecimalText( getRandomUuid() );
+}
+
+// ~~
+
+export function getTuidFromUuid(
+    uuid
+    )
+{
+    return getBase64TextFromHexadecimalText( uuid.replaceAll( '-', '' ) ).replaceAll( '=', '' );
+}
+
+// ~~
+
 export function getMillisecondTimestamp(
     )
 {
-    return window.performance.timing.navigationStart + window.performance.now();
+    if ( isBrowser )
+    {
+        return window.performance.timing.navigationStart + window.performance.now();
+    }
+    else
+    {
+        let hrTime = process.hrtime();
+
+        return parseInt( hrTime[ 0 ] * 1000 + hrTime[ 1 ] / 1000000 );
+    }
 }
 
 // ~~
