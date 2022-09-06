@@ -1,7 +1,10 @@
+// -- IMPORTS
+
+import crypto from 'crypto';
+
 // -- CONSTANTS
 
 export const isBrowser = ( typeof window !== "undefined" && typeof window.document !== "undefined" );
-export const crypto = ( isBrowser && window.crypto ) || require( 'crypto' );
 export const nullTuid = 'AAAAAAAAAAAAAAAAAAAAAA';
 export const nullUuid = '00000000-0000-0000-0000-000000000000';
 export const NullDate = {
