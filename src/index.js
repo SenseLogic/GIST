@@ -130,7 +130,7 @@ export function getBase64TextFromHexadecimalText(
     hexadecimalText
     )
 {
-    try
+    if ( isBrowser )
     {
         let text = '';
 
@@ -143,7 +143,7 @@ export function getBase64TextFromHexadecimalText(
 
         return btoa( text );
     }
-    catch ( error )
+    else
     {
         return Buffer.from( hexadecimalText, 'hex' ).toString( 'base64' );
     }
@@ -155,7 +155,7 @@ export function getHexadecimalTextFromBase64Text(
     base64Text
     )
 {
-    try
+    if ( isBrowser )
     {
         let text = atob( base64Text );
         let hexadecimalText = '';
@@ -169,7 +169,7 @@ export function getHexadecimalTextFromBase64Text(
 
         return hexadecimalText;
     }
-    catch ( error )
+    else
     {
         return Buffer.from( base64Text , 'base64' ).toString( 'hex' );
     }
@@ -243,10 +243,9 @@ export function getUuidFromTuid(
 // ~~
 
 export function getRandomTuid(
-    uuid
     )
 {
-    return getBase64TextFromHexadecimalText( getRandomUuid() );
+    return getTuidFromUuid( getRandomUuid() );
 }
 
 // ~~
