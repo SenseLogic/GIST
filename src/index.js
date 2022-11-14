@@ -157,6 +157,15 @@ export function getBase64TextFromHexadecimalText(
 
 // ~~
 
+export function getTuidFromHexadecimalText(
+    hexadecimalText
+    )
+{
+    return getBase64TextFromHexadecimalText( hexadecimalText ).replaceAll( "+", "-" ).replaceAll( "/", "_" ).replaceAll( "=", "" );
+}
+
+// ~~
+
 export function getHexadecimalTextFromBase64Text(
     base64Text
     )
@@ -170,7 +179,7 @@ export function getHexadecimalTextFromBase64Text(
               characterIndex < text.length;
               ++characterIndex )
         {
-            hexadecimalText += ( '000' + this.charCodeAt( characterIndex ).toString( 16 ) ).slice( -4 );
+            hexadecimalText += ( '0' + text.charCodeAt( characterIndex ).toString( 16 ) ).slice( -2 );
         }
 
         return hexadecimalText;
@@ -179,6 +188,15 @@ export function getHexadecimalTextFromBase64Text(
     {
         return Buffer.from( base64Text , 'base64' ).toString( 'hex' );
     }
+}
+
+// ~~
+
+export function getHexadecimalTextFromTuid(
+    tuid
+    )
+{
+    return getHexadecimalTextFromBase64Text( tuid.replaceAll( "-", "+" ).replaceAll( "_", "/" ) + "==" );
 }
 
 // ~~
@@ -243,7 +261,7 @@ export function getUuidFromTuid(
     tuid
     )
 {
-    return getUuidFromHexadecimalText( getHexadecimalTextFromBase64Text( tuid ) );
+    return getUuidFromHexadecimalText( getHexadecimalTextFromTuid( tuid ) );
 }
 
 // ~~
@@ -260,7 +278,7 @@ export function getTuidFromUuid(
     uuid
     )
 {
-    return getBase64TextFromHexadecimalText( uuid.replaceAll( '-', '' ) ).replaceAll( '=', '' );
+    return getTuidFromHexadecimalText( uuid.replaceAll( '-', '' ) );
 }
 
 // ~~
