@@ -311,8 +311,8 @@ export function getLocalDate(
 
     return {
         year : systemDate.getFullYear(),
-        month : systemDate.getMonth(),
-        day : systemDate.getDay()
+        month : systemDate.getMonth() + 1,
+        day : systemDate.getDate()
         };
 }
 
@@ -347,8 +347,8 @@ export function getLocalDateTime(
 
     return {
         year : systemDate.getFullYear(),
-        month : systemDate.getMonth(),
-        day : systemDate.getDay(),
+        month : systemDate.getMonth() + 1,
+        day : systemDate.getDate(),
         hour : systemDate.getHours(),
         minute : systemDate.getMinutes(),
         second : systemDate.getSeconds()
@@ -368,8 +368,8 @@ export function getUniversalDate(
 
     return {
         year : systemDate.getUTCFullYear(),
-        month : systemDate.getUTCMonth(),
-        day : systemDate.getUTCDay()
+        month : systemDate.getUTCMonth() + 1,
+        day : systemDate.getUTCDate()
         };
 }
 
@@ -404,8 +404,8 @@ export function getUniversalDateTime(
 
     return {
         year : systemDate.getUTCFullYear(),
-        month : systemDate.getUTCMonth(),
-        day : systemDate.getUTCDay(),
+        month : systemDate.getUTCMonth() + 1,
+        day : systemDate.getUTCDate(),
         hour : systemDate.getUTCHours(),
         minute : systemDate.getUTCMinutes(),
         second : systemDate.getUTCSeconds()
