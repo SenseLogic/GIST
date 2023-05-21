@@ -30,7 +30,7 @@ export const nullDateTime = {
 
 export let languageCode = 'en';
 export let defaultLanguageCode = 'en';
-export let textByLanguageCodeMapByCodeMap = new Map();
+export let textByLanguageCodeMapBySlugMap = new Map();
 
 // -- FUNCTIONS
 
@@ -506,27 +506,27 @@ export function getDefaultLanguageCode(
 
 // ~~
 
-export function setTextByLanguageCodeMapByCode(
+export function setTextByLanguageCodeMapBySlug(
     textByLanguageCodeMap,
-    textCode
+    textSlug
     )
 {
-    textByLanguageCodeMapByCodeMap.set( textCode, textByLanguageCodeMap );
+    textByLanguageCodeMapBySlugMap.set( textSlug, textByLanguageCodeMap );
 }
 
 // ~~
 
-export function getTextByLanguageCodeMapByCode(
-    textCode
+export function getTextByLanguageCodeMapBySlug(
+    textSlug
     )
 {
-    if ( textByLanguageCodeMapByCodeMap.has( textCode ) )
+    if ( textByLanguageCodeMapBySlugMap.has( textSlug ) )
     {
-        return textByLanguageCodeMapByCodeMap.get( textCode );
+        return textByLanguageCodeMapBySlugMap.get( textSlug );
     }
     else
     {
-        console.warn( 'Missing text code ' + textCode );
+        console.warn( 'Missing text code ' + textSlug );
 
         return '';
     }
@@ -562,19 +562,19 @@ export function getTranslatedText(
 
 // ~~
 
-export function getTranslatedTextByCode(
-    textCode,
+export function getTranslatedTextBySlug(
+    textSlug,
     languageCode
     )
 {
-    if ( textByLanguageCodeMapByCodeMap.has( textCode ) )
+    if ( textByLanguageCodeMapBySlugMap.has( textSlug ) )
     {
-        return getTranslatedText( textByLanguageCodeMapByCodeMap.get( textCode ), languageCode );
+        return getTranslatedText( textByLanguageCodeMapBySlugMap.get( textSlug ), languageCode );
     }
     else
     {
-        console.warn( 'Missing language code ' + languageCode + ' : ' + textCode );
+        console.warn( 'Missing translated text  : ' + textSlug );
 
-        return textCode;
+        return textSlug;
     }
 }
