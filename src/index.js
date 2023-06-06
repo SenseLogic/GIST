@@ -902,52 +902,55 @@ export function toggleGoogleAnalytics(
 
 // ~~
 
-HTMLElement.prototype.addClass = function (
+export function addClass(
+    element,
     className
     )
 {
-    this.classList.add( className );
+    element.classList.add( className );
 
-    return this;
+    return element;
 }
 
 // ~~
 
-HTMLElement.prototype.removeClass = function (
+export function removeClass(
+    element,
     className
     )
 {
-    this.classList.remove( className );
+    element.classList.remove( className );
 
-    return this;
+    return element;
 }
 
 // ~~
 
-HTMLElement.prototype.toggleClass = function (
+export function toggleClass(
+    element,
     className,
     condition = undefined
     )
 {
     if ( condition === undefined )
     {
-        if ( this.classList.contains( className ) )
+        if ( element.classList.contains( className ) )
         {
-            this.classList.remove( className );
+            element.classList.remove( className );
         }
         else
         {
-            this.classList.add( className );
+            element.classList.add( className );
         }
     }
     else if ( condition )
     {
-        this.classList.add( className );
+        element.classList.add( className );
     }
     else
     {
-        this.classList.remove( className );
+        element.classList.remove( className );
     }
 
-    return this;
+    return element;
 }
