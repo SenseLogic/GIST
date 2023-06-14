@@ -1,17 +1,25 @@
 // -- IMPORTS
 
 import {
+    defineColorTag,
+    defineDualTag,
+    defineLineTag,
+    defineTag,
+    getBase64TextFromHexadecimalText,
     getBrowserLanguageCode,
     getDateTimeSuffix,
-    getUniversalDateTime,
-    getRandomHexadecimalText,
-    getBase64TextFromHexadecimalText,
     getHexadecimalTextFromBase64Text,
+    getLocationFromIpAddress,
+    getProcessedMultilineText,
+    getProcessedText,
+    getQuotedText,
     getRandomUuid,
-    getTuidFromUuid,
-    getUuidFromTuid,
     getTimeUuid,
-    getRandomTuid
+    getTuidFromUuid,
+    getRandomHexadecimalText,
+    getRandomTuid,
+    getUniversalDateTime,
+    getUuidFromTuid
     } from '../src/index.js';
 
 // -- FUNCTIONS
@@ -32,7 +40,8 @@ function check(
 {
     if ( JSON.stringify( value ) !== JSON.stringify( wishedValue ) )
     {
-        console.error( 'Invalid value :', value, "<>", wishedValue );
+        console.error( 'Invalid value :', value, '<>', wishedValue );
+        process.exit();
     }
     else
     {
@@ -41,6 +50,10 @@ function check(
 }
 
 // -- STATEMENTS
+
+print( "-- GetQuotedText --" );
+
+check( getQuotedText( JSON.stringify( { text : '\n\r\t' } ) ), '"{\\"text\\":\\"\\\\n\\\\r\\\\t\\"}"' );
 
 print( "-- UniversalDateTime --" );
 
@@ -89,3 +102,51 @@ let randomTuidUuid = getUuidFromTuid( randomTuid );
 let randomTuidUuidTuid = getTuidFromUuid( randomTuidUuid );
 print( randomTuid, randomTuidUuid, randomTuidUuidTuid );
 check( randomTuidUuidTuid, randomTuid );
+
+print( "-- ProcessedTag --" );
+
+defineLineTag( '! ', '<div class="paragraph title-1">', '</div>' );
+defineLineTag( '!! ', '<div class="paragraph title-2">', '</div>' );
+defineLineTag( '!!! ', '<div class="paragraph title-3">', '</div>' );
+defineLineTag( '!!!! ', '<div class="paragraph title-4">', '</div>' );
+defineLineTag( '- ', '<div class="paragraph dash-1">', '</div>' );
+defineLineTag( '  - ', '<div class="paragraph dash-2">', '</div>' );
+defineLineTag( '    - ', '<div class="paragraph dash-3">', '</div>' );
+defineLineTag( '      - ', '<div class="paragraph dash-4">', '</div>' );
+defineLineTag( '* ', '<div class="paragraph bullet-1">', '</div>' );
+defineLineTag( '  * ', '<div class="paragraph bullet-2">', '</div>' );
+defineLineTag( '    * ', '<div class="paragraph bullet-3">', '</div>' );
+defineLineTag( '      * ', '<div class="paragraph bullet-4">', '</div>' );
+defineLineTag( '', '<div class="paragraph">', '</div>' );
+
+defineDualTag( '**', '<b>', '</b>' );
+defineDualTag( '%%', '<i>', '</i>' );
+defineDualTag( '__', '<u>', '</u>' );
+defineDualTag( ',,', '<sub>', '</sub>' );
+defineDualTag( '^^', '<sup>', '</sup>' );
+
+defineTag( '~', '&nbsp;' );
+defineTag( '¦', '<wbr/>' );
+defineTag( '§', '<br/>' );
+defineTag( '¶', '<br class="linebreak"/>' );
+defineTag( '((', '<a class="link" href="' );
+defineTag( ')(', '" target="_blank">' );
+defineTag( '))', '</a>' );
+
+defineColorTag( 'red' );
+defineColorTag( 'green', '#0F0' );
+
+check(
+    getProcessedText( '**bold** %%italics%% __underlined__ ~¦§¶ ((https://dailykitten.com)(Daily Kitten))' ),
+    '<b>bold</b> <i>italics</i> <u>underlined</u> &nbsp;<wbr/><br/><br class="linebreak"/> <a class="link" href="https://dailykitten.com" target="_blank">Daily Kitten</a>'
+    );
+
+check(
+    getProcessedMultilineText( '! **bold**\n\n!! %%italics%%\n\n__underlined__' ),
+    '<div class="paragraph title-1"><b>bold</b></div>\n<div class="paragraph title-2"><i>italics</i></div>\n<div class="paragraph"><u>underlined</u></div>'
+    );
+
+print( "-- Location --" );
+
+//print( await getLocationFromIpAddress( '157.164.136.250' ) );
+//print( await getLocationFromIpAddress( '2a01:690:35:100::f5:79' ) );

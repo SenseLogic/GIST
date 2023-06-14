@@ -31,9 +31,9 @@ export const nullDateTime = {
 export let languageCode = 'en';
 export let defaultLanguageCode = 'en';
 export let textByLanguageCodeMapBySlugMap = new Map();
-export let processedTagArray = [];
-export let processedDualTagArray = [];
 export let processedLineTagArray = [];
+export let processedDualTagArray = [];
+export let processedTagArray = [];
 export let locationByIpAddressMap = new Map();
 export let googleAnalyticsTrackingScript = null;
 export let googleAnalyticsTrackingIsEnabled = false;
@@ -124,7 +124,17 @@ export function getQuotedText(
     value
     )
 {
-    return '"' + value.toString().replaceAll( '"', '\\"' ) + '"';
+    return (
+        '"'
+        + value.toString()
+              .replaceAll( "\\", "\\\\" )
+              .replaceAll( "\n", "\\n" )
+              .replaceAll( "\r", "\\r" )
+              .replaceAll( "\t", "\\t" )
+              .replaceAll( "\"", "\\\"" )
+              .replaceAll( "'", "\\'" )
+        + '"'
+        );
 }
 
 // ~~
@@ -509,12 +519,12 @@ export function getLogicalFilePath(
     filePath
     )
 {
-    return filePath.split( '\\' ).join( '/' );
+    return filePath.replaceAll( '\\', '/' );
 }
 
 // ~~
 
-export function GetFolderPath(
+export function getFolderPath(
     filePath
     )
 {
@@ -523,7 +533,7 @@ export function GetFolderPath(
 
 // ~~
 
-export function GetFileName(
+export function getFileName(
     filePath
     )
 {
@@ -673,25 +683,149 @@ export function getTranslatedTextBySlug(
 
 // ~~
 
+export function defineLineTag(
+    name,
+    openingDefinition,
+    closingDefinition
+    )
+{
+    processedLineTagArray.push(
+        {
+            name,
+            openingDefinition,
+            closingDefinition
+        }
+        );
+}
+
+// ~~
+
+export function defineDualTag(
+    name,
+    openingDefinition,
+    closingDefinition
+    )
+{
+    processedDualTagArray.push(
+        {
+            name,
+            openingDefinition,
+            closingDefinition
+        }
+        );
+}
+
+// ~~
+
+export function defineTag(
+    name,
+    definition
+    )
+{
+    processedTagArray.push(
+        {
+            name,
+            definition
+        }
+        );
+}
+
+// ~~
+
+export function defineColorTag(
+    name,
+    color = ''
+    )
+{
+    if ( color === '' )
+    {
+        defineTag( '<' + name + '>', '<span class="color-' + name + '">' );
+    }
+    else
+    {
+        defineTag( '<' + name + '>', '<span style="color:' + color + '">' );
+    }
+
+    defineTag( '</' + name + '>', '</span>' );
+}
+
+// ~~
+
 export function getProcessedText(
-    textByLanguageCodeMap,
-    languageCode_
+    text
     )
 {
+    for ( let processedDualTag of processedDualTagArray )
+    {
+        let partArray = text.split( processedDualTag.name );
+        let partCount = partArray.length;
+
+        for ( let partIndex = 0;
+              partIndex + 1 < partCount;
+              partIndex += 2 )
+        {
+            partArray[ partIndex ] += processedDualTag.openingDefinition;
+            partArray[ partIndex + 1 ] += processedDualTag.closingDefinition;
+        }
+
+        text = partArray.join( '' );
+    }
+
+    for ( let processedTag of processedTagArray )
+    {
+        text = text.replaceAll( processedTag.name, processedTag.definition );
+    }
+
+    return text;
 }
 
 // ~~
 
-export function getProcessedTextBySlug(
-    textSlug,
-    languageCode
+export function getProcessedMultilineText(
+    text
     )
 {
+    let processedLineTagCount = processedLineTagArray.length;
+
+    if ( processedLineTagCount > 0 )
+    {
+        let lineArray = text.replaceAll( '\r', '' ).split( '\n' );
+        let lineCount = lineArray.length;
+
+        for ( let lineIndex = 0;
+              lineIndex < lineCount;
+              ++lineIndex )
+        {
+            let line = lineArray[ lineIndex ];
+
+            while ( line.startsWith( '\n' ) )
+            {
+                line = line.substring( 1 );
+            }
+
+            for ( let processedLineTag of processedLineTagArray )
+            {
+                if ( line.startsWith( processedLineTag.name ) )
+                {
+                    lineArray[ lineIndex ]
+                        = processedLineTag.openingDefinition
+                          + line.substring( processedLineTag.name.length )
+                          + processedLineTag.closingDefinition
+
+                    break;
+                }
+            }
+        }
+
+        text = lineArray.join( '\n' );
+    }
+
+    return getProcessedText( text );
 }
 
 // ~~
 
-export function GetCapitalLatitudeFromCountryCode(
+export function getCapitalLatitudeFromCountryCode(
     countryCode
     )
 {
@@ -947,7 +1081,7 @@ export function GetCapitalLatitudeFromCountryCode(
 
 // ~~
 
-export function GetCapitalLongitudeFromCountryCode(
+export function getCapitalLongitudeFromCountryCode(
     countryCode
     )
 {
@@ -1459,7 +1593,7 @@ export function getContinentSlugFromCountryCode(
 
 // ~~
 
-async function getlocationFromIpAddress(
+export async function getLocationFromIpAddress(
     ipAddress
     )
 {
@@ -1614,9 +1748,9 @@ async function getlocationFromIpAddress(
                 {
                     location.Service = 'hostip.info';
                     location.CountryCode = geographicData.country_code;
-                    location.Latitude = GetCapitalLatitudeFromCountryCode( location.CountryCode );
-                    location.Longitude = GetCapitalLongitudeFromCountryCode( location.CountryCode );
-                    location.TimeZone = GetTimeZoneFromLocation( location.Latitude, location.Longitude, location.CountryCode );
+                    location.Latitude = getCapitalLatitudeFromCountryCode( location.CountryCode );
+                    location.Longitude = getCapitalLongitudeFromCountryCode( location.CountryCode );
+                    location.TimeZone = getTimeZoneFromLocation( location.Latitude, location.Longitude, location.CountryCode );
                     location.IsFound = true;
                 }
             }
@@ -1737,3 +1871,9 @@ export function toggleClass(
 
     return element;
 }
+
+
+
+
+
+
