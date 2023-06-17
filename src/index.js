@@ -4,41 +4,212 @@ import crypto from 'crypto';
 
 // -- CONSTANTS
 
-export const isBrowser = ( typeof window !== "undefined" && typeof window.document !== "undefined" );
-export const nullTuid = 'AAAAAAAAAAAAAAAAAAAAAA';
-export const nullUuid = '00000000-0000-0000-0000-000000000000';
-export const nullDate = {
-    year : 1000,
-    month : 1,
-    day : 1
-    };
-export const nullTime = {
-    hour : 0,
-    minute : 0,
-    second : 0.0
-    };
-export const nullDateTime = {
-    year : 1000,
-    month : 1,
-    day : 1,
-    hour : 0,
-    minute : 0,
-    second : 0.0
-    };
+export const
+    isBrowser = ( typeof window !== "undefined" && typeof window.document !== "undefined" ),
+    nullTuid = 'AAAAAAAAAAAAAAAAAAAAAA',
+    nullUuid = '00000000-0000-0000-0000-000000000000',
+    nullDate = {
+        year : 1000,
+        month : 1,
+        day : 1
+        },
+    nullTime = {
+        hour : 0,
+        minute : 0,
+        second : 0.0
+        },
+    nullDateTime = {
+        year : 1000,
+        month : 1,
+        day : 1,
+        hour : 0,
+        minute : 0,
+        second : 0.0
+        },
+    minimumInteger = -9007199254740991,
+    maximumInteger = 9007199254740991,
+    naturalExpression = /^[0-9][0-9]*$/,
+    integerExpression = /^-?[0-9][0-9]*$/,
+    realExpression = /^-?[0-9][0-9]*\.[0-9]*$/,
+    numericExpression = /^-?[0-9][0-9]*\.?[0-9]*$/,
+    slugExpression = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 // -- VARIABLES
 
-export let languageCode = 'en';
-export let defaultLanguageCode = 'en';
-export let textByLanguageCodeMapBySlugMap = new Map();
-export let processedLineTagArray = [];
-export let processedDualTagArray = [];
-export let processedTagArray = [];
-export let locationByIpAddressMap = new Map();
-export let googleAnalyticsTrackingScript = null;
-export let googleAnalyticsTrackingIsEnabled = false;
+export let
+    countryCode = '',
+    defaultCountryCode = '',
+    languageCode = 'en',
+    defaultLanguageCode = 'en',
+    textByLanguageCodeMapBySlugMap = new Map(),
+    processedLineTagArray = [],
+    processedDualTagArray = [],
+    processedTagArray = [],
+    locationByIpAddressMap = new Map(),
+    googleAnalyticsTrackingScript = null,
+    googleAnalyticsTrackingIsEnabled = false;
 
 // -- FUNCTIONS
+
+export const
+    raw = String.raw,
+    print = console.log,
+    dump = console.dir,
+    printTable = console.table,
+    printStack = console.trace,
+    isNaN = Number.isNaN,
+    isInteger = Number.isInteger,
+    getReal = parseFloat,
+    getInteger = parseInt,
+    getNumber = Number,
+    getText = String,
+    getEscapedText = escape,
+    getUnescapedText = unescape,
+    getEncodedUri = encodeURI,
+    getDecodedUri = decodeURI,
+    getJsonText = JSON.stringify,
+    getJsonObject = JSON.parse;
+
+// ~~
+
+function isBooleanText(
+    text
+    )
+{
+    return text === "false" || text === "true";
+}
+
+// ~~
+
+function isBinaryText(
+    text
+    )
+{
+    return text === "0" || text === "1";
+}
+
+// ~~
+
+function isNaturalText(
+    text
+    )
+{
+    return text.match( naturalExpression );
+}
+
+// ~~
+
+function isIntegerText(
+    text
+    )
+{
+    return text.match( integerExpression );
+}
+
+// ~~
+
+function isRealText(
+    text
+    )
+{
+    return text.match( realExpression );
+}
+
+// ~~
+
+function isNumericText(
+    text
+    )
+{
+    return text.match( numericExpression );
+}
+
+// ~~
+
+function isSlugText(
+    text
+    )
+{
+    return text.match( slugExpression );
+}
+
+// ~~
+
+function isBoolean(
+    value
+    )
+{
+    return typeof value === "boolean";
+}
+
+// ~~
+
+function isNatural(
+    value
+    )
+{
+    return isInteger( value ) && getInteger( value ) >= 0;
+}
+
+// ~~
+
+function isNumber(
+    value
+    )
+{
+    return typeof value === "number";
+}
+
+// ~~
+
+function isString(
+    value
+    )
+{
+    return typeof value === "string";
+}
+
+// ~~
+
+function isObject(
+    value
+    )
+{
+    return (
+        value !== null
+        && typeof value === "object"
+        && !Array.isArray( value )
+        );
+}
+
+// ~~
+
+function isArray(
+    value
+    )
+{
+    return value instanceof Array;
+}
+
+// ~~
+
+function isFunction(
+    value
+    )
+{
+    return value instanceof Function;
+}
+
+// ~~
+
+function isElement(
+    value
+    )
+{
+    return value instanceof HTMLElement;
+}
+
+// ~~
 
 export function removePrefix(
     text,
@@ -551,6 +722,1036 @@ export function getSanitizedFileName(
 
 // ~~
 
+export function getCapitalLatitudeFromCountryCode(
+    countryCode
+    )
+{
+    switch ( countryCode )
+    {
+        case 'ad' : return 42.5;
+        case 'ae' : return 24.46666667;
+        case 'af' : return 34.51666667;
+        case 'ag' : return 17.11666667;
+        case 'ai' : return 18.21666667;
+        case 'al' : return 41.31666667;
+        case 'am' : return 40.16666667;
+        case 'ao' : return -8.833333333;
+        case 'aq' : return -80.0;
+        case 'ar' : return -34.58333333;
+        case 'as' : return -14.26666667;
+        case 'at' : return 48.2;
+        case 'au' : return -35.26666667;
+        case 'aw' : return 12.51666667;
+        case 'ax' : return 60.116667;
+        case 'az' : return 40.38333333;
+        case 'ba' : return 43.86666667;
+        case 'bb' : return 13.1;
+        case 'bd' : return 23.71666667;
+        case 'be' : return 50.83333333;
+        case 'bf' : return 12.36666667;
+        case 'bg' : return 42.68333333;
+        case 'bh' : return 26.23333333;
+        case 'bi' : return -3.366666667;
+        case 'bj' : return 6.483333333;
+        case 'bl' : return 17.88333333;
+        case 'bm' : return 32.28333333;
+        case 'bn' : return 4.883333333;
+        case 'bo' : return -16.5;
+        case 'br' : return -15.78333333;
+        case 'bs' : return 25.08333333;
+        case 'bt' : return 27.46666667;
+        case 'bw' : return -24.63333333;
+        case 'by' : return 53.9;
+        case 'bz' : return 17.25;
+        case 'ca' : return 45.41666667;
+        case 'cc' : return -12.16666667;
+        case 'cd' : return -4.316666667;
+        case 'cf' : return 4.366666667;
+        case 'cg' : return -4.25;
+        case 'ch' : return 46.91666667;
+        case 'ci' : return 6.816666667;
+        case 'ck' : return -21.2;
+        case 'cl' : return -33.45;
+        case 'cm' : return 3.866666667;
+        case 'cn' : return 39.91666667;
+        case 'co' : return 4.6;
+        case 'cr' : return 9.933333333;
+        case 'cu' : return 23.11666667;
+        case 'cv' : return 14.91666667;
+        case 'cw' : return 12.1;
+        case 'cx' : return -10.41666667;
+        case 'cy' : return 35.16666667;
+        case 'cz' : return 50.08333333;
+        case 'de' : return 52.51666667;
+        case 'dj' : return 11.58333333;
+        case 'dk' : return 55.66666667;
+        case 'dm' : return 15.3;
+        case 'do' : return 18.46666667;
+        case 'dz' : return 36.75;
+        case 'ec' : return -0.216666667;
+        case 'ee' : return 59.43333333;
+        case 'eg' : return 30.05;
+        case 'eh' : return 27.153611;
+        case 'er' : return 15.33333333;
+        case 'es' : return 40.4;
+        case 'et' : return 9.033333333;
+        case 'fi' : return 60.16666667;
+        case 'fj' : return -18.13333333;
+        case 'fk' : return -51.7;
+        case 'fm' : return 6.916666667;
+        case 'fo' : return 62;
+        case 'fr' : return 48.86666667;
+        case 'ga' : return 0.383333333;
+        case 'gb' : return 51.5;
+        case 'gd' : return 12.05;
+        case 'ge' : return 41.68333333;
+        case 'gg' : return 49.45;
+        case 'gh' : return 5.55;
+        case 'gi' : return 36.13333333;
+        case 'gl' : return 64.18333333;
+        case 'gm' : return 13.45;
+        case 'gn' : return 9.5;
+        case 'gq' : return 3.75;
+        case 'gr' : return 37.98333333;
+        case 'gs' : return -54.283333;
+        case 'gt' : return 14.61666667;
+        case 'gu' : return 13.46666667;
+        case 'gw' : return 11.85;
+        case 'gy' : return 6.8;
+        case 'hk' : return 0;
+        case 'hm' : return 0;
+        case 'hn' : return 14.1;
+        case 'hr' : return 45.8;
+        case 'ht' : return 18.53333333;
+        case 'hu' : return 47.5;
+        case 'id' : return -6.166666667;
+        case 'ie' : return 53.31666667;
+        case 'il' : return 31.76666667;
+        case 'im' : return 54.15;
+        case 'in' : return 28.6;
+        case 'io' : return -7.3;
+        case 'iq' : return 33.33333333;
+        case 'ir' : return 35.7;
+        case 'is' : return 64.15;
+        case 'it' : return 41.9;
+        case 'je' : return 49.18333333;
+        case 'jm' : return 18;
+        case 'jo' : return 31.95;
+        case 'jp' : return 35.68333333;
+        case 'ke' : return -1.283333333;
+        case 'kg' : return 42.86666667;
+        case 'kh' : return 11.55;
+        case 'ki' : return -0.883333333;
+        case 'km' : return -11.7;
+        case 'kn' : return 17.3;
+        case 'ko' : return 42.66666667;
+        case 'kp' : return 39.01666667;
+        case 'kr' : return 37.55;
+        case 'kw' : return 29.36666667;
+        case 'ky' : return 19.3;
+        case 'kz' : return 51.16666667;
+        case 'la' : return 17.96666667;
+        case 'lb' : return 33.86666667;
+        case 'lc' : return 14;
+        case 'li' : return 47.13333333;
+        case 'lk' : return 6.916666667;
+        case 'lr' : return 6.3;
+        case 'ls' : return -29.31666667;
+        case 'lt' : return 54.68333333;
+        case 'lu' : return 49.6;
+        case 'lv' : return 56.95;
+        case 'ly' : return 32.88333333;
+        case 'ma' : return 34.01666667;
+        case 'mc' : return 43.73333333;
+        case 'md' : return 47;
+        case 'me' : return 42.43333333;
+        case 'mf' : return 18.0731;
+        case 'mg' : return -18.91666667;
+        case 'mh' : return 7.1;
+        case 'mk' : return 42;
+        case 'ml' : return 12.65;
+        case 'mm' : return 16.8;
+        case 'mn' : return 47.91666667;
+        case 'mo' : return 0;
+        case 'mp' : return 15.2;
+        case 'mr' : return 18.06666667;
+        case 'ms' : return 16.7;
+        case 'mt' : return 35.88333333;
+        case 'mu' : return -20.15;
+        case 'mv' : return 4.166666667;
+        case 'mw' : return -13.96666667;
+        case 'mx' : return 19.43333333;
+        case 'my' : return 3.166666667;
+        case 'mz' : return -25.95;
+        case 'na' : return -22.56666667;
+        case 'nc' : return -22.26666667;
+        case 'ne' : return 13.51666667;
+        case 'nf' : return -29.05;
+        case 'ng' : return 9.083333333;
+        case 'ni' : return 12.13333333;
+        case 'nl' : return 52.35;
+        case 'no' : return 59.91666667;
+        case 'np' : return 27.71666667;
+        case 'nr' : return -0.5477;
+        case 'nu' : return -19.01666667;
+        case 'nz' : return -41.3;
+        case 'om' : return 23.61666667;
+        case 'pa' : return 8.966666667;
+        case 'pe' : return -12.05;
+        case 'pf' : return -17.53333333;
+        case 'pg' : return -9.45;
+        case 'ph' : return 14.6;
+        case 'pk' : return 33.68333333;
+        case 'pl' : return 52.25;
+        case 'pm' : return 46.76666667;
+        case 'pn' : return -25.06666667;
+        case 'pr' : return 18.46666667;
+        case 'ps' : return 31.76666667;
+        case 'pt' : return 38.71666667;
+        case 'pw' : return 7.483333333;
+        case 'py' : return -25.26666667;
+        case 'qa' : return 25.28333333;
+        case 'ro' : return 44.43333333;
+        case 'rs' : return 44.83333333;
+        case 'ru' : return 55.75;
+        case 'rw' : return -1.95;
+        case 'sa' : return 24.65;
+        case 'sb' : return -9.433333333;
+        case 'sc' : return -4.616666667;
+        case 'sd' : return 15.6;
+        case 'se' : return 59.33333333;
+        case 'sg' : return 1.283333333;
+        case 'sh' : return -15.93333333;
+        case 'si' : return 46.05;
+        case 'sj' : return 78.21666667;
+        case 'sk' : return 48.15;
+        case 'sl' : return 8.483333333;
+        case 'sm' : return 43.93333333;
+        case 'sn' : return 14.73333333;
+        case 'so' : return 2.066666667;
+        case 'sr' : return 5.833333333;
+        case 'ss' : return 4.85;
+        case 'st' : return 0.333333333;
+        case 'sv' : return 13.7;
+        case 'sx' : return 18.01666667;
+        case 'sy' : return 33.5;
+        case 'sz' : return -26.31666667;
+        case 'tc' : return 21.46666667;
+        case 'td' : return 12.1;
+        case 'tf' : return -49.35;
+        case 'tg' : return 6.116666667;
+        case 'th' : return 13.75;
+        case 'tj' : return 38.55;
+        case 'tk' : return -9.166667;
+        case 'tl' : return -8.583333333;
+        case 'tm' : return 37.95;
+        case 'tn' : return 36.8;
+        case 'to' : return -21.13333333;
+        case 'tr' : return 39.93333333;
+        case 'tt' : return 10.65;
+        case 'tv' : return -8.516666667;
+        case 'tw' : return 25.03333333;
+        case 'tz' : return -6.8;
+        case 'ua' : return 50.43333333;
+        case 'ug' : return 0.316666667;
+        case 'um' : return 38.883333;
+        case 'us' : return 38.883333;
+        case 'uy' : return -34.85;
+        case 'uz' : return 41.31666667;
+        case 'va' : return 41.9;
+        case 'vc' : return 13.13333333;
+        case 've' : return 10.48333333;
+        case 'vg' : return 18.41666667;
+        case 'vi' : return 18.35;
+        case 'vn' : return 21.03333333;
+        case 'vu' : return -17.73333333;
+        case 'wf' : return -13.95;
+        case 'ws' : return -13.81666667;
+        case 'ye' : return 15.35;
+        case 'za' : return -25.7;
+        case 'zm' : return -15.41666667;
+        case 'zw' : return -17.81666667;
+    }
+
+    return 0.0;
+}
+
+// ~~
+
+export function getCapitalLongitudeFromCountryCode(
+    countryCode
+    )
+{
+    switch ( countryCode )
+    {
+        case 'ad' : return 1.516667;
+        case 'ae' : return 54.366667;
+        case 'af' : return 69.183333;
+        case 'ag' : return -61.85;
+        case 'ai' : return -63.05;
+        case 'al' : return 19.816667;
+        case 'am' : return 44.5;
+        case 'ao' : return 13.216667;
+        case 'aq' : return 0.0;
+        case 'ar' : return -58.666667;
+        case 'as' : return -170.7;
+        case 'at' : return 16.366667;
+        case 'au' : return 149.133333;
+        case 'aw' : return -70.033333;
+        case 'ax' : return 19.9;
+        case 'az' : return 49.866667;
+        case 'ba' : return 18.416667;
+        case 'bb' : return -59.616667;
+        case 'bd' : return 90.4;
+        case 'be' : return 4.333333;
+        case 'bf' : return -1.516667;
+        case 'bg' : return 23.316667;
+        case 'bh' : return 50.566667;
+        case 'bi' : return 29.35;
+        case 'bj' : return 2.616667;
+        case 'bl' : return -62.85;
+        case 'bm' : return -64.783333;
+        case 'bn' : return 114.933333;
+        case 'bo' : return -68.15;
+        case 'br' : return -47.916667;
+        case 'bs' : return -77.35;
+        case 'bt' : return 89.633333;
+        case 'bw' : return 25.9;
+        case 'by' : return 27.566667;
+        case 'bz' : return -88.766667;
+        case 'ca' : return -75.7;
+        case 'cc' : return 96.833333;
+        case 'cd' : return 15.3;
+        case 'cf' : return 18.583333;
+        case 'cg' : return 15.283333;
+        case 'ch' : return 7.466667;
+        case 'ci' : return -5.266667;
+        case 'ck' : return -159.766667;
+        case 'cl' : return -70.666667;
+        case 'cm' : return 11.516667;
+        case 'cn' : return 116.383333;
+        case 'co' : return -74.083333;
+        case 'cr' : return -84.083333;
+        case 'cu' : return -82.35;
+        case 'cv' : return -23.516667;
+        case 'cw' : return -68.916667;
+        case 'cx' : return 105.716667;
+        case 'cy' : return 33.366667;
+        case 'cz' : return 14.466667;
+        case 'de' : return 13.4;
+        case 'dj' : return 43.15;
+        case 'dk' : return 12.583333;
+        case 'dm' : return -61.4;
+        case 'do' : return -69.9;
+        case 'dz' : return 3.05;
+        case 'ec' : return -78.5;
+        case 'ee' : return 24.716667;
+        case 'eg' : return 31.25;
+        case 'eh' : return -13.203333;
+        case 'er' : return 38.933333;
+        case 'es' : return -3.683333;
+        case 'et' : return 38.7;
+        case 'fi' : return 24.933333;
+        case 'fj' : return 178.416667;
+        case 'fk' : return -57.85;
+        case 'fm' : return 158.15;
+        case 'fo' : return -6.766667;
+        case 'fr' : return 2.333333;
+        case 'ga' : return 9.45;
+        case 'gb' : return -0.083333;
+        case 'gd' : return -61.75;
+        case 'ge' : return 44.833333;
+        case 'gg' : return -2.533333;
+        case 'gh' : return -0.216667;
+        case 'gi' : return -5.35;
+        case 'gl' : return -51.75;
+        case 'gm' : return -16.566667;
+        case 'gn' : return -13.7;
+        case 'gq' : return 8.783333;
+        case 'gr' : return 23.733333;
+        case 'gs' : return -36.5;
+        case 'gt' : return -90.516667;
+        case 'gu' : return 144.733333;
+        case 'gw' : return -15.583333;
+        case 'gy' : return -58.15;
+        case 'hk' : return 0;
+        case 'hm' : return 0;
+        case 'hn' : return -87.216667;
+        case 'hr' : return 16;
+        case 'ht' : return -72.333333;
+        case 'hu' : return 19.083333;
+        case 'id' : return 106.816667;
+        case 'ie' : return -6.233333;
+        case 'il' : return 35.233333;
+        case 'im' : return -4.483333;
+        case 'in' : return 77.2;
+        case 'io' : return 72.4;
+        case 'iq' : return 44.4;
+        case 'ir' : return 51.416667;
+        case 'is' : return -21.95;
+        case 'it' : return 12.483333;
+        case 'je' : return -2.1;
+        case 'jm' : return -76.8;
+        case 'jo' : return 35.933333;
+        case 'jp' : return 139.75;
+        case 'ke' : return 36.816667;
+        case 'kg' : return 74.6;
+        case 'kh' : return 104.916667;
+        case 'ki' : return 169.533333;
+        case 'km' : return 43.233333;
+        case 'kn' : return -62.716667;
+        case 'ko' : return 21.166667;
+        case 'kp' : return 125.75;
+        case 'kr' : return 126.983333;
+        case 'kw' : return 47.966667;
+        case 'ky' : return -81.383333;
+        case 'kz' : return 71.416667;
+        case 'la' : return 102.6;
+        case 'lb' : return 35.5;
+        case 'lc' : return -61;
+        case 'li' : return 9.516667;
+        case 'lk' : return 79.833333;
+        case 'lr' : return -10.8;
+        case 'ls' : return 27.483333;
+        case 'lt' : return 25.316667;
+        case 'lu' : return 6.116667;
+        case 'lv' : return 24.1;
+        case 'ly' : return 13.166667;
+        case 'ma' : return -6.816667;
+        case 'mc' : return 7.416667;
+        case 'md' : return 28.85;
+        case 'me' : return 19.266667;
+        case 'mf' : return -63.0822;
+        case 'mg' : return 47.516667;
+        case 'mh' : return 171.383333;
+        case 'mk' : return 21.433333;
+        case 'ml' : return -8;
+        case 'mm' : return 96.15;
+        case 'mn' : return 106.916667;
+        case 'mo' : return 0;
+        case 'mp' : return 145.75;
+        case 'mr' : return -15.966667;
+        case 'ms' : return -62.216667;
+        case 'mt' : return 14.5;
+        case 'mu' : return 57.483333;
+        case 'mv' : return 73.5;
+        case 'mw' : return 33.783333;
+        case 'mx' : return -99.133333;
+        case 'my' : return 101.7;
+        case 'mz' : return 32.583333;
+        case 'na' : return 17.083333;
+        case 'nc' : return 166.45;
+        case 'ne' : return 2.116667;
+        case 'nf' : return 167.966667;
+        case 'ng' : return 7.533333;
+        case 'ni' : return -86.25;
+        case 'nl' : return 4.916667;
+        case 'no' : return 10.75;
+        case 'np' : return 85.316667;
+        case 'nr' : return 166.920867;
+        case 'nu' : return -169.916667;
+        case 'nz' : return 174.783333;
+        case 'om' : return 58.583333;
+        case 'pa' : return -79.533333;
+        case 'pe' : return -77.05;
+        case 'pf' : return -149.566667;
+        case 'pg' : return 147.183333;
+        case 'ph' : return 120.966667;
+        case 'pk' : return 73.05;
+        case 'pl' : return 21;
+        case 'pm' : return -56.183333;
+        case 'pn' : return -130.083333;
+        case 'pr' : return -66.116667;
+        case 'ps' : return 35.233333;
+        case 'pt' : return -9.133333;
+        case 'pw' : return 134.633333;
+        case 'py' : return -57.666667;
+        case 'qa' : return 51.533333;
+        case 'ro' : return 26.1;
+        case 'rs' : return 20.5;
+        case 'ru' : return 37.6;
+        case 'rw' : return 30.05;
+        case 'sa' : return 46.7;
+        case 'sb' : return 159.95;
+        case 'sc' : return 55.45;
+        case 'sd' : return 32.533333;
+        case 'se' : return 18.05;
+        case 'sg' : return 103.85;
+        case 'sh' : return -5.716667;
+        case 'si' : return 14.516667;
+        case 'sj' : return 15.633333;
+        case 'sk' : return 17.116667;
+        case 'sl' : return -13.233333;
+        case 'sm' : return 12.416667;
+        case 'sn' : return -17.633333;
+        case 'so' : return 45.333333;
+        case 'sr' : return -55.166667;
+        case 'ss' : return 31.616667;
+        case 'st' : return 6.733333;
+        case 'sv' : return -89.2;
+        case 'sx' : return -63.033333;
+        case 'sy' : return 36.3;
+        case 'sz' : return 31.133333;
+        case 'tc' : return -71.133333;
+        case 'td' : return 15.033333;
+        case 'tf' : return 70.216667;
+        case 'tg' : return 1.216667;
+        case 'th' : return 100.516667;
+        case 'tj' : return 68.766667;
+        case 'tk' : return -171.833333;
+        case 'tl' : return 125.6;
+        case 'tm' : return 58.383333;
+        case 'tn' : return 10.183333;
+        case 'to' : return -175.2;
+        case 'tr' : return 32.866667;
+        case 'tt' : return -61.516667;
+        case 'tv' : return 179.216667;
+        case 'tw' : return 121.516667;
+        case 'tz' : return 39.283333;
+        case 'ua' : return 30.516667;
+        case 'ug' : return 32.55;
+        case 'um' : return -77;
+        case 'us' : return -77;
+        case 'uy' : return -56.166667;
+        case 'uz' : return 69.25;
+        case 'va' : return 12.45;
+        case 'vc' : return -61.216667;
+        case 've' : return -66.866667;
+        case 'vg' : return -64.616667;
+        case 'vi' : return -64.933333;
+        case 'vn' : return 105.85;
+        case 'vu' : return 168.316667;
+        case 'wf' : return -171.933333;
+        case 'ws' : return -171.766667;
+        case 'ye' : return 44.2;
+        case 'za' : return 28.216667;
+        case 'zm' : return 28.283333;
+        case 'zw' : return 31.033333;
+    }
+
+    return 0.0;
+}
+
+// ~~
+
+export function getContinentSlugFromCountryCode(
+    countryCode
+    )
+{
+    switch ( countryCode )
+    {
+        case 'af' : return 'asia';
+        case 'ax' : return 'europe';
+        case 'al' : return 'europe';
+        case 'dz' : return 'africa';
+        case 'as' : return 'australia';
+        case 'ad' : return 'europe';
+        case 'ao' : return 'africa';
+        case 'ai' : return 'central-america';
+        case 'aq' : return 'antarctica';
+        case 'ag' : return 'central-america';
+        case 'ar' : return 'south-america';
+        case 'am' : return 'europe';
+        case 'aw' : return 'central-america';
+        case 'au' : return 'australia';
+        case 'at' : return 'europe';
+        case 'az' : return 'europe';
+        case 'bs' : return 'central-america';
+        case 'bh' : return 'asia';
+        case 'bd' : return 'asia';
+        case 'bb' : return 'central-america';
+        case 'by' : return 'europe';
+        case 'be' : return 'europe';
+        case 'bz' : return 'central-america';
+        case 'bj' : return 'africa';
+        case 'bm' : return 'central-america';
+        case 'bt' : return 'asia';
+        case 'bo' : return 'south-america';
+        case 'ba' : return 'europe';
+        case 'bw' : return 'africa';
+        case 'br' : return 'south-america';
+        case 'io' : return 'africa';
+        case 'vg' : return 'central-america';
+        case 'bn' : return 'asia';
+        case 'bg' : return 'europe';
+        case 'bf' : return 'africa';
+        case 'bi' : return 'africa';
+        case 'kh' : return 'asia';
+        case 'cm' : return 'africa';
+        case 'ca' : return 'north-america';
+        case 'cv' : return 'africa';
+        case 'ky' : return 'central-america';
+        case 'cf' : return 'africa';
+        case 'td' : return 'africa';
+        case 'cl' : return 'south-america';
+        case 'cn' : return 'asia';
+        case 'cx' : return 'australia';
+        case 'cc' : return 'australia';
+        case 'co' : return 'south-america';
+        case 'km' : return 'africa';
+        case 'ck' : return 'australia';
+        case 'cr' : return 'central-america';
+        case 'ci' : return 'africa';
+        case 'hr' : return 'europe';
+        case 'cu' : return 'central-america';
+        case 'cw' : return 'central-america';
+        case 'cy' : return 'europe';
+        case 'cz' : return 'europe';
+        case 'cd' : return 'africa';
+        case 'dk' : return 'europe';
+        case 'dj' : return 'africa';
+        case 'dm' : return 'central-america';
+        case 'do' : return 'central-america';
+        case 'ec' : return 'south-america';
+        case 'eg' : return 'africa';
+        case 'sv' : return 'central-america';
+        case 'gq' : return 'africa';
+        case 'er' : return 'africa';
+        case 'ee' : return 'europe';
+        case 'et' : return 'africa';
+        case 'fk' : return 'south-america';
+        case 'fo' : return 'europe';
+        case 'fm' : return 'australia';
+        case 'fj' : return 'australia';
+        case 'fi' : return 'europe';
+        case 'fr' : return 'europe';
+        case 'pf' : return 'australia';
+        case 'tf' : return 'antarctica';
+        case 'ga' : return 'africa';
+        case 'ge' : return 'europe';
+        case 'de' : return 'europe';
+        case 'gh' : return 'africa';
+        case 'gi' : return 'europe';
+        case 'gr' : return 'europe';
+        case 'gl' : return 'central-america';
+        case 'gd' : return 'central-america';
+        case 'gu' : return 'australia';
+        case 'gt' : return 'central-america';
+        case 'gg' : return 'europe';
+        case 'gn' : return 'africa';
+        case 'gw' : return 'africa';
+        case 'gy' : return 'south-america';
+        case 'ht' : return 'central-america';
+        case 'hm' : return 'antarctica';
+        case 'hn' : return 'central-america';
+        case 'hk' : return 'asia';
+        case 'hu' : return 'europe';
+        case 'is' : return 'europe';
+        case 'in' : return 'asia';
+        case 'id' : return 'asia';
+        case 'ir' : return 'asia';
+        case 'iq' : return 'asia';
+        case 'ie' : return 'europe';
+        case 'im' : return 'europe';
+        case 'il' : return 'asia';
+        case 'it' : return 'europe';
+        case 'jm' : return 'central-america';
+        case 'jp' : return 'asia';
+        case 'je' : return 'europe';
+        case 'jo' : return 'asia';
+        case 'kz' : return 'asia';
+        case 'ke' : return 'africa';
+        case 'ki' : return 'australia';
+        case 'ko' : return 'europe';
+        case 'kw' : return 'asia';
+        case 'kg' : return 'asia';
+        case 'la' : return 'asia';
+        case 'lv' : return 'europe';
+        case 'lb' : return 'asia';
+        case 'ls' : return 'africa';
+        case 'lr' : return 'africa';
+        case 'ly' : return 'africa';
+        case 'li' : return 'europe';
+        case 'lt' : return 'europe';
+        case 'lu' : return 'europe';
+        case 'mo' : return 'asia';
+        case 'mk' : return 'europe';
+        case 'mg' : return 'africa';
+        case 'mw' : return 'africa';
+        case 'my' : return 'asia';
+        case 'mv' : return 'asia';
+        case 'ml' : return 'africa';
+        case 'mt' : return 'europe';
+        case 'mh' : return 'australia';
+        case 'mr' : return 'africa';
+        case 'mu' : return 'africa';
+        case 'mx' : return 'central-america';
+        case 'md' : return 'europe';
+        case 'mc' : return 'europe';
+        case 'mn' : return 'asia';
+        case 'me' : return 'europe';
+        case 'ms' : return 'central-america';
+        case 'ma' : return 'africa';
+        case 'mz' : return 'africa';
+        case 'mm' : return 'asia';
+        case 'na' : return 'africa';
+        case 'nr' : return 'australia';
+        case 'np' : return 'asia';
+        case 'nl' : return 'europe';
+        case 'nc' : return 'australia';
+        case 'nz' : return 'australia';
+        case 'ni' : return 'central-america';
+        case 'ne' : return 'africa';
+        case 'ng' : return 'africa';
+        case 'nu' : return 'australia';
+        case 'nf' : return 'australia';
+        case 'kp' : return 'asia';
+        case 'mp' : return 'australia';
+        case 'no' : return 'europe';
+        case 'om' : return 'asia';
+        case 'pk' : return 'asia';
+        case 'pw' : return 'australia';
+        case 'ps' : return 'asia';
+        case 'pa' : return 'central-america';
+        case 'pg' : return 'australia';
+        case 'py' : return 'south-america';
+        case 'pe' : return 'south-america';
+        case 'ph' : return 'asia';
+        case 'pn' : return 'australia';
+        case 'pl' : return 'europe';
+        case 'pt' : return 'europe';
+        case 'pr' : return 'central-america';
+        case 'qa' : return 'asia';
+        case 'cg' : return 'africa';
+        case 'ro' : return 'europe';
+        case 'ru' : return 'europe';
+        case 'rw' : return 'africa';
+        case 'bl' : return 'central-america';
+        case 'sh' : return 'africa';
+        case 'kn' : return 'central-america';
+        case 'lc' : return 'central-america';
+        case 'mf' : return 'central-america';
+        case 'pm' : return 'central-america';
+        case 'vc' : return 'central-america';
+        case 'ws' : return 'australia';
+        case 'sm' : return 'europe';
+        case 'st' : return 'africa';
+        case 'sa' : return 'asia';
+        case 'sn' : return 'africa';
+        case 'rs' : return 'europe';
+        case 'sc' : return 'africa';
+        case 'sl' : return 'africa';
+        case 'sg' : return 'asia';
+        case 'sx' : return 'central-america';
+        case 'sk' : return 'europe';
+        case 'si' : return 'europe';
+        case 'sb' : return 'australia';
+        case 'so' : return 'africa';
+        case 'za' : return 'africa';
+        case 'gs' : return 'antarctica';
+        case 'kr' : return 'asia';
+        case 'ss' : return 'africa';
+        case 'es' : return 'europe';
+        case 'lk' : return 'asia';
+        case 'sd' : return 'africa';
+        case 'sr' : return 'south-america';
+        case 'sj' : return 'europe';
+        case 'sz' : return 'africa';
+        case 'se' : return 'europe';
+        case 'ch' : return 'europe';
+        case 'sy' : return 'asia';
+        case 'tw' : return 'asia';
+        case 'tj' : return 'asia';
+        case 'tz' : return 'africa';
+        case 'th' : return 'asia';
+        case 'gm' : return 'africa';
+        case 'tl' : return 'asia';
+        case 'tg' : return 'africa';
+        case 'tk' : return 'australia';
+        case 'to' : return 'australia';
+        case 'tt' : return 'central-america';
+        case 'tn' : return 'africa';
+        case 'tr' : return 'europe';
+        case 'tm' : return 'asia';
+        case 'tc' : return 'central-america';
+        case 'tv' : return 'australia';
+        case 'ug' : return 'africa';
+        case 'ua' : return 'europe';
+        case 'ae' : return 'asia';
+        case 'gb' : return 'europe';
+        case 'us' : return 'north-america';
+        case 'uy' : return 'south-america';
+        case 'um' : return 'australia';
+        case 'vi' : return 'central-america';
+        case 'uz' : return 'asia';
+        case 'vu' : return 'australia';
+        case 'va' : return 'europe';
+        case 've' : return 'south-america';
+        case 'vn' : return 'asia';
+        case 'wf' : return 'australia';
+        case 'eh' : return 'africa';
+        case 'ye' : return 'asia';
+        case 'zm' : return 'africa';
+        case 'zw' : return 'africa';
+    }
+
+    return '';
+}
+
+// ~~
+
+export async function getLocationFromIpAddress(
+    ipAddress
+    )
+{
+    if ( locationByIpAddressMap.has( ipAddress ) )
+    {
+        return locationByIpAddressMap.get( ipAddress );
+    }
+    else
+    {
+        let location = {
+            Service: '',
+            Latitude: 0.0,
+            Longitude: 0.0,
+            CountryCode: '',
+            TimeZone: '',
+            IsFound: false,
+            ContinentSlug: '',
+            IsAntarctica: false,
+            IsSouthAmerica: false,
+            IsCentralAmerica: false,
+            IsNorthAmerica: false,
+            IsAmerica: false,
+            IsAfrica: false,
+            IsEurope: false,
+            IsAustralia: false,
+            IsAsia: false,
+            IsJapan: false
+        };
+
+        if ( !location.IsFound )
+        {
+            try
+            {
+                let response = await fetch( 'http://ip-api.com/json/' + ipAddress );
+                let geographicData = await response.json();
+
+                if ( geographicData
+                     && geographicData.status === 'success' )
+                {
+                    location.Service = 'ip-api.com';
+                    location.CountryCode = geographicData.countryCode.toLowerCase();
+                    location.Latitude = geographicData.lat;
+                    location.Longitude = geographicData.lon;
+                    location.TimeZone = geographicData.timezone;
+                    location.IsFound = true;
+                }
+            }
+            catch ( error )
+            {
+                console.error( error );
+            }
+        }
+
+        if ( !location.IsFound )
+        {
+            try
+            {
+                const response = await fetch( 'http://ip-api.com/json/' + ipAddress );
+                const geographicData = await response.json();
+
+                if ( geographicData
+                     && geographicData.hasOwnProperty( 'countryCode' )
+                     && geographicData.hasOwnProperty( 'lat' )
+                     && geographicData.hasOwnProperty( 'lon' )
+                     && geographicData.hasOwnProperty( 'timezone' )
+                     && geographicData.hasOwnProperty( 'status' )
+                     && geographicData.status === 'success' )
+                {
+                     location.Service = 'ip-api.com';
+                     location.CountryCode = geographicData.countryCode.toLowerCase();
+                     location.Latitude = Number( geographicData.lat );
+                     location.Longitude = Number( geographicData.lon );
+                     location.TimeZone = geographicData.timezone;
+                     location.IsFound = true;
+                }
+            }
+            catch ( error )
+            {
+                console.error( error );
+            }
+        }
+
+        if ( !location.IsFound )
+        {
+            try
+            {
+                const response = await fetch( 'http://www.geoplugin.net/json.gp?ip=' + ipAddress );
+                const geographicData = await response.json();
+
+                if ( geographicData
+                     && geographicData.hasOwnProperty( 'geoplugin_countryCode' )
+                     && geographicData.hasOwnProperty( 'geoplugin_latitude' )
+                     && geographicData.hasOwnProperty( 'geoplugin_longitude' )
+                     && geographicData.hasOwnProperty( 'geoplugin_timezone' )
+                     && geographicData.hasOwnProperty( 'geoplugin_status' )
+                     && geographicData.geoplugin_countryCode !== null
+                     && geographicData.geoplugin_status !== 404 )
+                {
+                     location.Service = 'geoplugin.net';
+                     location.CountryCode = geographicData.geoplugin_countryCode.toLowerCase();
+                     location.Latitude = Number( geographicData.geoplugin_latitude );
+                     location.Longitude = Number( geoplugin_longitude );
+                     location.TimeZone = geographicData.geoplugin_timezone;
+                     location.IsFound = true;
+                }
+            }
+            catch ( error )
+            {
+                console.error( error );
+            }
+        }
+
+        if ( !location.IsFound )
+        {
+            try
+            {
+                const response = await fetch( 'https://www.iplocate.io/api/lookup/' + ipAddress );
+                const geographicData = await response.json();
+
+                if ( geographicData
+                     && geographicData.hasOwnProperty( 'country_code' )
+                     && geographicData.hasOwnProperty( 'latitude' )
+                     && geographicData.hasOwnProperty( 'longitude' )
+                     && geographicData.hasOwnProperty( 'time_zone' )
+                     && geographicData.country_code !== null )
+                {
+                    location.Service = 'iplocate.io';
+                    location.CountryCode = geographicData.country_code.toLowerCase();
+                    location.Latitude = Number( geographicData.latitude );
+                    location.Longitude = Number( geographicData.longitude );
+                    location.TimeZone = geographicData.time_zone;
+                    location.IsFound = true;
+                }
+            }
+            catch ( error )
+            {
+                console.error( error );
+            }
+        }
+
+        if ( !location.IsFound )
+        {
+            try
+            {
+                const response = await fetch( 'https://api.hostip.info/get_json.php?ip=' + ipAddress );
+                const geographicData = await response.json();
+
+                if ( geographicData
+                     && geographicData.hasOwnProperty( 'country_code' )
+                     && geographicData.country_code !== null
+                     && geographicData.country_code !== 'XX' )
+                {
+                    location.Service = 'hostip.info';
+                    location.CountryCode = geographicData.country_code;
+                    location.Latitude = getCapitalLatitudeFromCountryCode( location.CountryCode.toLowerCase() );
+                    location.Longitude = getCapitalLongitudeFromCountryCode( location.CountryCode );
+                    location.TimeZone = getTimeZoneFromLocation( location.Latitude, location.Longitude, location.CountryCode );
+                    location.IsFound = true;
+                }
+            }
+            catch ( error )
+            {
+                console.error( error );
+            }
+        }
+
+        location.ContinentSlug = getContinentSlugFromCountryCode( location.CountryCode );
+        location.IsAntarctica = ( location.ContinentSlug === 'antarctica' );
+        location.IsSouthAmerica = ( location.ContinentSlug === 'south-america' );
+        location.IsCentralAmerica = ( location.ContinentSlug === 'central-america' );
+        location.IsNorthAmerica = ( location.ContinentSlug === 'north-america' );
+        location.IsAmerica = ( location.IsSouthAmerica || location.IsNorthAmerica );
+        location.IsAfrica = ( location.ContinentSlug === 'africa' );
+        location.IsEurope = ( location.ContinentSlug === 'europe' );
+        location.IsAustralia = ( location.ContinentSlug === 'australia' );
+        location.IsAsia = ( location.ContinentSlug === 'asia' );
+        location.IsJapan = ( location.CountryCode === 'jp' );
+
+        locationByIpAddressMap.set( ipAddress, location );
+
+        return location;
+    }
+}
+
+// ~~
+
+export async function getCountryCodeFromIpAddress(
+    ipAddress
+    )
+{
+    return getLocationFromIpAddress().countryCode;
+}
+
+// ~~
+
+export function setCountryCode(
+    countryCode_
+    )
+{
+    countryCode = countryCode_;
+}
+
+// ~~
+
+export function getCountryCode(
+    )
+{
+    return countryCode;
+}
+
+// ~~
+
+export function setDefaultCountryCode(
+    defaultCountryCode_
+    )
+{
+    defaultCountryCode = defaultCountryCode_;
+}
+
+// ~~
+
+export function getDefaultCountryCode(
+    )
+{
+    return defaultCountryCode;
+}
+
+// ~~
+
+export function getCountryText(
+    textByCountryCodeMap,
+    countryCode_ = undefined
+    )
+{
+    if ( isString( textByCountryCodeMap ) )
+    {
+        return textByCountryCodeMap;
+    }
+    else if ( countryCode_ !== undefined
+              && textByCountryCodeMap.hasOwnProperty( countryCode_ ) )
+    {
+        return textByCountryCodeMap[ countryCode_ ];
+    }
+    else if ( textByCountryCodeMap.hasOwnProperty( countryCode ) )
+    {
+        return textByCountryCodeMap[ countryCode ];
+    }
+    else if ( textByCountryCodeMap.hasOwnProperty( defaultCountryCode ) )
+    {
+        return textByCountryCodeMap[ defaultCountryCode ];
+    }
+    else
+    {
+        console.warn( 'Missing country code ' + countryCode_ + ' : ' + JSON.stringigy( textByCountryCodeMap ) );
+
+        return '';
+    }
+}
+
+// ~~
+
 export function getBrowserLanguageCode(
     browserLanguageText,
     validLanguageCodeArray,
@@ -628,7 +1829,7 @@ export function getTextByLanguageCodeMapBySlug(
     }
     else
     {
-        console.warn( 'Missing text code ' + textSlug );
+        console.warn( 'Missing text slug : ' + textSlug );
 
         return '';
     }
@@ -636,23 +1837,28 @@ export function getTextByLanguageCodeMapBySlug(
 
 // ~~
 
-export function getTranslatedText(
+export function getLanguageText(
     textByLanguageCodeMap,
-    languageCode_
+    languageCode_ = undefined,
+    countryCode = undefined
     )
 {
-    if ( languageCode_ !== undefined
-         && textByLanguageCodeMap.hasOwnProperty( languageCode_ ) )
+    if ( isString( textByLanguageCodeMap ) )
     {
-        return textByLanguageCodeMap[ languageCode_ ];
+        return textByLanguageCodeMap;
+    }
+    else if ( languageCode_ !== undefined
+              && textByLanguageCodeMap.hasOwnProperty( languageCode_ ) )
+    {
+        return getCountryText( textByLanguageCodeMap[ languageCode_ ], countryCode );
     }
     else if ( textByLanguageCodeMap.hasOwnProperty( languageCode ) )
     {
-        return textByLanguageCodeMap[ languageCode ];
+        return getCountryText( textByLanguageCodeMap[ languageCode ], countryCode );
     }
     else if ( textByLanguageCodeMap.hasOwnProperty( defaultLanguageCode ) )
     {
-        return textByLanguageCodeMap[ defaultLanguageCode ];
+        return getCountryText( textByLanguageCodeMap[ defaultLanguageCode ], countryCode );
     }
     else
     {
@@ -664,18 +1870,19 @@ export function getTranslatedText(
 
 // ~~
 
-export function getTranslatedTextBySlug(
+export function getLanguageTextBySlug(
     textSlug,
-    languageCode
+    languageCode = undefined,
+    countryCode = undefined
     )
 {
     if ( textByLanguageCodeMapBySlugMap.has( textSlug ) )
     {
-        return getTranslatedText( textByLanguageCodeMapBySlugMap.get( textSlug ), languageCode );
+        return getLanguageText( textByLanguageCodeMapBySlugMap.get( textSlug ), languageCode, countryCode );
     }
     else
     {
-        console.warn( 'Missing translated text  : ' + textSlug );
+        console.warn( 'Missing text slug : ' + textSlug );
 
         return textSlug;
     }
@@ -752,9 +1959,16 @@ export function defineColorTag(
 // ~~
 
 export function getProcessedText(
-    text
+    text,
+    languageCode = undefined,
+    countryCode = undefined
     )
 {
+    if ( !isString( text ) )
+    {
+        text = getLanguageText( text, languageCode, countryCode );
+    }
+    
     for ( let processedDualTag of processedDualTagArray )
     {
         let partArray = text.split( processedDualTag.name );
@@ -782,9 +1996,16 @@ export function getProcessedText(
 // ~~
 
 export function getProcessedMultilineText(
-    text
+    text,
+    languageCode = undefined,
+    countryCode = undefined
     )
 {
+    if ( !isString( text ) )
+    {
+        text = getLanguageText( text, languageCode, countryCode );
+    }
+    
     let processedLineTagCount = processedLineTagArray.length;
 
     if ( processedLineTagCount > 0 )
@@ -825,956 +2046,41 @@ export function getProcessedMultilineText(
 
 // ~~
 
-export function getCapitalLatitudeFromCountryCode(
-    countryCode
+export function getProcessedTextBySlug(
+    textSlug,
+    languageCode = undefined,
+    countryCode = undefined
     )
 {
-    switch ( countryCode )
+    if ( textByLanguageCodeMapBySlugMap.has( textSlug ) )
     {
-        case 'AD' : return 42.5;
-        case 'AE' : return 24.46666667;
-        case 'AF' : return 34.51666667;
-        case 'AG' : return 17.11666667;
-        case 'AI' : return 18.21666667;
-        case 'AL' : return 41.31666667;
-        case 'AM' : return 40.16666667;
-        case 'AO' : return -8.833333333;
-        case 'AQ' : return -80.0;
-        case 'AR' : return -34.58333333;
-        case 'AS' : return -14.26666667;
-        case 'AT' : return 48.2;
-        case 'AU' : return -35.26666667;
-        case 'AW' : return 12.51666667;
-        case 'AX' : return 60.116667;
-        case 'AZ' : return 40.38333333;
-        case 'BA' : return 43.86666667;
-        case 'BB' : return 13.1;
-        case 'BD' : return 23.71666667;
-        case 'BE' : return 50.83333333;
-        case 'BF' : return 12.36666667;
-        case 'BG' : return 42.68333333;
-        case 'BH' : return 26.23333333;
-        case 'BI' : return -3.366666667;
-        case 'BJ' : return 6.483333333;
-        case 'BL' : return 17.88333333;
-        case 'BM' : return 32.28333333;
-        case 'BN' : return 4.883333333;
-        case 'BO' : return -16.5;
-        case 'BR' : return -15.78333333;
-        case 'BS' : return 25.08333333;
-        case 'BT' : return 27.46666667;
-        case 'BW' : return -24.63333333;
-        case 'BY' : return 53.9;
-        case 'BZ' : return 17.25;
-        case 'CA' : return 45.41666667;
-        case 'CC' : return -12.16666667;
-        case 'CD' : return -4.316666667;
-        case 'CF' : return 4.366666667;
-        case 'CG' : return -4.25;
-        case 'CH' : return 46.91666667;
-        case 'CI' : return 6.816666667;
-        case 'CK' : return -21.2;
-        case 'CL' : return -33.45;
-        case 'CM' : return 3.866666667;
-        case 'CN' : return 39.91666667;
-        case 'CO' : return 4.6;
-        case 'CR' : return 9.933333333;
-        case 'CU' : return 23.11666667;
-        case 'CV' : return 14.91666667;
-        case 'CW' : return 12.1;
-        case 'CX' : return -10.41666667;
-        case 'CY' : return 35.16666667;
-        case 'CZ' : return 50.08333333;
-        case 'DE' : return 52.51666667;
-        case 'DJ' : return 11.58333333;
-        case 'DK' : return 55.66666667;
-        case 'DM' : return 15.3;
-        case 'DO' : return 18.46666667;
-        case 'DZ' : return 36.75;
-        case 'EC' : return -0.216666667;
-        case 'EE' : return 59.43333333;
-        case 'EG' : return 30.05;
-        case 'EH' : return 27.153611;
-        case 'ER' : return 15.33333333;
-        case 'ES' : return 40.4;
-        case 'ET' : return 9.033333333;
-        case 'FI' : return 60.16666667;
-        case 'FJ' : return -18.13333333;
-        case 'FK' : return -51.7;
-        case 'FM' : return 6.916666667;
-        case 'FO' : return 62;
-        case 'FR' : return 48.86666667;
-        case 'GA' : return 0.383333333;
-        case 'GB' : return 51.5;
-        case 'GD' : return 12.05;
-        case 'GE' : return 41.68333333;
-        case 'GG' : return 49.45;
-        case 'GH' : return 5.55;
-        case 'GI' : return 36.13333333;
-        case 'GL' : return 64.18333333;
-        case 'GM' : return 13.45;
-        case 'GN' : return 9.5;
-        case 'GQ' : return 3.75;
-        case 'GR' : return 37.98333333;
-        case 'GS' : return -54.283333;
-        case 'GT' : return 14.61666667;
-        case 'GU' : return 13.46666667;
-        case 'GW' : return 11.85;
-        case 'GY' : return 6.8;
-        case 'HK' : return 0;
-        case 'HM' : return 0;
-        case 'HN' : return 14.1;
-        case 'HR' : return 45.8;
-        case 'HT' : return 18.53333333;
-        case 'HU' : return 47.5;
-        case 'ID' : return -6.166666667;
-        case 'IE' : return 53.31666667;
-        case 'IL' : return 31.76666667;
-        case 'IM' : return 54.15;
-        case 'IN' : return 28.6;
-        case 'IO' : return -7.3;
-        case 'IQ' : return 33.33333333;
-        case 'IR' : return 35.7;
-        case 'IS' : return 64.15;
-        case 'IT' : return 41.9;
-        case 'JE' : return 49.18333333;
-        case 'JM' : return 18;
-        case 'JO' : return 31.95;
-        case 'JP' : return 35.68333333;
-        case 'KE' : return -1.283333333;
-        case 'KG' : return 42.86666667;
-        case 'KH' : return 11.55;
-        case 'KI' : return -0.883333333;
-        case 'KM' : return -11.7;
-        case 'KN' : return 17.3;
-        case 'KO' : return 42.66666667;
-        case 'KP' : return 39.01666667;
-        case 'KR' : return 37.55;
-        case 'KW' : return 29.36666667;
-        case 'KY' : return 19.3;
-        case 'KZ' : return 51.16666667;
-        case 'LA' : return 17.96666667;
-        case 'LB' : return 33.86666667;
-        case 'LC' : return 14;
-        case 'LI' : return 47.13333333;
-        case 'LK' : return 6.916666667;
-        case 'LR' : return 6.3;
-        case 'LS' : return -29.31666667;
-        case 'LT' : return 54.68333333;
-        case 'LU' : return 49.6;
-        case 'LV' : return 56.95;
-        case 'LY' : return 32.88333333;
-        case 'MA' : return 34.01666667;
-        case 'MC' : return 43.73333333;
-        case 'MD' : return 47;
-        case 'ME' : return 42.43333333;
-        case 'MF' : return 18.0731;
-        case 'MG' : return -18.91666667;
-        case 'MH' : return 7.1;
-        case 'MK' : return 42;
-        case 'ML' : return 12.65;
-        case 'MM' : return 16.8;
-        case 'MN' : return 47.91666667;
-        case 'MO' : return 0;
-        case 'MP' : return 15.2;
-        case 'MR' : return 18.06666667;
-        case 'MS' : return 16.7;
-        case 'MT' : return 35.88333333;
-        case 'MU' : return -20.15;
-        case 'MV' : return 4.166666667;
-        case 'MW' : return -13.96666667;
-        case 'MX' : return 19.43333333;
-        case 'MY' : return 3.166666667;
-        case 'MZ' : return -25.95;
-        case 'NA' : return -22.56666667;
-        case 'NC' : return -22.26666667;
-        case 'NE' : return 13.51666667;
-        case 'NF' : return -29.05;
-        case 'NG' : return 9.083333333;
-        case 'NI' : return 12.13333333;
-        case 'NL' : return 52.35;
-        case 'NO' : return 59.91666667;
-        case 'NP' : return 27.71666667;
-        case 'NR' : return -0.5477;
-        case 'NU' : return -19.01666667;
-        case 'NZ' : return -41.3;
-        case 'OM' : return 23.61666667;
-        case 'PA' : return 8.966666667;
-        case 'PE' : return -12.05;
-        case 'PF' : return -17.53333333;
-        case 'PG' : return -9.45;
-        case 'PH' : return 14.6;
-        case 'PK' : return 33.68333333;
-        case 'PL' : return 52.25;
-        case 'PM' : return 46.76666667;
-        case 'PN' : return -25.06666667;
-        case 'PR' : return 18.46666667;
-        case 'PS' : return 31.76666667;
-        case 'PT' : return 38.71666667;
-        case 'PW' : return 7.483333333;
-        case 'PY' : return -25.26666667;
-        case 'QA' : return 25.28333333;
-        case 'RO' : return 44.43333333;
-        case 'RS' : return 44.83333333;
-        case 'RU' : return 55.75;
-        case 'RW' : return -1.95;
-        case 'SA' : return 24.65;
-        case 'SB' : return -9.433333333;
-        case 'SC' : return -4.616666667;
-        case 'SD' : return 15.6;
-        case 'SE' : return 59.33333333;
-        case 'SG' : return 1.283333333;
-        case 'SH' : return -15.93333333;
-        case 'SI' : return 46.05;
-        case 'SJ' : return 78.21666667;
-        case 'SK' : return 48.15;
-        case 'SL' : return 8.483333333;
-        case 'SM' : return 43.93333333;
-        case 'SN' : return 14.73333333;
-        case 'SO' : return 2.066666667;
-        case 'SR' : return 5.833333333;
-        case 'SS' : return 4.85;
-        case 'ST' : return 0.333333333;
-        case 'SV' : return 13.7;
-        case 'SX' : return 18.01666667;
-        case 'SY' : return 33.5;
-        case 'SZ' : return -26.31666667;
-        case 'TC' : return 21.46666667;
-        case 'TD' : return 12.1;
-        case 'TF' : return -49.35;
-        case 'TG' : return 6.116666667;
-        case 'TH' : return 13.75;
-        case 'TJ' : return 38.55;
-        case 'TK' : return -9.166667;
-        case 'TL' : return -8.583333333;
-        case 'TM' : return 37.95;
-        case 'TN' : return 36.8;
-        case 'TO' : return -21.13333333;
-        case 'TR' : return 39.93333333;
-        case 'TT' : return 10.65;
-        case 'TV' : return -8.516666667;
-        case 'TW' : return 25.03333333;
-        case 'TZ' : return -6.8;
-        case 'UA' : return 50.43333333;
-        case 'UG' : return 0.316666667;
-        case 'UM' : return 38.883333;
-        case 'US' : return 38.883333;
-        case 'UY' : return -34.85;
-        case 'UZ' : return 41.31666667;
-        case 'VA' : return 41.9;
-        case 'VC' : return 13.13333333;
-        case 'VE' : return 10.48333333;
-        case 'VG' : return 18.41666667;
-        case 'VI' : return 18.35;
-        case 'VN' : return 21.03333333;
-        case 'VU' : return -17.73333333;
-        case 'WF' : return -13.95;
-        case 'WS' : return -13.81666667;
-        case 'YE' : return 15.35;
-        case 'ZA' : return -25.7;
-        case 'ZM' : return -15.41666667;
-        case 'ZW' : return -17.81666667;
-    }
-
-    return 0.0;
-}
-
-// ~~
-
-export function getCapitalLongitudeFromCountryCode(
-    countryCode
-    )
-{
-    switch ( countryCode )
-    {
-        case 'AD' : return 1.516667;
-        case 'AE' : return 54.366667;
-        case 'AF' : return 69.183333;
-        case 'AG' : return -61.85;
-        case 'AI' : return -63.05;
-        case 'AL' : return 19.816667;
-        case 'AM' : return 44.5;
-        case 'AO' : return 13.216667;
-        case 'AQ' : return 0.0;
-        case 'AR' : return -58.666667;
-        case 'AS' : return -170.7;
-        case 'AT' : return 16.366667;
-        case 'AU' : return 149.133333;
-        case 'AW' : return -70.033333;
-        case 'AX' : return 19.9;
-        case 'AZ' : return 49.866667;
-        case 'BA' : return 18.416667;
-        case 'BB' : return -59.616667;
-        case 'BD' : return 90.4;
-        case 'BE' : return 4.333333;
-        case 'BF' : return -1.516667;
-        case 'BG' : return 23.316667;
-        case 'BH' : return 50.566667;
-        case 'BI' : return 29.35;
-        case 'BJ' : return 2.616667;
-        case 'BL' : return -62.85;
-        case 'BM' : return -64.783333;
-        case 'BN' : return 114.933333;
-        case 'BO' : return -68.15;
-        case 'BR' : return -47.916667;
-        case 'BS' : return -77.35;
-        case 'BT' : return 89.633333;
-        case 'BW' : return 25.9;
-        case 'BY' : return 27.566667;
-        case 'BZ' : return -88.766667;
-        case 'CA' : return -75.7;
-        case 'CC' : return 96.833333;
-        case 'CD' : return 15.3;
-        case 'CF' : return 18.583333;
-        case 'CG' : return 15.283333;
-        case 'CH' : return 7.466667;
-        case 'CI' : return -5.266667;
-        case 'CK' : return -159.766667;
-        case 'CL' : return -70.666667;
-        case 'CM' : return 11.516667;
-        case 'CN' : return 116.383333;
-        case 'CO' : return -74.083333;
-        case 'CR' : return -84.083333;
-        case 'CU' : return -82.35;
-        case 'CV' : return -23.516667;
-        case 'CW' : return -68.916667;
-        case 'CX' : return 105.716667;
-        case 'CY' : return 33.366667;
-        case 'CZ' : return 14.466667;
-        case 'DE' : return 13.4;
-        case 'DJ' : return 43.15;
-        case 'DK' : return 12.583333;
-        case 'DM' : return -61.4;
-        case 'DO' : return -69.9;
-        case 'DZ' : return 3.05;
-        case 'EC' : return -78.5;
-        case 'EE' : return 24.716667;
-        case 'EG' : return 31.25;
-        case 'EH' : return -13.203333;
-        case 'ER' : return 38.933333;
-        case 'ES' : return -3.683333;
-        case 'ET' : return 38.7;
-        case 'FI' : return 24.933333;
-        case 'FJ' : return 178.416667;
-        case 'FK' : return -57.85;
-        case 'FM' : return 158.15;
-        case 'FO' : return -6.766667;
-        case 'FR' : return 2.333333;
-        case 'GA' : return 9.45;
-        case 'GB' : return -0.083333;
-        case 'GD' : return -61.75;
-        case 'GE' : return 44.833333;
-        case 'GG' : return -2.533333;
-        case 'GH' : return -0.216667;
-        case 'GI' : return -5.35;
-        case 'GL' : return -51.75;
-        case 'GM' : return -16.566667;
-        case 'GN' : return -13.7;
-        case 'GQ' : return 8.783333;
-        case 'GR' : return 23.733333;
-        case 'GS' : return -36.5;
-        case 'GT' : return -90.516667;
-        case 'GU' : return 144.733333;
-        case 'GW' : return -15.583333;
-        case 'GY' : return -58.15;
-        case 'HK' : return 0;
-        case 'HM' : return 0;
-        case 'HN' : return -87.216667;
-        case 'HR' : return 16;
-        case 'HT' : return -72.333333;
-        case 'HU' : return 19.083333;
-        case 'ID' : return 106.816667;
-        case 'IE' : return -6.233333;
-        case 'IL' : return 35.233333;
-        case 'IM' : return -4.483333;
-        case 'IN' : return 77.2;
-        case 'IO' : return 72.4;
-        case 'IQ' : return 44.4;
-        case 'IR' : return 51.416667;
-        case 'IS' : return -21.95;
-        case 'IT' : return 12.483333;
-        case 'JE' : return -2.1;
-        case 'JM' : return -76.8;
-        case 'JO' : return 35.933333;
-        case 'JP' : return 139.75;
-        case 'KE' : return 36.816667;
-        case 'KG' : return 74.6;
-        case 'KH' : return 104.916667;
-        case 'KI' : return 169.533333;
-        case 'KM' : return 43.233333;
-        case 'KN' : return -62.716667;
-        case 'KO' : return 21.166667;
-        case 'KP' : return 125.75;
-        case 'KR' : return 126.983333;
-        case 'KW' : return 47.966667;
-        case 'KY' : return -81.383333;
-        case 'KZ' : return 71.416667;
-        case 'LA' : return 102.6;
-        case 'LB' : return 35.5;
-        case 'LC' : return -61;
-        case 'LI' : return 9.516667;
-        case 'LK' : return 79.833333;
-        case 'LR' : return -10.8;
-        case 'LS' : return 27.483333;
-        case 'LT' : return 25.316667;
-        case 'LU' : return 6.116667;
-        case 'LV' : return 24.1;
-        case 'LY' : return 13.166667;
-        case 'MA' : return -6.816667;
-        case 'MC' : return 7.416667;
-        case 'MD' : return 28.85;
-        case 'ME' : return 19.266667;
-        case 'MF' : return -63.0822;
-        case 'MG' : return 47.516667;
-        case 'MH' : return 171.383333;
-        case 'MK' : return 21.433333;
-        case 'ML' : return -8;
-        case 'MM' : return 96.15;
-        case 'MN' : return 106.916667;
-        case 'MO' : return 0;
-        case 'MP' : return 145.75;
-        case 'MR' : return -15.966667;
-        case 'MS' : return -62.216667;
-        case 'MT' : return 14.5;
-        case 'MU' : return 57.483333;
-        case 'MV' : return 73.5;
-        case 'MW' : return 33.783333;
-        case 'MX' : return -99.133333;
-        case 'MY' : return 101.7;
-        case 'MZ' : return 32.583333;
-        case 'NA' : return 17.083333;
-        case 'NC' : return 166.45;
-        case 'NE' : return 2.116667;
-        case 'NF' : return 167.966667;
-        case 'NG' : return 7.533333;
-        case 'NI' : return -86.25;
-        case 'NL' : return 4.916667;
-        case 'NO' : return 10.75;
-        case 'NP' : return 85.316667;
-        case 'NR' : return 166.920867;
-        case 'NU' : return -169.916667;
-        case 'NZ' : return 174.783333;
-        case 'OM' : return 58.583333;
-        case 'PA' : return -79.533333;
-        case 'PE' : return -77.05;
-        case 'PF' : return -149.566667;
-        case 'PG' : return 147.183333;
-        case 'PH' : return 120.966667;
-        case 'PK' : return 73.05;
-        case 'PL' : return 21;
-        case 'PM' : return -56.183333;
-        case 'PN' : return -130.083333;
-        case 'PR' : return -66.116667;
-        case 'PS' : return 35.233333;
-        case 'PT' : return -9.133333;
-        case 'PW' : return 134.633333;
-        case 'PY' : return -57.666667;
-        case 'QA' : return 51.533333;
-        case 'RO' : return 26.1;
-        case 'RS' : return 20.5;
-        case 'RU' : return 37.6;
-        case 'RW' : return 30.05;
-        case 'SA' : return 46.7;
-        case 'SB' : return 159.95;
-        case 'SC' : return 55.45;
-        case 'SD' : return 32.533333;
-        case 'SE' : return 18.05;
-        case 'SG' : return 103.85;
-        case 'SH' : return -5.716667;
-        case 'SI' : return 14.516667;
-        case 'SJ' : return 15.633333;
-        case 'SK' : return 17.116667;
-        case 'SL' : return -13.233333;
-        case 'SM' : return 12.416667;
-        case 'SN' : return -17.633333;
-        case 'SO' : return 45.333333;
-        case 'SR' : return -55.166667;
-        case 'SS' : return 31.616667;
-        case 'ST' : return 6.733333;
-        case 'SV' : return -89.2;
-        case 'SX' : return -63.033333;
-        case 'SY' : return 36.3;
-        case 'SZ' : return 31.133333;
-        case 'TC' : return -71.133333;
-        case 'TD' : return 15.033333;
-        case 'TF' : return 70.216667;
-        case 'TG' : return 1.216667;
-        case 'TH' : return 100.516667;
-        case 'TJ' : return 68.766667;
-        case 'TK' : return -171.833333;
-        case 'TL' : return 125.6;
-        case 'TM' : return 58.383333;
-        case 'TN' : return 10.183333;
-        case 'TO' : return -175.2;
-        case 'TR' : return 32.866667;
-        case 'TT' : return -61.516667;
-        case 'TV' : return 179.216667;
-        case 'TW' : return 121.516667;
-        case 'TZ' : return 39.283333;
-        case 'UA' : return 30.516667;
-        case 'UG' : return 32.55;
-        case 'UM' : return -77;
-        case 'US' : return -77;
-        case 'UY' : return -56.166667;
-        case 'UZ' : return 69.25;
-        case 'VA' : return 12.45;
-        case 'VC' : return -61.216667;
-        case 'VE' : return -66.866667;
-        case 'VG' : return -64.616667;
-        case 'VI' : return -64.933333;
-        case 'VN' : return 105.85;
-        case 'VU' : return 168.316667;
-        case 'WF' : return -171.933333;
-        case 'WS' : return -171.766667;
-        case 'YE' : return 44.2;
-        case 'ZA' : return 28.216667;
-        case 'ZM' : return 28.283333;
-        case 'ZW' : return 31.033333;
-    }
-
-    return 0.0;
-}
-
-// ~~
-
-export function getContinentSlugFromCountryCode(
-    countryCode
-    )
-{
-    switch ( countryCode )
-    {
-        case 'AF' : return 'asia';
-        case 'AX' : return 'europe';
-        case 'AL' : return 'europe';
-        case 'DZ' : return 'africa';
-        case 'AS' : return 'australia';
-        case 'AD' : return 'europe';
-        case 'AO' : return 'africa';
-        case 'AI' : return 'central-america';
-        case 'AQ' : return 'antarctica';
-        case 'AG' : return 'central-america';
-        case 'AR' : return 'south-america';
-        case 'AM' : return 'europe';
-        case 'AW' : return 'central-america';
-        case 'AU' : return 'australia';
-        case 'AT' : return 'europe';
-        case 'AZ' : return 'europe';
-        case 'BS' : return 'central-america';
-        case 'BH' : return 'asia';
-        case 'BD' : return 'asia';
-        case 'BB' : return 'central-america';
-        case 'BY' : return 'europe';
-        case 'BE' : return 'europe';
-        case 'BZ' : return 'central-america';
-        case 'BJ' : return 'africa';
-        case 'BM' : return 'central-america';
-        case 'BT' : return 'asia';
-        case 'BO' : return 'south-america';
-        case 'BA' : return 'europe';
-        case 'BW' : return 'africa';
-        case 'BR' : return 'south-america';
-        case 'IO' : return 'africa';
-        case 'VG' : return 'central-america';
-        case 'BN' : return 'asia';
-        case 'BG' : return 'europe';
-        case 'BF' : return 'africa';
-        case 'BI' : return 'africa';
-        case 'KH' : return 'asia';
-        case 'CM' : return 'africa';
-        case 'CA' : return 'north-america';
-        case 'CV' : return 'africa';
-        case 'KY' : return 'central-america';
-        case 'CF' : return 'africa';
-        case 'TD' : return 'africa';
-        case 'CL' : return 'south-america';
-        case 'CN' : return 'asia';
-        case 'CX' : return 'australia';
-        case 'CC' : return 'australia';
-        case 'CO' : return 'south-america';
-        case 'KM' : return 'africa';
-        case 'CK' : return 'australia';
-        case 'CR' : return 'central-america';
-        case 'CI' : return 'africa';
-        case 'HR' : return 'europe';
-        case 'CU' : return 'central-america';
-        case 'CW' : return 'central-america';
-        case 'CY' : return 'europe';
-        case 'CZ' : return 'europe';
-        case 'CD' : return 'africa';
-        case 'DK' : return 'europe';
-        case 'DJ' : return 'africa';
-        case 'DM' : return 'central-america';
-        case 'DO' : return 'central-america';
-        case 'EC' : return 'south-america';
-        case 'EG' : return 'africa';
-        case 'SV' : return 'central-america';
-        case 'GQ' : return 'africa';
-        case 'ER' : return 'africa';
-        case 'EE' : return 'europe';
-        case 'ET' : return 'africa';
-        case 'FK' : return 'south-america';
-        case 'FO' : return 'europe';
-        case 'FM' : return 'australia';
-        case 'FJ' : return 'australia';
-        case 'FI' : return 'europe';
-        case 'FR' : return 'europe';
-        case 'PF' : return 'australia';
-        case 'TF' : return 'antarctica';
-        case 'GA' : return 'africa';
-        case 'GE' : return 'europe';
-        case 'DE' : return 'europe';
-        case 'GH' : return 'africa';
-        case 'GI' : return 'europe';
-        case 'GR' : return 'europe';
-        case 'GL' : return 'central-america';
-        case 'GD' : return 'central-america';
-        case 'GU' : return 'australia';
-        case 'GT' : return 'central-america';
-        case 'GG' : return 'europe';
-        case 'GN' : return 'africa';
-        case 'GW' : return 'africa';
-        case 'GY' : return 'south-america';
-        case 'HT' : return 'central-america';
-        case 'HM' : return 'antarctica';
-        case 'HN' : return 'central-america';
-        case 'HK' : return 'asia';
-        case 'HU' : return 'europe';
-        case 'IS' : return 'europe';
-        case 'IN' : return 'asia';
-        case 'ID' : return 'asia';
-        case 'IR' : return 'asia';
-        case 'IQ' : return 'asia';
-        case 'IE' : return 'europe';
-        case 'IM' : return 'europe';
-        case 'IL' : return 'asia';
-        case 'IT' : return 'europe';
-        case 'JM' : return 'central-america';
-        case 'JP' : return 'asia';
-        case 'JE' : return 'europe';
-        case 'JO' : return 'asia';
-        case 'KZ' : return 'asia';
-        case 'KE' : return 'africa';
-        case 'KI' : return 'australia';
-        case 'KO' : return 'europe';
-        case 'KW' : return 'asia';
-        case 'KG' : return 'asia';
-        case 'LA' : return 'asia';
-        case 'LV' : return 'europe';
-        case 'LB' : return 'asia';
-        case 'LS' : return 'africa';
-        case 'LR' : return 'africa';
-        case 'LY' : return 'africa';
-        case 'LI' : return 'europe';
-        case 'LT' : return 'europe';
-        case 'LU' : return 'europe';
-        case 'MO' : return 'asia';
-        case 'MK' : return 'europe';
-        case 'MG' : return 'africa';
-        case 'MW' : return 'africa';
-        case 'MY' : return 'asia';
-        case 'MV' : return 'asia';
-        case 'ML' : return 'africa';
-        case 'MT' : return 'europe';
-        case 'MH' : return 'australia';
-        case 'MR' : return 'africa';
-        case 'MU' : return 'africa';
-        case 'MX' : return 'central-america';
-        case 'MD' : return 'europe';
-        case 'MC' : return 'europe';
-        case 'MN' : return 'asia';
-        case 'ME' : return 'europe';
-        case 'MS' : return 'central-america';
-        case 'MA' : return 'africa';
-        case 'MZ' : return 'africa';
-        case 'MM' : return 'asia';
-        case 'NA' : return 'africa';
-        case 'NR' : return 'australia';
-        case 'NP' : return 'asia';
-        case 'NL' : return 'europe';
-        case 'NC' : return 'australia';
-        case 'NZ' : return 'australia';
-        case 'NI' : return 'central-america';
-        case 'NE' : return 'africa';
-        case 'NG' : return 'africa';
-        case 'NU' : return 'australia';
-        case 'NF' : return 'australia';
-        case 'KP' : return 'asia';
-        case 'MP' : return 'australia';
-        case 'NO' : return 'europe';
-        case 'OM' : return 'asia';
-        case 'PK' : return 'asia';
-        case 'PW' : return 'australia';
-        case 'PS' : return 'asia';
-        case 'PA' : return 'central-america';
-        case 'PG' : return 'australia';
-        case 'PY' : return 'south-america';
-        case 'PE' : return 'south-america';
-        case 'PH' : return 'asia';
-        case 'PN' : return 'australia';
-        case 'PL' : return 'europe';
-        case 'PT' : return 'europe';
-        case 'PR' : return 'central-america';
-        case 'QA' : return 'asia';
-        case 'CG' : return 'africa';
-        case 'RO' : return 'europe';
-        case 'RU' : return 'europe';
-        case 'RW' : return 'africa';
-        case 'BL' : return 'central-america';
-        case 'SH' : return 'africa';
-        case 'KN' : return 'central-america';
-        case 'LC' : return 'central-america';
-        case 'MF' : return 'central-america';
-        case 'PM' : return 'central-america';
-        case 'VC' : return 'central-america';
-        case 'WS' : return 'australia';
-        case 'SM' : return 'europe';
-        case 'ST' : return 'africa';
-        case 'SA' : return 'asia';
-        case 'SN' : return 'africa';
-        case 'RS' : return 'europe';
-        case 'SC' : return 'africa';
-        case 'SL' : return 'africa';
-        case 'SG' : return 'asia';
-        case 'SX' : return 'central-america';
-        case 'SK' : return 'europe';
-        case 'SI' : return 'europe';
-        case 'SB' : return 'australia';
-        case 'SO' : return 'africa';
-        case 'ZA' : return 'africa';
-        case 'GS' : return 'antarctica';
-        case 'KR' : return 'asia';
-        case 'SS' : return 'africa';
-        case 'ES' : return 'europe';
-        case 'LK' : return 'asia';
-        case 'SD' : return 'africa';
-        case 'SR' : return 'south-america';
-        case 'SJ' : return 'europe';
-        case 'SZ' : return 'africa';
-        case 'SE' : return 'europe';
-        case 'CH' : return 'europe';
-        case 'SY' : return 'asia';
-        case 'TW' : return 'asia';
-        case 'TJ' : return 'asia';
-        case 'TZ' : return 'africa';
-        case 'TH' : return 'asia';
-        case 'GM' : return 'africa';
-        case 'TL' : return 'asia';
-        case 'TG' : return 'africa';
-        case 'TK' : return 'australia';
-        case 'TO' : return 'australia';
-        case 'TT' : return 'central-america';
-        case 'TN' : return 'africa';
-        case 'TR' : return 'europe';
-        case 'TM' : return 'asia';
-        case 'TC' : return 'central-america';
-        case 'TV' : return 'australia';
-        case 'UG' : return 'africa';
-        case 'UA' : return 'europe';
-        case 'AE' : return 'asia';
-        case 'GB' : return 'europe';
-        case 'US' : return 'north-america';
-        case 'UY' : return 'south-america';
-        case 'UM' : return 'australia';
-        case 'VI' : return 'central-america';
-        case 'UZ' : return 'asia';
-        case 'VU' : return 'australia';
-        case 'VA' : return 'europe';
-        case 'VE' : return 'south-america';
-        case 'VN' : return 'asia';
-        case 'WF' : return 'australia';
-        case 'EH' : return 'africa';
-        case 'YE' : return 'asia';
-        case 'ZM' : return 'africa';
-        case 'ZW' : return 'africa';
-    }
-
-    return '';
-}
-
-// ~~
-
-export async function getLocationFromIpAddress(
-    ipAddress
-    )
-{
-    if ( locationByIpAddressMap.has( ipAddress ) )
-    {
-        return locationByIpAddressMap.get( ipAddress );
+        return getProcessedText( textByLanguageCodeMapBySlugMap.get( textSlug ), languageCode, countryCode );
     }
     else
     {
-        let location = {
-            Service: '',
-            Latitude: 0.0,
-            Longitude: 0.0,
-            CountryCode: '',
-            TimeZone: '',
-            IsFound: false,
-            ContinentSlug: '',
-            IsAntarctica: false,
-            IsSouthAmerica: false,
-            IsCentralAmerica: false,
-            IsNorthAmerica: false,
-            IsAmerica: false,
-            IsAfrica: false,
-            IsEurope: false,
-            IsAustralia: false,
-            IsAsia: false,
-            IsJapan: false
-        };
+        console.warn( 'Missing text slug : ' + textSlug );
 
-        if ( !location.IsFound )
-        {
-            try
-            {
-                let response = await fetch( 'http://ip-api.com/json/' + ipAddress );
-                let geographicData = await response.json();
+        return textSlug;
+    }
+}
 
-                if ( geographicData
-                     && geographicData.status === 'success' )
-                {
-                    location.Service = 'ip-api.com';
-                    location.CountryCode = geographicData.countryCode;
-                    location.Latitude = geographicData.lat;
-                    location.Longitude = geographicData.lon;
-                    location.TimeZone = geographicData.timezone;
-                    location.IsFound = true;
-                }
-            }
-            catch ( error )
-            {
-                console.error( error );
-            }
-        }
+// ~~
 
-        if ( !location.IsFound )
-        {
-            try
-            {
-                const response = await fetch( 'http://ip-api.com/json/' + ipAddress );
-                const geographicData = await response.json();
+export function getProcessedMultilineTextBySlug(
+    textSlug,
+    languageCode = undefined,
+    countryCode = undefined
+    )
+{
+    if ( textByLanguageCodeMapBySlugMap.has( textSlug ) )
+    {
+        return getProcessedMultilineText( textByLanguageCodeMapBySlugMap.get( textSlug ), languageCode, countryCode );
+    }
+    else
+    {
+        console.warn( 'Missing text slug : ' + textSlug );
 
-                if ( geographicData
-                     && geographicData.hasOwnProperty( 'countryCode' )
-                     && geographicData.hasOwnProperty( 'lat' )
-                     && geographicData.hasOwnProperty( 'lon' )
-                     && geographicData.hasOwnProperty( 'timezone' )
-                     && geographicData.hasOwnProperty( 'status' )
-                     && geographicData.status === 'success' )
-                {
-                     location.Service = 'ip-api.com';
-                     location.CountryCode = geographicData.countryCode;
-                     location.Latitude = Number( geographicData.lat );
-                     location.Longitude = Number( geographicData.lon );
-                     location.TimeZone = geographicData.timezone;
-                     location.IsFound = true;
-                }
-            }
-            catch ( error )
-            {
-                console.error( error );
-            }
-        }
-
-        if ( !location.IsFound )
-        {
-            try
-            {
-                const response = await fetch( 'http://www.geoplugin.net/json.gp?ip=' + ipAddress );
-                const geographicData = await response.json();
-
-                if ( geographicData
-                     && geographicData.hasOwnProperty( 'geoplugin_countryCode' )
-                     && geographicData.hasOwnProperty( 'geoplugin_latitude' )
-                     && geographicData.hasOwnProperty( 'geoplugin_longitude' )
-                     && geographicData.hasOwnProperty( 'geoplugin_timezone' )
-                     && geographicData.hasOwnProperty( 'geoplugin_status' )
-                     && geographicData.geoplugin_countryCode !== null
-                     && geographicData.geoplugin_status !== 404 )
-                {
-                     location.Service = 'geoplugin.net';
-                     location.CountryCode = geographicData.geoplugin_countryCode;
-                     location.Latitude = Number( geographicData.geoplugin_latitude );
-                     location.Longitude = Number( geoplugin_longitude );
-                     location.TimeZone = geographicData.geoplugin_timezone;
-                     location.IsFound = true;
-                }
-            }
-            catch ( error )
-            {
-                console.error( error );
-            }
-        }
-
-        if ( !location.IsFound )
-        {
-            try
-            {
-                const response = await fetch( 'https://www.iplocate.io/api/lookup/' + ipAddress );
-                const geographicData = await response.json();
-
-                if ( geographicData
-                     && geographicData.hasOwnProperty( 'country_code' )
-                     && geographicData.hasOwnProperty( 'latitude' )
-                     && geographicData.hasOwnProperty( 'longitude' )
-                     && geographicData.hasOwnProperty( 'time_zone' )
-                     && geographicData.country_code !== null )
-                {
-                    location.Service = 'iplocate.io';
-                    location.CountryCode = geographicData.country_code;
-                    location.Latitude = Number( geographicData.latitude );
-                    location.Longitude = Number( geographicData.longitude );
-                    location.TimeZone = geographicData.time_zone;
-                    location.IsFound = true;
-                }
-            }
-            catch ( error )
-            {
-                console.error( error );
-            }
-        }
-
-        if ( !location.IsFound )
-        {
-            try
-            {
-                const response = await fetch( 'https://api.hostip.info/get_json.php?ip=' + ipAddress );
-                const geographicData = await response.json();
-
-                if ( geographicData
-                     && geographicData.hasOwnProperty( 'country_code' )
-                     && geographicData.country_code !== null
-                     && geographicData.country_code !== 'XX' )
-                {
-                    location.Service = 'hostip.info';
-                    location.CountryCode = geographicData.country_code;
-                    location.Latitude = getCapitalLatitudeFromCountryCode( location.CountryCode );
-                    location.Longitude = getCapitalLongitudeFromCountryCode( location.CountryCode );
-                    location.TimeZone = getTimeZoneFromLocation( location.Latitude, location.Longitude, location.CountryCode );
-                    location.IsFound = true;
-                }
-            }
-            catch ( error )
-            {
-                console.error( error );
-            }
-        }
-
-        location.ContinentSlug = getContinentSlugFromCountryCode( location.CountryCode );
-        location.IsAntarctica = ( location.ContinentSlug === 'antarctica' );
-        location.IsSouthAmerica = ( location.ContinentSlug === 'south-america' );
-        location.IsCentralAmerica = ( location.ContinentSlug === 'central-america' );
-        location.IsNorthAmerica = ( location.ContinentSlug === 'north-america' );
-        location.IsAmerica = ( location.IsSouthAmerica || location.IsNorthAmerica );
-        location.IsAfrica = ( location.ContinentSlug === 'africa' );
-        location.IsEurope = ( location.ContinentSlug === 'europe' );
-        location.IsAustralia = ( location.ContinentSlug === 'australia' );
-        location.IsAsia = ( location.ContinentSlug === 'asia' );
-        location.IsJapan = ( location.CountryCode === 'JP' );
-
-        locationByIpAddressMap.set( ipAddress, location )
-
-        return location;
+        return textSlug;
     }
 }
 

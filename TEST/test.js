@@ -103,7 +103,7 @@ let randomTuidUuidTuid = getTuidFromUuid( randomTuidUuid );
 print( randomTuid, randomTuidUuid, randomTuidUuidTuid );
 check( randomTuidUuidTuid, randomTuid );
 
-print( "-- ProcessedTag --" );
+print( "-- ProcessedText --" );
 
 defineLineTag( '! ', '<div class="paragraph title-1">', '</div>' );
 defineLineTag( '!! ', '<div class="paragraph title-2">', '</div>' );
