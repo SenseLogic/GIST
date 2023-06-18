@@ -247,6 +247,27 @@ export function removeSuffix(
 
 // ~~
 
+export function replaceIteratively(
+    text,
+    oldText,
+    newText
+    )
+{
+    let replacedText = text;
+
+    do
+    {
+        let oldReplacedText = replacedText;
+
+        replacedText = replacedText.replaceAll( oldText, newText );
+    }
+    while ( replacedText !== oldReplacedText );
+
+    return oldReplacedText;
+}
+
+// ~~
+
 export function getLeftPaddedText(
     text,
     minimumCharacterCount,
@@ -713,11 +734,11 @@ export function getFileName(
 
 // ~~
 
-export function getSanitizedFileName(
+export function getValidFileName(
     fileName
     )
 {
-    return fileName.replace( /[^\p{L}\p{N}\-_]/gu, '_' );
+    return replaceIteratively( fileName.replace( /[^\p{L}\p{N}\-_.]/gu, '_' ), '__', '_' );
 }
 
 // ~~
@@ -1968,7 +1989,7 @@ export function getProcessedText(
     {
         text = getLanguageText( text, languageCode, countryCode );
     }
-    
+
     for ( let processedDualTag of processedDualTagArray )
     {
         let partArray = text.split( processedDualTag.name );
@@ -2005,7 +2026,7 @@ export function getProcessedMultilineText(
     {
         text = getLanguageText( text, languageCode, countryCode );
     }
-    
+
     let processedLineTagCount = processedLineTagArray.length;
 
     if ( processedLineTagCount > 0 )

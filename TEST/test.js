@@ -142,7 +142,7 @@ check(
     );
 
 check(
-    getProcessedMultilineText( '! **bold**\n\n!! %%italics%%\n\n__underlined__' ),
+    getProcessedMultilineText( '! **bold**\n!! %%italics%%\n__underlined__' ),
     '<div class="paragraph title-1"><b>bold</b></div>\n<div class="paragraph title-2"><i>italics</i></div>\n<div class="paragraph"><u>underlined</u></div>'
     );
 
