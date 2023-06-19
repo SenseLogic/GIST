@@ -7,9 +7,11 @@ import {
     defineTag,
     getBase64TextFromHexadecimalText,
     getBrowserLanguageCode,
+    getCountryCodeFromIpAddress,
     getDateTimeSuffix,
     getHexadecimalTextFromBase64Text,
     getLocationFromIpAddress,
+    getLocalizedText,
     getProcessedMultilineText,
     getProcessedText,
     getQuotedText,
@@ -19,7 +21,11 @@ import {
     getRandomHexadecimalText,
     getRandomTuid,
     getUniversalDateTime,
-    getUuidFromTuid
+    getUuidFromTuid,
+    setDefaultLanguageCode,
+    setCountryCode,
+    setDefaultCountryCode,
+    setLanguageCode
     } from '../src/index.js';
 
 // -- FUNCTIONS
@@ -103,6 +109,61 @@ let randomTuidUuidTuid = getTuidFromUuid( randomTuidUuid );
 print( randomTuid, randomTuidUuid, randomTuidUuidTuid );
 check( randomTuidUuidTuid, randomTuid );
 
+print( "-- GetLocalizedText --" );
+
+let textByLanguageTagsMap =
+    {
+        "en": "US",
+        "en-uk en-au": "UKAU",
+        "fr": "FR",
+        "fr-be fr-ca": "BECA",
+        "pt" : "PT",
+        "pt-br" : "BR"
+    };
+
+setDefaultLanguageCode( 'en' );
+setDefaultCountryCode( 'us' );
+
+setLanguageCode( 'en' );
+setCountryCode( 'us' );
+check( getLocalizedText( textByLanguageTagsMap ), 'US' );
+
+setLanguageCode( 'en' );
+setCountryCode( 'uk' );
+check( getLocalizedText( textByLanguageTagsMap ), 'UKAU' );
+
+setLanguageCode( 'en' );
+setCountryCode( 'au' );
+check( getLocalizedText( textByLanguageTagsMap ), 'UKAU' );
+
+setLanguageCode( 'en' );
+setCountryCode( 'ca' );
+check( getLocalizedText( textByLanguageTagsMap ), 'US' );
+
+setLanguageCode( 'fr' );
+setCountryCode( 'fr' );
+check( getLocalizedText( textByLanguageTagsMap ), 'FR' );
+
+setLanguageCode( 'fr' );
+setCountryCode( 'be' );
+check( getLocalizedText( textByLanguageTagsMap ), 'BECA' );
+
+setLanguageCode( 'fr' );
+setCountryCode( 'ca' );
+check( getLocalizedText( textByLanguageTagsMap ), 'BECA' );
+
+setLanguageCode( 'fr' );
+setCountryCode( 'ch' );
+check( getLocalizedText( textByLanguageTagsMap ), 'FR' );
+
+setLanguageCode( 'de' );
+setCountryCode( 'ch' );
+check( getLocalizedText( textByLanguageTagsMap ), 'US' );
+
+setLanguageCode( 'en' );
+setCountryCode( 'fr' );
+check( getLocalizedText( textByLanguageTagsMap ), 'US' );
+
 print( "-- ProcessedText --" );
 
 defineLineTag( '! ', '<div class="paragraph title-1">', '</div>' );
@@ -148,5 +209,6 @@ check(
 
 print( "-- Location --" );
 
-//print( await getLocationFromIpAddress( '157.164.136.250' ) );
-//print( await getLocationFromIpAddress( '2a01:690:35:100::f5:79' ) );
+print( await getLocationFromIpAddress( '157.164.136.250' ) );
+print( await getLocationFromIpAddress( '2a01:690:35:100::f5:79' ) );
+check( await getCountryCodeFromIpAddress( '195.244.180.40' ), 'be' );

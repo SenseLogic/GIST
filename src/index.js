@@ -41,7 +41,7 @@ export let
     defaultCountryCode = '',
     languageCode = 'en',
     defaultLanguageCode = 'en',
-    textByLanguageCodeMapBySlugMap = new Map(),
+    textByLanguageTagsMapBySlugMap = new Map(),
     processedLineTagArray = [],
     processedDualTagArray = [],
     processedTagArray = [],
@@ -1522,26 +1522,26 @@ export async function getLocationFromIpAddress(
     else
     {
         let location = {
-            Service: '',
-            Latitude: 0.0,
-            Longitude: 0.0,
-            CountryCode: '',
-            TimeZone: '',
-            IsFound: false,
-            ContinentSlug: '',
-            IsAntarctica: false,
-            IsSouthAmerica: false,
-            IsCentralAmerica: false,
-            IsNorthAmerica: false,
-            IsAmerica: false,
-            IsAfrica: false,
-            IsEurope: false,
-            IsAustralia: false,
-            IsAsia: false,
-            IsJapan: false
+            service: '',
+            latitude: 0.0,
+            longitude: 0.0,
+            countryCode: '',
+            timeZone: '',
+            isFound: false,
+            continentSlug: '',
+            isAntarctica: false,
+            isSouthAmerica: false,
+            isCentralAmerica: false,
+            isNorthAmerica: false,
+            isAmerica: false,
+            isAfrica: false,
+            isEurope: false,
+            isAustralia: false,
+            isAsia: false,
+            isJapan: false
         };
 
-        if ( !location.IsFound )
+        if ( !location.isFound )
         {
             try
             {
@@ -1551,12 +1551,12 @@ export async function getLocationFromIpAddress(
                 if ( geographicData
                      && geographicData.status === 'success' )
                 {
-                    location.Service = 'ip-api.com';
-                    location.CountryCode = geographicData.countryCode.toLowerCase();
-                    location.Latitude = geographicData.lat;
-                    location.Longitude = geographicData.lon;
-                    location.TimeZone = geographicData.timezone;
-                    location.IsFound = true;
+                    location.service = 'ip-api.com';
+                    location.countryCode = geographicData.countryCode.toLowerCase();
+                    location.latitude = geographicData.lat;
+                    location.longitude = geographicData.lon;
+                    location.timeZone = geographicData.timezone;
+                    location.isFound = true;
                 }
             }
             catch ( error )
@@ -1565,7 +1565,7 @@ export async function getLocationFromIpAddress(
             }
         }
 
-        if ( !location.IsFound )
+        if ( !location.isFound )
         {
             try
             {
@@ -1580,12 +1580,12 @@ export async function getLocationFromIpAddress(
                      && geographicData.hasOwnProperty( 'status' )
                      && geographicData.status === 'success' )
                 {
-                     location.Service = 'ip-api.com';
-                     location.CountryCode = geographicData.countryCode.toLowerCase();
-                     location.Latitude = Number( geographicData.lat );
-                     location.Longitude = Number( geographicData.lon );
-                     location.TimeZone = geographicData.timezone;
-                     location.IsFound = true;
+                     location.service = 'ip-api.com';
+                     location.countryCode = geographicData.countryCode.toLowerCase();
+                     location.latitude = Number( geographicData.lat );
+                     location.longitude = Number( geographicData.lon );
+                     location.timeZone = geographicData.timezone;
+                     location.isFound = true;
                 }
             }
             catch ( error )
@@ -1594,7 +1594,7 @@ export async function getLocationFromIpAddress(
             }
         }
 
-        if ( !location.IsFound )
+        if ( !location.isFound )
         {
             try
             {
@@ -1610,12 +1610,12 @@ export async function getLocationFromIpAddress(
                      && geographicData.geoplugin_countryCode !== null
                      && geographicData.geoplugin_status !== 404 )
                 {
-                     location.Service = 'geoplugin.net';
-                     location.CountryCode = geographicData.geoplugin_countryCode.toLowerCase();
-                     location.Latitude = Number( geographicData.geoplugin_latitude );
-                     location.Longitude = Number( geoplugin_longitude );
-                     location.TimeZone = geographicData.geoplugin_timezone;
-                     location.IsFound = true;
+                     location.service = 'geoplugin.net';
+                     location.countryCode = geographicData.geoplugin_countryCode.toLowerCase();
+                     location.latitude = Number( geographicData.geoplugin_latitude );
+                     location.longitude = Number( geographicData.geoplugin_longitude );
+                     location.timeZone = geographicData.geoplugin_timezone;
+                     location.isFound = true;
                 }
             }
             catch ( error )
@@ -1624,7 +1624,7 @@ export async function getLocationFromIpAddress(
             }
         }
 
-        if ( !location.IsFound )
+        if ( !location.isFound )
         {
             try
             {
@@ -1638,12 +1638,12 @@ export async function getLocationFromIpAddress(
                      && geographicData.hasOwnProperty( 'time_zone' )
                      && geographicData.country_code !== null )
                 {
-                    location.Service = 'iplocate.io';
-                    location.CountryCode = geographicData.country_code.toLowerCase();
-                    location.Latitude = Number( geographicData.latitude );
-                    location.Longitude = Number( geographicData.longitude );
-                    location.TimeZone = geographicData.time_zone;
-                    location.IsFound = true;
+                    location.service = 'iplocate.io';
+                    location.countryCode = geographicData.country_code.toLowerCase();
+                    location.latitude = Number( geographicData.latitude );
+                    location.longitude = Number( geographicData.longitude );
+                    location.timeZone = geographicData.time_zone;
+                    location.isFound = true;
                 }
             }
             catch ( error )
@@ -1652,7 +1652,7 @@ export async function getLocationFromIpAddress(
             }
         }
 
-        if ( !location.IsFound )
+        if ( !location.isFound )
         {
             try
             {
@@ -1664,12 +1664,12 @@ export async function getLocationFromIpAddress(
                      && geographicData.country_code !== null
                      && geographicData.country_code !== 'XX' )
                 {
-                    location.Service = 'hostip.info';
-                    location.CountryCode = geographicData.country_code;
-                    location.Latitude = getCapitalLatitudeFromCountryCode( location.CountryCode.toLowerCase() );
-                    location.Longitude = getCapitalLongitudeFromCountryCode( location.CountryCode );
-                    location.TimeZone = getTimeZoneFromLocation( location.Latitude, location.Longitude, location.CountryCode );
-                    location.IsFound = true;
+                    location.service = 'hostip.info';
+                    location.countryCode = geographicData.country_code;
+                    location.latitude = getCapitalLatitudeFromCountryCode( location.countryCode.toLowerCase() );
+                    location.longitude = getCapitalLongitudeFromCountryCode( location.countryCode );
+                    location.timeZone = getTimeZoneFromLocation( location.latitude, location.longitude, location.countryCode );
+                    location.isFound = true;
                 }
             }
             catch ( error )
@@ -1678,17 +1678,17 @@ export async function getLocationFromIpAddress(
             }
         }
 
-        location.ContinentSlug = getContinentSlugFromCountryCode( location.CountryCode );
-        location.IsAntarctica = ( location.ContinentSlug === 'antarctica' );
-        location.IsSouthAmerica = ( location.ContinentSlug === 'south-america' );
-        location.IsCentralAmerica = ( location.ContinentSlug === 'central-america' );
-        location.IsNorthAmerica = ( location.ContinentSlug === 'north-america' );
-        location.IsAmerica = ( location.IsSouthAmerica || location.IsNorthAmerica );
-        location.IsAfrica = ( location.ContinentSlug === 'africa' );
-        location.IsEurope = ( location.ContinentSlug === 'europe' );
-        location.IsAustralia = ( location.ContinentSlug === 'australia' );
-        location.IsAsia = ( location.ContinentSlug === 'asia' );
-        location.IsJapan = ( location.CountryCode === 'jp' );
+        location.continentSlug = getContinentSlugFromCountryCode( location.countryCode );
+        location.isAntarctica = ( location.continentSlug === 'antarctica' );
+        location.isSouthAmerica = ( location.continentSlug === 'south-america' );
+        location.isCentralAmerica = ( location.continentSlug === 'central-america' );
+        location.isNorthAmerica = ( location.continentSlug === 'north-america' );
+        location.isAmerica = ( location.isSouthAmerica || location.isNorthAmerica );
+        location.isAfrica = ( location.continentSlug === 'africa' );
+        location.isEurope = ( location.continentSlug === 'europe' );
+        location.isAustralia = ( location.continentSlug === 'australia' );
+        location.isAsia = ( location.continentSlug === 'asia' );
+        location.isJapan = ( location.countryCode === 'jp' );
 
         locationByIpAddressMap.set( ipAddress, location );
 
@@ -1702,7 +1702,7 @@ export async function getCountryCodeFromIpAddress(
     ipAddress
     )
 {
-    return getLocationFromIpAddress().countryCode;
+    return ( await getLocationFromIpAddress() ).countryCode;
 }
 
 // ~~
@@ -1737,38 +1737,6 @@ export function getDefaultCountryCode(
     )
 {
     return defaultCountryCode;
-}
-
-// ~~
-
-export function getCountryText(
-    textByCountryCodeMap,
-    countryCode_ = undefined
-    )
-{
-    if ( isString( textByCountryCodeMap ) )
-    {
-        return textByCountryCodeMap;
-    }
-    else if ( countryCode_ !== undefined
-              && textByCountryCodeMap.hasOwnProperty( countryCode_ ) )
-    {
-        return textByCountryCodeMap[ countryCode_ ];
-    }
-    else if ( textByCountryCodeMap.hasOwnProperty( countryCode ) )
-    {
-        return textByCountryCodeMap[ countryCode ];
-    }
-    else if ( textByCountryCodeMap.hasOwnProperty( defaultCountryCode ) )
-    {
-        return textByCountryCodeMap[ defaultCountryCode ];
-    }
-    else
-    {
-        console.warn( 'Missing country code ' + countryCode_ + ' : ' + JSON.stringigy( textByCountryCodeMap ) );
-
-        return '';
-    }
 }
 
 // ~~
@@ -1830,23 +1798,23 @@ export function getDefaultLanguageCode(
 
 // ~~
 
-export function setTextByLanguageCodeMapBySlug(
-    textByLanguageCodeMap,
+export function setTextByLanguageTagsMapBySlug(
+    textByLanguageTagsMap,
     textSlug
     )
 {
-    textByLanguageCodeMapBySlugMap.set( textSlug, textByLanguageCodeMap );
+    textByLanguageTagsMapBySlugMap.set( textSlug, textByLanguageTagsMap );
 }
 
 // ~~
 
-export function getTextByLanguageCodeMapBySlug(
+export function getTextByLanguageTagsMapBySlug(
     textSlug
     )
 {
-    if ( textByLanguageCodeMapBySlugMap.has( textSlug ) )
+    if ( textByLanguageTagsMapBySlugMap.has( textSlug ) )
     {
-        return textByLanguageCodeMapBySlugMap.get( textSlug );
+        return textByLanguageTagsMapBySlugMap.get( textSlug );
     }
     else
     {
@@ -1858,48 +1826,121 @@ export function getTextByLanguageCodeMapBySlug(
 
 // ~~
 
-export function getLanguageText(
-    textByLanguageCodeMap,
+export function getLanguageTagsText(
     languageCode_ = undefined,
     countryCode = undefined
     )
 {
-    if ( isString( textByLanguageCodeMap ) )
+}
+
+// ~~
+
+export function getTextByLanguageTagMap(
+    textByLanguageTagsMap
+    )
+{
+    let textByLanguageTagMap = {};
+
+    for ( let languageTags in textByLanguageTagsMap )
     {
-        return textByLanguageCodeMap;
+        if ( textByLanguageTagsMap.hasOwnProperty( languageTags ) )
+        {
+            let text = textByLanguageTagsMap[ languageTags ];
+
+            for ( let languageTag of languageTags.split( ' ' ) )
+            {
+                textByLanguageTagMap[ languageTag ] = text;
+            }
+        }
     }
-    else if ( languageCode_ !== undefined
-              && textByLanguageCodeMap.hasOwnProperty( languageCode_ ) )
+
+    return textByLanguageTagMap;
+}
+
+// ~~
+
+export function getTextFromLanguageTag(
+    textByLanguageTagMap,
+    languageTag
+    )
+{
+    if ( textByLanguageTagMap.hasOwnProperty( languageTag ) )
     {
-        return getCountryText( textByLanguageCodeMap[ languageCode_ ], countryCode );
-    }
-    else if ( textByLanguageCodeMap.hasOwnProperty( languageCode ) )
-    {
-        return getCountryText( textByLanguageCodeMap[ languageCode ], countryCode );
-    }
-    else if ( textByLanguageCodeMap.hasOwnProperty( defaultLanguageCode ) )
-    {
-        return getCountryText( textByLanguageCodeMap[ defaultLanguageCode ], countryCode );
+        return textByLanguageTagMap[ languageTag ];
     }
     else
     {
-        console.warn( 'Missing language code ' + languageCode_ + ' : ' + JSON.stringigy( textByLanguageCodeMap ) );
-
-        return '';
+        return undefined;
     }
 }
 
 // ~~
 
-export function getLanguageTextBySlug(
+export function getLocalizedText(
+    textByLanguageTagsMap,
+    languageCode_ = undefined,
+    countryCode_ = undefined
+    )
+{
+    if ( isString( textByLanguageTagsMap ) )
+    {
+        return textByLanguageTagsMap;
+    }
+    else
+    {
+        let textByLanguageTagMap = getTextByLanguageTagMap( textByLanguageTagsMap );
+
+        if ( languageCode_ === undefined )
+        {
+            languageCode_ = languageCode;
+        }
+
+        if ( countryCode_ === undefined )
+        {
+            countryCode_ = countryCode;
+        }
+
+        let text = getTextFromLanguageTag( textByLanguageTagMap, languageCode_ + '-' + countryCode_ );
+
+        if ( text === undefined )
+        {
+            text = getTextFromLanguageTag( textByLanguageTagMap, languageCode_ );
+        }
+
+        if ( text === undefined )
+        {
+            text = getTextFromLanguageTag( textByLanguageTagMap, defaultLanguageCode + '-' + countryCode_ );
+        }
+
+        if ( text === undefined )
+        {
+            text = getTextFromLanguageTag( textByLanguageTagMap, defaultLanguageCode );
+        }
+
+        if ( text === undefined )
+        {
+            console.warn( 'Missing language tag ' + languageCode_ + '-' + countryCode_ + ' : ' + JSON.stringify( textByLanguageTagsMap ) );
+
+            return '';
+        }
+        else
+        {
+            return text;
+        }
+    }
+}
+
+// ~~
+
+export function getLocalizedTextBySlug(
     textSlug,
     languageCode = undefined,
     countryCode = undefined
     )
 {
-    if ( textByLanguageCodeMapBySlugMap.has( textSlug ) )
+    if ( textByLanguageTagsMapBySlugMap.has( textSlug ) )
     {
-        return getLanguageText( textByLanguageCodeMapBySlugMap.get( textSlug ), languageCode, countryCode );
+        return getLocalizedText( textByLanguageTagsMapBySlugMap.get( textSlug ), languageCode, countryCode );
     }
     else
     {
@@ -1987,7 +2028,7 @@ export function getProcessedText(
 {
     if ( !isString( text ) )
     {
-        text = getLanguageText( text, languageCode, countryCode );
+        text = getLocalizedText( text, languageCode, countryCode );
     }
 
     for ( let processedDualTag of processedDualTagArray )
@@ -2024,7 +2065,7 @@ export function getProcessedMultilineText(
 {
     if ( !isString( text ) )
     {
-        text = getLanguageText( text, languageCode, countryCode );
+        text = getLocalizedText( text, languageCode, countryCode );
     }
 
     let processedLineTagCount = processedLineTagArray.length;
@@ -2073,9 +2114,9 @@ export function getProcessedTextBySlug(
     countryCode = undefined
     )
 {
-    if ( textByLanguageCodeMapBySlugMap.has( textSlug ) )
+    if ( textByLanguageTagsMapBySlugMap.has( textSlug ) )
     {
-        return getProcessedText( textByLanguageCodeMapBySlugMap.get( textSlug ), languageCode, countryCode );
+        return getProcessedText( textByLanguageTagsMapBySlugMap.get( textSlug ), languageCode, countryCode );
     }
     else
     {
@@ -2093,9 +2134,9 @@ export function getProcessedMultilineTextBySlug(
     countryCode = undefined
     )
 {
-    if ( textByLanguageCodeMapBySlugMap.has( textSlug ) )
+    if ( textByLanguageTagsMapBySlugMap.has( textSlug ) )
     {
-        return getProcessedMultilineText( textByLanguageCodeMapBySlugMap.get( textSlug ), languageCode, countryCode );
+        return getProcessedMultilineText( textByLanguageTagsMapBySlugMap.get( textSlug ), languageCode, countryCode );
     }
     else
     {
