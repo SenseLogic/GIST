@@ -1702,7 +1702,7 @@ export async function getCountryCodeFromIpAddress(
     ipAddress
     )
 {
-    return ( await getLocationFromIpAddress() ).countryCode;
+    return getLocationFromIpAddress( ipAddress ).countryCode;
 }
 
 // ~~
