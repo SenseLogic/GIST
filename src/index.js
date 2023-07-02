@@ -1698,15 +1698,6 @@ export async function getLocationFromIpAddress(
 
 // ~~
 
-export async function getCountryCodeFromIpAddress(
-    ipAddress
-    )
-{
-    return getLocationFromIpAddress( ipAddress ).countryCode;
-}
-
-// ~~
-
 export function setCountryCode(
     countryCode_
     )

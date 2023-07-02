@@ -7,7 +7,6 @@ import {
     defineTag,
     getBase64TextFromHexadecimalText,
     getBrowserLanguageCode,
-    getCountryCodeFromIpAddress,
     getDateTimeSuffix,
     getHexadecimalTextFromBase64Text,
     getLocationFromIpAddress,
@@ -209,6 +208,14 @@ check(
 
 print( "-- Location --" );
 
-print( await getLocationFromIpAddress( '157.164.136.250' ) );
-print( await getLocationFromIpAddress( '2a01:690:35:100::f5:79' ) );
-check( await getCountryCodeFromIpAddress( '195.244.180.40' ), 'be' );
+let location = await getLocationFromIpAddress( '157.164.136.250' );
+print( location );
+check( location.countryCode, 'be' );
+
+location = await getLocationFromIpAddress( '2a01:690:35:100::f5:79' );
+print( location );
+check( location.countryCode, 'be' );
+
+location = await getLocationFromIpAddress( '195.244.180.40' );
+print( location );
+check( location.countryCode, 'be' );
