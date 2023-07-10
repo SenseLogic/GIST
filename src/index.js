@@ -1,11 +1,12 @@
 // -- IMPORTS
 
 import crypto from 'crypto';
+import md5 from 'js-md5';
 
 // -- CONSTANTS
 
 export const
-    isBrowser = ( typeof window !== "undefined" && typeof window.document !== "undefined" ),
+    isBrowser = ( typeof window !== 'undefined' && typeof window.document !== 'undefined' ),
     nullTuid = 'AAAAAAAAAAAAAAAAAAAAAA',
     nullUuid = '00000000-0000-0000-0000-000000000000',
     nullDate = {
@@ -76,7 +77,7 @@ function isBooleanText(
     text
     )
 {
-    return text === "false" || text === "true";
+    return text === 'false' || text === 'true';
 }
 
 // ~~
@@ -85,7 +86,7 @@ function isBinaryText(
     text
     )
 {
-    return text === "0" || text === "1";
+    return text === '0' || text === '1';
 }
 
 // ~~
@@ -139,7 +140,7 @@ function isBoolean(
     value
     )
 {
-    return typeof value === "boolean";
+    return typeof value === 'boolean';
 }
 
 // ~~
@@ -157,7 +158,7 @@ function isNumber(
     value
     )
 {
-    return typeof value === "number";
+    return typeof value === 'number';
 }
 
 // ~~
@@ -166,7 +167,7 @@ function isString(
     value
     )
 {
-    return typeof value === "string";
+    return typeof value === 'string';
 }
 
 // ~~
@@ -177,7 +178,7 @@ function isObject(
 {
     return (
         value !== null
-        && typeof value === "object"
+        && typeof value === 'object'
         && !Array.isArray( value )
         );
 }
@@ -238,6 +239,42 @@ export function removeSuffix(
          && text.endsWith( suffix ) )
     {
         return text.substring( 0, text.length - suffix.length );
+    }
+    else
+    {
+        return text;
+    }
+}
+
+// ~~
+
+export function replacePrefix(
+    text,
+    oldPrefix,
+    newPrefix
+    )
+{
+    if ( text.startsWith( oldPrefix ) )
+    {
+        return newPrefix + text.substring( oldPrefix.length );
+    }
+    else
+    {
+        return text;
+    }
+}
+
+// ~~
+
+export function replaceSuffix(
+    text,
+    oldSuffix,
+    newSuffix
+    )
+{
+    if ( text.endsWith( oldSuffix ) )
+    {
+        return text.substring( 0, text.length - oldSuffix.length ) + newSuffix;
     }
     else
     {
@@ -319,12 +356,12 @@ export function getQuotedText(
     return (
         '"'
         + value.toString()
-              .replaceAll( "\\", "\\\\" )
-              .replaceAll( "\n", "\\n" )
-              .replaceAll( "\r", "\\r" )
-              .replaceAll( "\t", "\\t" )
-              .replaceAll( "\"", "\\\"" )
-              .replaceAll( "'", "\\'" )
+              .replaceAll( '\\', '\\\\' )
+              .replaceAll( '\n', '\\n' )
+              .replaceAll( '\r', '\\r' )
+              .replaceAll( '\t', '\\t' )
+              .replaceAll( '"', '\\"' )
+              .replaceAll( '\'', '\\\'' )
         + '"'
         );
 }
@@ -369,7 +406,21 @@ export function getTuidFromHexadecimalText(
     hexadecimalText
     )
 {
-    return getBase64TextFromHexadecimalText( hexadecimalText ).replaceAll( "+", "-" ).replaceAll( "/", "_" ).replaceAll( "=", "" );
+    return getBase64TextFromHexadecimalText( hexadecimalText ).replaceAll( '+', '-' ).replaceAll( '/', '_' ).replaceAll( '=', '' );
+}
+
+// ~~
+
+export function getTuidFromText( text )
+{
+    if ( text === '' )
+    {
+        return '';
+    }
+    else
+    {
+        return getTuidFromHexadecimalText( md5( text ) );
+    }
 }
 
 // ~~
@@ -404,7 +455,7 @@ export function getHexadecimalTextFromTuid(
     tuid
     )
 {
-    return getHexadecimalTextFromBase64Text( tuid.replaceAll( "-", "+" ).replaceAll( "_", "/" ) + "==" );
+    return getHexadecimalTextFromBase64Text( tuid.replaceAll( '-', '+' ).replaceAll( '_', '/' ) + '==' );
 }
 
 // ~~
@@ -415,15 +466,31 @@ export function getUuidFromHexadecimalText(
 {
     return (
         hexadecimalText.substring( 0, 8 )
-        + "-"
+        + '-'
         + hexadecimalText.substring( 8, 12 )
-        + "-"
+        + '-'
         + hexadecimalText.substring( 12, 16 )
-        + "-"
+        + '-'
         + hexadecimalText.substring( 16, 20 )
-        + "-"
+        + '-'
         + hexadecimalText.substring( 20, 32 )
         );
+}
+
+// ~~
+
+export function getUuidFromText(
+    text
+    )
+{
+    if ( text === '' )
+    {
+        return '00000000-0000-0000-0000-000000000000';
+    }
+    else
+    {
+        return getUuidFromHexadecimalText( md5( text ) );
+    }
 }
 
 // ~~
