@@ -748,6 +748,32 @@ export function getDateTimeText(
 
 // ~~
 
+export function getTimestampText(
+    timestamp,
+    infix = ' ',
+    suffix = ''
+    )
+{
+    return (
+        getLeftPaddedText( dateTime.year.toString(), 4, '0' )
+        + '-'
+        + getLeftPaddedText( dateTime.month.toString(), 2, '0' )
+        + '-'
+        + getLeftPaddedText( dateTime.day.toString(), 2, '0' )
+        + infix
+        + getLeftPaddedText( dateTime.hour.toString(), 2, '0' )
+        + ':'
+        + getLeftPaddedText( dateTime.minute.toString(), 2, '0' )
+        + ':'
+        + getLeftPaddedText( dateTime.second.toString(), 2, '0' )
+        + '.'
+        + getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' )
+        + suffix
+        );
+}
+
+// ~~
+
 export function getDateTimeSuffix(
     dateTime,
     infix = '',
