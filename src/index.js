@@ -1,7 +1,7 @@
 // -- IMPORTS
 
 import crypto from 'crypto';
-import md5 from 'js-md5';
+import md5 from 'md5';
 
 // -- CONSTANTS
 
