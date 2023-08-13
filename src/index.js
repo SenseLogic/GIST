@@ -55,7 +55,7 @@ export let
 export const
     raw = String.raw,
     print = console.log,
-    dump = console.dir,
+    printObject = console.dir,
     printTable = console.table,
     printStack = console.trace,
     isNaN = Number.isNaN,
@@ -73,7 +73,42 @@ export const
 
 // ~~
 
-function isBooleanText(
+export function printValue(
+    value
+    )
+{
+    console.log( getJsonText( value ) );
+}
+
+// ~~
+
+export function printWarning(
+    warning
+    )
+{
+    if ( warning !== null )
+    {
+        console.trace();
+        console.warn( warning );
+    }
+}
+
+// ~~
+
+export function printError(
+    error
+    )
+{
+    if ( error !== null )
+    {
+        console.trace();
+        console.error( error );
+    }
+}
+
+// ~~
+
+export function isBooleanText(
     text
     )
 {
@@ -82,7 +117,7 @@ function isBooleanText(
 
 // ~~
 
-function isBinaryText(
+export function isBinaryText(
     text
     )
 {
@@ -91,7 +126,7 @@ function isBinaryText(
 
 // ~~
 
-function isNaturalText(
+export function isNaturalText(
     text
     )
 {
@@ -100,7 +135,7 @@ function isNaturalText(
 
 // ~~
 
-function isIntegerText(
+export function isIntegerText(
     text
     )
 {
@@ -109,7 +144,7 @@ function isIntegerText(
 
 // ~~
 
-function isRealText(
+export function isRealText(
     text
     )
 {
@@ -118,7 +153,7 @@ function isRealText(
 
 // ~~
 
-function isNumericText(
+export function isNumericText(
     text
     )
 {
@@ -127,7 +162,7 @@ function isNumericText(
 
 // ~~
 
-function isSlugText(
+export function isSlugText(
     text
     )
 {
@@ -136,7 +171,7 @@ function isSlugText(
 
 // ~~
 
-function isBoolean(
+export function isBoolean(
     value
     )
 {
@@ -145,7 +180,7 @@ function isBoolean(
 
 // ~~
 
-function isNatural(
+export function isNatural(
     value
     )
 {
@@ -154,7 +189,7 @@ function isNatural(
 
 // ~~
 
-function isNumber(
+export function isNumber(
     value
     )
 {
@@ -163,7 +198,7 @@ function isNumber(
 
 // ~~
 
-function isString(
+export function isString(
     value
     )
 {
@@ -172,7 +207,7 @@ function isString(
 
 // ~~
 
-function isObject(
+export function isObject(
     value
     )
 {
@@ -185,7 +220,7 @@ function isObject(
 
 // ~~
 
-function isArray(
+export function isArray(
     value
     )
 {
@@ -194,7 +229,7 @@ function isArray(
 
 // ~~
 
-function isFunction(
+export function isFunction(
     value
     )
 {
@@ -203,7 +238,7 @@ function isFunction(
 
 // ~~
 
-function isElement(
+export function isElement(
     value
     )
 {
@@ -1654,7 +1689,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                console.error( error );
+                printError( error );
             }
         }
 
@@ -1683,7 +1718,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                console.error( error );
+                printError( error );
             }
         }
 
@@ -1713,7 +1748,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                console.error( error );
+                printError( error );
             }
         }
 
@@ -1741,7 +1776,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                console.error( error );
+                printError( error );
             }
         }
 
@@ -1767,7 +1802,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                console.error( error );
+                printError( error );
             }
         }
 
@@ -1902,7 +1937,7 @@ export function getTextByLanguageTagsMapBySlug(
     }
     else
     {
-        console.warn( 'Missing text slug : ' + textSlug );
+        printWarning( 'Missing text slug : ' + textSlug );
 
         return '';
     }
@@ -2003,7 +2038,7 @@ export function getLocalizedText(
 
         if ( text === undefined )
         {
-            console.warn( 'Missing language tag ' + languageCode_ + '-' + countryCode_ + ' : ' + JSON.stringify( textByLanguageTagsMap ) );
+            printWarning( 'Missing language tag ' + languageCode_ + '-' + countryCode_ + ' : ' + JSON.stringify( textByLanguageTagsMap ) );
 
             return '';
         }
@@ -2028,7 +2063,7 @@ export function getLocalizedTextBySlug(
     }
     else
     {
-        console.warn( 'Missing text slug : ' + textSlug );
+        printWarning( 'Missing text slug : ' + textSlug );
 
         return textSlug;
     }
@@ -2204,7 +2239,7 @@ export function getProcessedTextBySlug(
     }
     else
     {
-        console.warn( 'Missing text slug : ' + textSlug );
+        printWarning( 'Missing text slug : ' + textSlug );
 
         return textSlug;
     }
@@ -2224,7 +2259,7 @@ export function getProcessedMultilineTextBySlug(
     }
     else
     {
-        console.warn( 'Missing text slug : ' + textSlug );
+        printWarning( 'Missing text slug : ' + textSlug );
 
         return textSlug;
     }
