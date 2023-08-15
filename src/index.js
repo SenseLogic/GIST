@@ -86,11 +86,8 @@ export function printWarning(
     warning
     )
 {
-    if ( warning !== null )
-    {
-        console.trace();
-        console.warn( warning );
-    }
+    console.trace();
+    console.warn( warning );
 }
 
 // ~~
@@ -99,11 +96,8 @@ export function printError(
     error
     )
 {
-    if ( error !== null )
-    {
-        console.trace();
-        console.error( error );
-    }
+    console.trace();
+    console.error( error );
 }
 
 // ~~
