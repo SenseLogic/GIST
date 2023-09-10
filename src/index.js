@@ -38,11 +38,11 @@ export const
 // -- VARIABLES
 
 export let
+    continentCode = '',
     countryCode = '',
-    defaultCountryCode = '',
     languageCode = 'en',
     defaultLanguageCode = 'en',
-    textByLanguageTagsMapBySlugMap = new Map(),
+    textBySlugMap = new Map(),
     processedLineTagArray = [],
     processedDualTagArray = [],
     processedTagArray = [],
@@ -323,7 +323,7 @@ export function replaceIteratively(
 
     do
     {
-        let oldReplacedText = replacedText;
+        var oldReplacedText = replacedText;
 
         replacedText = replacedText.replaceAll( oldText, newText );
     }
@@ -784,19 +784,19 @@ export function getTimestampText(
     )
 {
     return (
-        getLeftPaddedText( dateTime.year.toString(), 4, '0' )
+        getLeftPaddedText( timestamp.year.toString(), 4, '0' )
         + '-'
-        + getLeftPaddedText( dateTime.month.toString(), 2, '0' )
+        + getLeftPaddedText( timestamp.month.toString(), 2, '0' )
         + '-'
-        + getLeftPaddedText( dateTime.day.toString(), 2, '0' )
+        + getLeftPaddedText( timestamp.day.toString(), 2, '0' )
         + infix
-        + getLeftPaddedText( dateTime.hour.toString(), 2, '0' )
+        + getLeftPaddedText( timestamp.hour.toString(), 2, '0' )
         + ':'
-        + getLeftPaddedText( dateTime.minute.toString(), 2, '0' )
+        + getLeftPaddedText( timestamp.minute.toString(), 2, '0' )
         + ':'
-        + getLeftPaddedText( dateTime.second.toString(), 2, '0' )
+        + getLeftPaddedText( timestamp.second.toString(), 2, '0' )
         + '.'
-        + getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' )
+        + getLeftPaddedText( timestamp.millisecond.toString(), 3, '0' )
         + suffix
         );
 }
@@ -825,6 +825,561 @@ export function getDateTimeSuffix(
         + getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' )
         + suffix
         );
+}
+
+// ~~
+
+export function getTimeZoneFromLocation(
+    latitude,
+    longitude,
+    countryCode
+    )
+{
+    let timeShift = Math.max( Math.min( Math.round( longitude / 15.0 ), 12 ), -12 );
+
+    if ( timeShift >= 12 )
+    {
+        timeShift = -12;
+    }
+
+    switch ( countryCode )
+    {
+        case 'AD' : return 'Europe/Andorra';
+        case 'AE' : return 'Asia/Dubai';
+        case 'AF' : return 'Asia/Kabul';
+        case 'AG' : return 'America/Antigua';
+        case 'AI' : return 'America/Anguilla';
+        case 'AL' : return 'Europe/Tirane';
+        case 'AM' : return 'Asia/Yerevan';
+        case 'AO' : return 'Africa/Luanda';
+        case 'AQ' :
+        {
+            switch ( timeShift )
+            {
+                case -11 : return 'Antarctica/McMurdo';
+                case -3 : return 'Antarctica/Palmer';
+                case 0 : return 'Antarctica/Troll';
+                case 3 : return 'Antarctica/Syowa';
+                case 5 : return 'Antarctica/Mawson';
+                case 6 : return 'Antarctica/Vostok';
+                case 7 : return 'Antarctica/Davis';
+                case 10 : return 'Antarctica/DumontDUrville';
+                case 11 : return 'Antarctica/Casey';
+            }
+
+            break;
+        }
+        case 'AR' : return 'America/Argentina/Buenos_Aires';
+        case 'AS' : return 'Pacific/Pago_Pago';
+        case 'AT' : return 'Europe/Vienna';
+        case 'AU' :
+        {
+            switch ( timeShift )
+            {
+                case 8 : return 'Australia/Perth';
+                case 9 : return 'Australia/Darwin';
+                case 10 :
+                {
+                    if ( latitude < -29.0 )
+                    {
+                        return 'Australia/Sydney';
+                    }
+                    else
+                    {
+                        return 'Australia/Brisbane';
+                    }
+                }
+            }
+
+            break;
+        }
+        case 'AW' : return 'America/Aruba';
+        case 'AX' : return 'Europe/Mariehamn';
+        case 'AZ' : return 'Asia/Baku';
+        case 'BA' : return 'Europe/Sarajevo';
+        case 'BB' : return 'America/Barbados';
+        case 'BD' : return 'Asia/Dhaka';
+        case 'BE' : return 'Europe/Brussels';
+        case 'BF' : return 'Africa/Ouagadougou';
+        case 'BG' : return 'Europe/Sofia';
+        case 'BH' : return 'Asia/Bahrain';
+        case 'BI' : return 'Africa/Bujumbura';
+        case 'BJ' : return 'Africa/Porto-Novo';
+        case 'BL' : return 'America/St_Barthelemy';
+        case 'BM' : return 'Atlantic/Bermuda';
+        case 'BN' : return 'Asia/Brunei';
+        case 'BO' : return 'America/La_Paz';
+        case 'BQ' : return 'America/Kralendijk';
+        case 'BR' :
+        {
+            switch ( timeShift )
+            {
+                case -5 : return 'America/Rio_Branco';
+                case -4 : return 'America/Manaus';
+                case -3 : return 'America/Sao_Paulo';
+                case -2 : return 'America/Recife';
+            }
+
+            break;
+        }
+        case 'BS' : return 'America/Nassau';
+        case 'BT' : return 'Asia/Thimphu';
+        case 'BW' : return 'Africa/Gaborone';
+        case 'BY' : return 'Europe/Minsk';
+        case 'BZ' : return 'America/Belize';
+        case 'CA' :
+        {
+            switch ( timeShift )
+            {
+                case -9 : return 'America/Whitehorse';
+                case -8 : return 'America/Vancouver';
+                case -7 : return 'America/Edmonton';
+                case -6 : return 'America/Winnipeg';
+                case -5 : return 'America/Toronto';
+                case -4 : return 'America/Halifax';
+                case -3 : return 'America/St_Johns';
+            }
+
+            break;
+        }
+        case 'CC' : return 'Indian/Cocos';
+        case 'CD' :
+        {
+            switch ( timeShift )
+            {
+                case 1 : return 'Africa/Kinshasa';
+                case 2 : return 'Africa/Lubumbashi';
+            }
+
+            break;
+        }
+        case 'CF' : return 'Africa/Bangui';
+        case 'CG' : return 'Africa/Brazzaville';
+        case 'CH' : return 'Europe/Zurich';
+        case 'CI' : return 'Africa/Abidjan';
+        case 'CK' : return 'Pacific/Rarotonga';
+        case 'CL' :
+        {
+            switch ( timeShift )
+            {
+                case -7 : return 'Pacific/Easter';
+                case -5 :
+                case -4 : return 'America/Santiago';
+            }
+
+            break;
+        }
+        case 'CM' : return 'Africa/Douala';
+        case 'CN' :
+        {
+            switch ( timeShift )
+            {
+                case 5 :
+                case 6 : return 'Asia/Urumqi';
+                case 7 :
+                case 8 :
+                case 9 : return 'Asia/Shanghai';
+            }
+
+            break;
+        }
+        case 'CO' : return 'America/Bogota';
+        case 'CR' : return 'America/Costa_Rica';
+        case 'CU' : return 'America/Havana';
+        case 'CV' : return 'Atlantic/Cape_Verde';
+        case 'CW' : return 'America/Curacao';
+        case 'CX' : return 'Indian/Christmas';
+        case 'CY' : return 'Asia/Famagusta';
+        case 'CY' : return 'Asia/Nicosia';
+        case 'CZ' : return 'Europe/Prague';
+        case 'DE' : return 'Europe/Berlin';
+        case 'DE' : return 'Europe/Busingen';
+        case 'DJ' : return 'Africa/Djibouti';
+        case 'DK' : return 'Europe/Copenhagen';
+        case 'DM' : return 'America/Dominica';
+        case 'DO' : return 'America/Santo_Domingo';
+        case 'DZ' : return 'Africa/Algiers';
+        case 'EC' :
+        {
+            switch ( timeShift )
+            {
+                case -6 : return 'Pacific/Galapagos';
+                case -5 : return 'America/Guayaquil';
+            }
+
+            break;
+        }
+        case 'EE' : return 'Europe/Tallinn';
+        case 'EG' : return 'Africa/Cairo';
+        case 'EH' : return 'Africa/El_Aaiun';
+        case 'ER' : return 'Africa/Asmara';
+        case 'ES' :
+        {
+            if ( longitude < -12.0 )
+            {
+                return 'Atlantic/Canary';
+            }
+            else
+            {
+                return 'Europe/Madrid';
+            }
+        }
+        case 'ET' : return 'Africa/Addis_Ababa';
+        case 'FI' : return 'Europe/Helsinki';
+        case 'FJ' : return 'Pacific/Fiji';
+        case 'FK' : return 'Atlantic/Stanley';
+        case 'FM' :
+        {
+            switch ( timeShift )
+            {
+                case 10 : return 'Pacific/Chuuk';
+                case 11 : return 'Pacific/Pohnpei';
+            }
+
+            break;
+        }
+        case 'FO' : return 'Atlantic/Faroe';
+        case 'FR' : return 'Europe/Paris';
+        case 'GA' : return 'Africa/Libreville';
+        case 'GB' : return 'Europe/London';
+        case 'GD' : return 'America/Grenada';
+        case 'GE' : return 'Asia/Tbilisi';
+        case 'GF' : return 'America/Cayenne';
+        case 'GG' : return 'Europe/Guernsey';
+        case 'GH' : return 'Africa/Accra';
+        case 'GI' : return 'Europe/Gibraltar';
+        case 'GL' :
+        {
+            switch ( timeShift )
+            {
+                case -4 : return 'America/Thule';
+                case -3 : return 'America/Nuuk';
+                case -1 : return 'America/Scoresbysund';
+                case 0 : return 'America/Danmarkshavn';
+            }
+
+            break;
+        }
+        case 'GM' : return 'Africa/Banjul';
+        case 'GN' : return 'Africa/Conakry';
+        case 'GP' : return 'America/Guadeloupe';
+        case 'GQ' : return 'Africa/Malabo';
+        case 'GR' : return 'Europe/Athens';
+        case 'GS' : return 'Atlantic/South_Georgia';
+        case 'GT' : return 'America/Guatemala';
+        case 'GU' : return 'Pacific/Guam';
+        case 'GW' : return 'Africa/Bissau';
+        case 'GY' : return 'America/Guyana';
+        case 'HK' : return 'Asia/Hong_Kong';
+        case 'HN' : return 'America/Tegucigalpa';
+        case 'HR' : return 'Europe/Zagreb';
+        case 'HT' : return 'America/Port-au-Prince';
+        case 'HU' : return 'Europe/Budapest';
+        case 'ID' :
+        {
+            switch ( timeShift )
+            {
+                case 6 :
+                case 7 : return 'Asia/Jakarta';
+                case 8 : return 'Asia/Makassar';
+                case 9 : return 'Asia/Jayapura';
+            }
+
+            break;
+        }
+        case 'IE' : return 'Europe/Dublin';
+        case 'IL' : return 'Asia/Jerusalem';
+        case 'IM' : return 'Europe/Isle_of_Man';
+        case 'IN' : return 'Asia/Kolkata';
+        case 'IO' : return 'Indian/Chagos';
+        case 'IQ' : return 'Asia/Baghdad';
+        case 'IR' : return 'Asia/Tehran';
+        case 'IS' : return 'Atlantic/Reykjavik';
+        case 'IT' : return 'Europe/Rome';
+        case 'JE' : return 'Europe/Jersey';
+        case 'JM' : return 'America/Jamaica';
+        case 'JO' : return 'Asia/Amman';
+        case 'JP' : return 'Asia/Tokyo';
+        case 'KE' : return 'Africa/Nairobi';
+        case 'KG' : return 'Asia/Bishkek';
+        case 'KH' : return 'Asia/Phnom_Penh';
+        case 'KI' :
+        {
+            switch ( timeShift )
+            {
+                case -12 : return 'Pacific/Tarawa';
+                case -11 : return 'Pacific/Enderbury';
+                case -10 : return 'Pacific/Kiritimati';
+            }
+
+            break;
+        }
+        case 'KM' : return 'Indian/Comoro';
+        case 'KN' : return 'America/St_Kitts';
+        case 'KP' : return 'Asia/Pyongyang';
+        case 'KR' : return 'Asia/Seoul';
+        case 'KW' : return 'Asia/Kuwait';
+        case 'KY' : return 'America/Cayman';
+        case 'KZ' :
+        {
+            switch ( timeShift )
+            {
+                case 4 : return 'Asia/Aqtau';
+                case 5 :
+                case 6 : return 'Asia/Almaty';
+            }
+
+            break;
+        }
+        case 'LA' : return 'Asia/Vientiane';
+        case 'LB' : return 'Asia/Beirut';
+        case 'LC' : return 'America/St_Lucia';
+        case 'LI' : return 'Europe/Vaduz';
+        case 'LK' : return 'Asia/Colombo';
+        case 'LR' : return 'Africa/Monrovia';
+        case 'LS' : return 'Africa/Maseru';
+        case 'LT' : return 'Europe/Vilnius';
+        case 'LU' : return 'Europe/Luxembourg';
+        case 'LV' : return 'Europe/Riga';
+        case 'LY' : return 'Africa/Tripoli';
+        case 'MA' : return 'Africa/Casablanca';
+        case 'MC' : return 'Europe/Monaco';
+        case 'MD' : return 'Europe/Chisinau';
+        case 'ME' : return 'Europe/Podgorica';
+        case 'MF' : return 'America/Marigot';
+        case 'MG' : return 'Indian/Antananarivo';
+        case 'MH' : return 'Pacific/Majuro';
+        case 'MK' : return 'Europe/Skopje';
+        case 'ML' : return 'Africa/Bamako';
+        case 'MM' : return 'Asia/Yangon';
+        case 'MN' : return 'Europe/Chisinau';
+        case 'MO' : return 'Asia/Macau';
+        case 'MP' : return 'Pacific/Saipan';
+        case 'MQ' : return 'America/Martinique';
+        case 'MR' : return 'Africa/Nouakchott';
+        case 'MS' : return 'America/Montserrat';
+        case 'MT' : return 'Europe/Malta';
+        case 'MU' : return 'Indian/Mauritius';
+        case 'MV' : return 'Indian/Maldives';
+        case 'MW' : return 'Africa/Blantyre';
+        case 'MX' :
+        {
+            switch ( timeShift )
+            {
+                case -9 :
+                case -8 : return 'America/Tijuana';
+                case -7 : return 'America/Chihuahua';
+                case -6 : return 'America/Mexico_City';
+                case -5 : return 'America/Cancun';
+            }
+
+            break;
+        }
+        case 'MY' : return 'Asia/Kuala_Lumpur';
+        case 'MZ' : return 'Africa/Maputo';
+        case 'NA' : return 'Africa/Windhoek';
+        case 'NC' : return 'Pacific/Noumea';
+        case 'NE' : return 'Africa/Niamey';
+        case 'NF' : return 'Pacific/Norfolk';
+        case 'NG' : return 'Africa/Lagos';
+        case 'NI' : return 'America/Managua';
+        case 'NL' : return 'Europe/Amsterdam';
+        case 'NO' : return 'Europe/Oslo';
+        case 'NP' : return 'Asia/Kathmandu';
+        case 'NR' : return 'Pacific/Nauru';
+        case 'NU' : return 'Pacific/Niue';
+        case 'NZ' : return 'Pacific/Auckland';
+        case 'OM' : return 'Asia/Muscat';
+        case 'PA' : return 'America/Panama';
+        case 'PE' : return 'America/Lima';
+        case 'PF' :
+        {
+            switch ( timeShift )
+            {
+                case -10 : return 'Pacific/Tahiti';
+                case -9 : return 'Pacific/Marquesas';
+            }
+
+            break;
+        }
+        case 'PG' :
+        {
+            switch ( timeShift )
+            {
+                case 10 : return 'Pacific/Port_Moresby';
+                case 11 : return 'Pacific/Bougainville';
+            }
+
+            break;
+        }
+        case 'PH' : return 'Asia/Manila';
+        case 'PK' : return 'Asia/Karachi';
+        case 'PL' : return 'Europe/Warsaw';
+        case 'PM' : return 'America/Miquelon';
+        case 'PN' : return 'Pacific/Pitcairn';
+        case 'PR' : return 'America/Puerto_Rico';
+        case 'PS' : return 'Asia/Hebron';
+        case 'PT' :
+        {
+            if ( longitude < -12.0 )
+            {
+                return 'Atlantic/Azores';
+            }
+            else
+            {
+                return 'Europe/Lisbon';
+            }
+        }
+        case 'PW' : return 'Pacific/Palau';
+        case 'PY' : return 'America/Asuncion';
+        case 'QA' : return 'Asia/Qatar';
+        case 'RE' : return 'Indian/Reunion';
+        case 'RO' : return 'Europe/Bucharest';
+        case 'RS' : return 'Europe/Belgrade';
+        case 'RU' :
+        {
+            switch ( timeShift )
+            {
+                case 1 :
+                case 2 : return 'Europe/Kaliningrad';
+                case 3 : return 'Europe/Moscow';
+                case 4 : return 'Europe/Volgograd';
+                case 5 : return 'Asia/Yekaterinburg';
+                case 6 : return 'Asia/Omsk';
+                case 7 : return 'Asia/Tomsk';
+                case 8 : return 'Asia/Irkutsk';
+                case 9 : return 'Asia/Yakutsk';
+                case 10 : return 'Asia/Vladivostok';
+                case 11 : return 'Asia/Sakhalin';
+                case -12 : return 'Asia/Anadyr';
+            }
+
+            break;
+        }
+        case 'RW' : return 'Africa/Kigali';
+        case 'SA' : return 'Asia/Riyadh';
+        case 'SB' : return 'Pacific/Guadalcanal';
+        case 'SC' : return 'Indian/Mahe';
+        case 'SD' : return 'Africa/Khartoum';
+        case 'SE' : return 'Europe/Stockholm';
+        case 'SG' : return 'Asia/Singapore';
+        case 'SH' : return 'Atlantic/St_Helena';
+        case 'SI' : return 'Europe/Ljubljana';
+        case 'SJ' : return 'Arctic/Longyearbyen';
+        case 'SK' : return 'Europe/Bratislava';
+        case 'SL' : return 'Africa/Freetown';
+        case 'SM' : return 'Europe/San_Marino';
+        case 'SN' : return 'Africa/Dakar';
+        case 'SO' : return 'Africa/Mogadishu';
+        case 'SR' : return 'America/Paramaribo';
+        case 'SS' : return 'Africa/Juba';
+        case 'ST' : return 'Africa/Sao_Tome';
+        case 'SV' : return 'America/El_Salvador';
+        case 'SX' : return 'America/Lower_Princes';
+        case 'SY' : return 'Asia/Damascus';
+        case 'SZ' : return 'Africa/Mbabane';
+        case 'TC' : return 'America/Grand_Turk';
+        case 'TD' : return 'Africa/Ndjamena';
+        case 'TF' : return 'Indian/Kerguelen';
+        case 'TG' : return 'Africa/Lome';
+        case 'TH' : return 'Asia/Bangkok';
+        case 'TJ' : return 'Asia/Dushanbe';
+        case 'TK' : return 'Pacific/Fakaofo';
+        case 'TL' : return 'Asia/Dili';
+        case 'TM' : return 'Asia/Ashgabat';
+        case 'TN' : return 'Africa/Tunis';
+        case 'TO' : return 'Pacific/Tongatapu';
+        case 'TR' : return 'Europe/Istanbul';
+        case 'TT' : return 'America/Port_of_Spain';
+        case 'TV' : return 'Pacific/Funafuti';
+        case 'TW' : return 'Asia/Taipei';
+        case 'TZ' : return 'Africa/Dar_es_Salaam';
+        case 'UA' :
+        {
+            switch ( timeShift )
+            {
+                case 1 :
+                case 2 : return 'Europe/Kiev';
+                case 3 : return 'Europe/Simferopol';
+            }
+
+            break;
+        }
+        case 'UG' : return 'Africa/Kampala';
+        case 'UM' :
+        {
+            switch ( timeShift )
+            {
+                case -12 : return 'Pacific/Wake';
+                case -11 : return 'Pacific/Midway';
+            }
+
+            break;
+        }
+        case 'US' :
+        {
+            switch ( timeShift )
+            {
+                case -11 :
+                case -10 : return 'Pacific/Honolulu';
+                case -9 : return 'America/Juneau';
+                case -8 : return 'America/Los_Angeles';
+                case -7 : return 'America/Denver';
+                case -6 : return 'America/Chicago';
+                case -5 :
+                case -4 : return 'America/New_York';
+            }
+
+            break;
+        }
+        case 'UY' : return 'America/Montevideo';
+        case 'UZ' : return 'Asia/Samarkand';
+        case 'UZ' : return 'Asia/Tashkent';
+        case 'VA' : return 'Europe/Vatican';
+        case 'VC' : return 'America/St_Vincent';
+        case 'VE' : return 'America/Caracas';
+        case 'VG' : return 'America/Tortola';
+        case 'VI' : return 'America/St_Thomas';
+        case 'VN' : return 'Asia/Ho_Chi_Minh';
+        case 'VU' : return 'Pacific/Efate';
+        case 'WF' : return 'Pacific/Wallis';
+        case 'WS' : return 'Pacific/Apia';
+        case 'YE' : return 'Asia/Aden';
+        case 'YT' : return 'Indian/Mayotte';
+        case 'ZA' : return 'Africa/Johannesburg';
+        case 'ZM' : return 'Africa/Lusaka';
+        case 'ZW' : return 'Africa/Harare';
+    }
+
+    switch ( timeShift )
+    {
+        case -12 : return 'Pacific/Funafuti';
+        case -11 : return 'Pacific/Pago_Pago';
+        case -10 : return 'Pacific/Honolulu';
+        case -9 : return 'America/Juneau';
+        case -8 : return 'America/Vancouver';
+        case -7 : return 'America/Denver';
+        case -6 : return 'America/Chicago';
+        case -5 : return 'America/New_York';
+        case -4 : return 'America/Puerto_Rico';
+        case -3 : return 'America/Sao_Paulo';
+        case -2 : return 'Atlantic/South_Georgia';
+        case -1 : return 'Atlantic/Azores';
+        case 0 : return 'Europe/London';
+        case 1 : return 'Europe/Vienna';
+        case 2 : return 'Europe/Bucharest';
+        case 3 : return 'Europe/Moscow';
+        case 4 : return 'Asia/Dubai';
+        case 5 : return 'Asia/Dushanbe';
+        case 6 : return 'Asia/Thimphu';
+        case 7 : return 'Asia/Jakarta';
+        case 8 : return 'Asia/Shanghai';
+        case 9 : return 'Asia/Tokyo';
+        case 10 : return 'Australia/Brisbane';
+        case 11 : return 'Pacific/Noumea';
+    }
+
+    return '';
 }
 
 // ~~
@@ -1377,255 +1932,277 @@ export function getCapitalLongitudeFromCountryCode(
 
 // ~~
 
-export function getContinentSlugFromCountryCode(
+function getContinentCodeFromCountryCode(
     countryCode
     )
 {
     switch ( countryCode )
     {
-        case 'af' : return 'asia';
-        case 'ax' : return 'europe';
-        case 'al' : return 'europe';
-        case 'dz' : return 'africa';
-        case 'as' : return 'australia';
-        case 'ad' : return 'europe';
-        case 'ao' : return 'africa';
-        case 'ai' : return 'central-america';
-        case 'aq' : return 'antarctica';
-        case 'ag' : return 'central-america';
-        case 'ar' : return 'south-america';
-        case 'am' : return 'europe';
-        case 'aw' : return 'central-america';
-        case 'au' : return 'australia';
-        case 'at' : return 'europe';
-        case 'az' : return 'europe';
-        case 'bs' : return 'central-america';
-        case 'bh' : return 'asia';
-        case 'bd' : return 'asia';
-        case 'bb' : return 'central-america';
-        case 'by' : return 'europe';
-        case 'be' : return 'europe';
-        case 'bz' : return 'central-america';
-        case 'bj' : return 'africa';
-        case 'bm' : return 'central-america';
-        case 'bt' : return 'asia';
-        case 'bo' : return 'south-america';
-        case 'ba' : return 'europe';
-        case 'bw' : return 'africa';
-        case 'br' : return 'south-america';
-        case 'io' : return 'africa';
-        case 'vg' : return 'central-america';
-        case 'bn' : return 'asia';
-        case 'bg' : return 'europe';
-        case 'bf' : return 'africa';
-        case 'bi' : return 'africa';
-        case 'kh' : return 'asia';
-        case 'cm' : return 'africa';
-        case 'ca' : return 'north-america';
-        case 'cv' : return 'africa';
-        case 'ky' : return 'central-america';
-        case 'cf' : return 'africa';
-        case 'td' : return 'africa';
-        case 'cl' : return 'south-america';
-        case 'cn' : return 'asia';
-        case 'cx' : return 'australia';
-        case 'cc' : return 'australia';
-        case 'co' : return 'south-america';
-        case 'km' : return 'africa';
-        case 'ck' : return 'australia';
-        case 'cr' : return 'central-america';
-        case 'ci' : return 'africa';
-        case 'hr' : return 'europe';
-        case 'cu' : return 'central-america';
-        case 'cw' : return 'central-america';
-        case 'cy' : return 'europe';
-        case 'cz' : return 'europe';
-        case 'cd' : return 'africa';
-        case 'dk' : return 'europe';
-        case 'dj' : return 'africa';
-        case 'dm' : return 'central-america';
-        case 'do' : return 'central-america';
-        case 'ec' : return 'south-america';
-        case 'eg' : return 'africa';
-        case 'sv' : return 'central-america';
-        case 'gq' : return 'africa';
-        case 'er' : return 'africa';
-        case 'ee' : return 'europe';
-        case 'et' : return 'africa';
-        case 'fk' : return 'south-america';
-        case 'fo' : return 'europe';
-        case 'fm' : return 'australia';
-        case 'fj' : return 'australia';
-        case 'fi' : return 'europe';
-        case 'fr' : return 'europe';
-        case 'pf' : return 'australia';
-        case 'tf' : return 'antarctica';
-        case 'ga' : return 'africa';
-        case 'ge' : return 'europe';
-        case 'de' : return 'europe';
-        case 'gh' : return 'africa';
-        case 'gi' : return 'europe';
-        case 'gr' : return 'europe';
-        case 'gl' : return 'central-america';
-        case 'gd' : return 'central-america';
-        case 'gu' : return 'australia';
-        case 'gt' : return 'central-america';
-        case 'gg' : return 'europe';
-        case 'gn' : return 'africa';
-        case 'gw' : return 'africa';
-        case 'gy' : return 'south-america';
-        case 'ht' : return 'central-america';
-        case 'hm' : return 'antarctica';
-        case 'hn' : return 'central-america';
-        case 'hk' : return 'asia';
-        case 'hu' : return 'europe';
-        case 'is' : return 'europe';
-        case 'in' : return 'asia';
-        case 'id' : return 'asia';
-        case 'ir' : return 'asia';
-        case 'iq' : return 'asia';
-        case 'ie' : return 'europe';
-        case 'im' : return 'europe';
-        case 'il' : return 'asia';
-        case 'it' : return 'europe';
-        case 'jm' : return 'central-america';
-        case 'jp' : return 'asia';
-        case 'je' : return 'europe';
-        case 'jo' : return 'asia';
-        case 'kz' : return 'asia';
-        case 'ke' : return 'africa';
-        case 'ki' : return 'australia';
-        case 'ko' : return 'europe';
-        case 'kw' : return 'asia';
-        case 'kg' : return 'asia';
-        case 'la' : return 'asia';
-        case 'lv' : return 'europe';
-        case 'lb' : return 'asia';
-        case 'ls' : return 'africa';
-        case 'lr' : return 'africa';
-        case 'ly' : return 'africa';
-        case 'li' : return 'europe';
-        case 'lt' : return 'europe';
-        case 'lu' : return 'europe';
-        case 'mo' : return 'asia';
-        case 'mk' : return 'europe';
-        case 'mg' : return 'africa';
-        case 'mw' : return 'africa';
-        case 'my' : return 'asia';
-        case 'mv' : return 'asia';
-        case 'ml' : return 'africa';
-        case 'mt' : return 'europe';
-        case 'mh' : return 'australia';
-        case 'mr' : return 'africa';
-        case 'mu' : return 'africa';
-        case 'mx' : return 'central-america';
-        case 'md' : return 'europe';
-        case 'mc' : return 'europe';
-        case 'mn' : return 'asia';
-        case 'me' : return 'europe';
-        case 'ms' : return 'central-america';
-        case 'ma' : return 'africa';
-        case 'mz' : return 'africa';
-        case 'mm' : return 'asia';
-        case 'na' : return 'africa';
-        case 'nr' : return 'australia';
-        case 'np' : return 'asia';
-        case 'nl' : return 'europe';
-        case 'nc' : return 'australia';
-        case 'nz' : return 'australia';
-        case 'ni' : return 'central-america';
-        case 'ne' : return 'africa';
-        case 'ng' : return 'africa';
-        case 'nu' : return 'australia';
-        case 'nf' : return 'australia';
-        case 'kp' : return 'asia';
-        case 'mp' : return 'australia';
-        case 'no' : return 'europe';
-        case 'om' : return 'asia';
-        case 'pk' : return 'asia';
-        case 'pw' : return 'australia';
-        case 'ps' : return 'asia';
-        case 'pa' : return 'central-america';
-        case 'pg' : return 'australia';
-        case 'py' : return 'south-america';
-        case 'pe' : return 'south-america';
-        case 'ph' : return 'asia';
-        case 'pn' : return 'australia';
-        case 'pl' : return 'europe';
-        case 'pt' : return 'europe';
-        case 'pr' : return 'central-america';
-        case 'qa' : return 'asia';
-        case 'cg' : return 'africa';
-        case 'ro' : return 'europe';
-        case 'ru' : return 'europe';
-        case 'rw' : return 'africa';
-        case 'bl' : return 'central-america';
-        case 'sh' : return 'africa';
-        case 'kn' : return 'central-america';
-        case 'lc' : return 'central-america';
-        case 'mf' : return 'central-america';
-        case 'pm' : return 'central-america';
-        case 'vc' : return 'central-america';
-        case 'ws' : return 'australia';
-        case 'sm' : return 'europe';
-        case 'st' : return 'africa';
-        case 'sa' : return 'asia';
-        case 'sn' : return 'africa';
-        case 'rs' : return 'europe';
-        case 'sc' : return 'africa';
-        case 'sl' : return 'africa';
-        case 'sg' : return 'asia';
-        case 'sx' : return 'central-america';
-        case 'sk' : return 'europe';
-        case 'si' : return 'europe';
-        case 'sb' : return 'australia';
-        case 'so' : return 'africa';
-        case 'za' : return 'africa';
-        case 'gs' : return 'antarctica';
-        case 'kr' : return 'asia';
-        case 'ss' : return 'africa';
-        case 'es' : return 'europe';
-        case 'lk' : return 'asia';
-        case 'sd' : return 'africa';
-        case 'sr' : return 'south-america';
-        case 'sj' : return 'europe';
-        case 'sz' : return 'africa';
-        case 'se' : return 'europe';
-        case 'ch' : return 'europe';
-        case 'sy' : return 'asia';
-        case 'tw' : return 'asia';
-        case 'tj' : return 'asia';
-        case 'tz' : return 'africa';
-        case 'th' : return 'asia';
-        case 'gm' : return 'africa';
-        case 'tl' : return 'asia';
-        case 'tg' : return 'africa';
-        case 'tk' : return 'australia';
-        case 'to' : return 'australia';
-        case 'tt' : return 'central-america';
-        case 'tn' : return 'africa';
-        case 'tr' : return 'europe';
-        case 'tm' : return 'asia';
-        case 'tc' : return 'central-america';
-        case 'tv' : return 'australia';
-        case 'ug' : return 'africa';
-        case 'ua' : return 'europe';
-        case 'ae' : return 'asia';
-        case 'gb' : return 'europe';
-        case 'us' : return 'north-america';
-        case 'uy' : return 'south-america';
-        case 'um' : return 'australia';
-        case 'vi' : return 'central-america';
-        case 'uz' : return 'asia';
-        case 'vu' : return 'australia';
-        case 'va' : return 'europe';
-        case 've' : return 'south-america';
-        case 'vn' : return 'asia';
-        case 'wf' : return 'australia';
-        case 'eh' : return 'africa';
-        case 'ye' : return 'asia';
-        case 'zm' : return 'africa';
-        case 'zw' : return 'africa';
+        case 'AF' : return 'AS';
+        case 'AX' : return 'EU';
+        case 'AL' : return 'EU';
+        case 'DZ' : return 'AF';
+        case 'AS' : return 'OC';
+        case 'AD' : return 'EU';
+        case 'AO' : return 'AF';
+        case 'AI' : return 'CA';
+        case 'AQ' : return 'AN';
+        case 'AG' : return 'CA';
+        case 'AR' : return 'SA';
+        case 'AM' : return 'EU';
+        case 'AW' : return 'CA';
+        case 'AU' : return 'OC';
+        case 'AT' : return 'EU';
+        case 'AZ' : return 'EU';
+        case 'BS' : return 'CA';
+        case 'BH' : return 'AS';
+        case 'BD' : return 'AS';
+        case 'BB' : return 'CA';
+        case 'BY' : return 'EU';
+        case 'BE' : return 'EU';
+        case 'BZ' : return 'CA';
+        case 'BJ' : return 'AF';
+        case 'BM' : return 'CA';
+        case 'BT' : return 'AS';
+        case 'BO' : return 'SA';
+        case 'BA' : return 'EU';
+        case 'BW' : return 'AF';
+        case 'BR' : return 'SA';
+        case 'IO' : return 'AF';
+        case 'VG' : return 'CA';
+        case 'BN' : return 'AS';
+        case 'BG' : return 'EU';
+        case 'BF' : return 'AF';
+        case 'BI' : return 'AF';
+        case 'KH' : return 'AS';
+        case 'CM' : return 'AF';
+        case 'CA' : return 'NA';
+        case 'CV' : return 'AF';
+        case 'KY' : return 'CA';
+        case 'CF' : return 'AF';
+        case 'TD' : return 'AF';
+        case 'CL' : return 'SA';
+        case 'CN' : return 'AS';
+        case 'CX' : return 'OC';
+        case 'CC' : return 'OC';
+        case 'CO' : return 'SA';
+        case 'KM' : return 'AF';
+        case 'CK' : return 'OC';
+        case 'CR' : return 'CA';
+        case 'CI' : return 'AF';
+        case 'HR' : return 'EU';
+        case 'CU' : return 'CA';
+        case 'CW' : return 'CA';
+        case 'CY' : return 'EU';
+        case 'CZ' : return 'EU';
+        case 'CD' : return 'AF';
+        case 'DK' : return 'EU';
+        case 'DJ' : return 'AF';
+        case 'DM' : return 'CA';
+        case 'DO' : return 'CA';
+        case 'EC' : return 'SA';
+        case 'EG' : return 'AF';
+        case 'SV' : return 'CA';
+        case 'GQ' : return 'AF';
+        case 'ER' : return 'AF';
+        case 'EE' : return 'EU';
+        case 'ET' : return 'AF';
+        case 'FK' : return 'SA';
+        case 'FO' : return 'EU';
+        case 'FM' : return 'OC';
+        case 'FJ' : return 'OC';
+        case 'FI' : return 'EU';
+        case 'FR' : return 'EU';
+        case 'PF' : return 'OC';
+        case 'TF' : return 'AN';
+        case 'GA' : return 'AF';
+        case 'GE' : return 'EU';
+        case 'DE' : return 'EU';
+        case 'GH' : return 'AF';
+        case 'GI' : return 'EU';
+        case 'GR' : return 'EU';
+        case 'GL' : return 'CA';
+        case 'GD' : return 'CA';
+        case 'GU' : return 'OC';
+        case 'GT' : return 'CA';
+        case 'GG' : return 'EU';
+        case 'GN' : return 'AF';
+        case 'GW' : return 'AF';
+        case 'GY' : return 'SA';
+        case 'HT' : return 'CA';
+        case 'HM' : return 'AN';
+        case 'HN' : return 'CA';
+        case 'HK' : return 'AS';
+        case 'HU' : return 'EU';
+        case 'IS' : return 'EU';
+        case 'IN' : return 'AS';
+        case 'ID' : return 'AS';
+        case 'IR' : return 'AS';
+        case 'IQ' : return 'AS';
+        case 'IE' : return 'EU';
+        case 'IM' : return 'EU';
+        case 'IL' : return 'AS';
+        case 'IT' : return 'EU';
+        case 'JM' : return 'CA';
+        case 'JP' : return 'AS';
+        case 'JE' : return 'EU';
+        case 'JO' : return 'AS';
+        case 'KZ' : return 'AS';
+        case 'KE' : return 'AF';
+        case 'KI' : return 'OC';
+        case 'KO' : return 'EU';
+        case 'KW' : return 'AS';
+        case 'KG' : return 'AS';
+        case 'LA' : return 'AS';
+        case 'LV' : return 'EU';
+        case 'LB' : return 'AS';
+        case 'LS' : return 'AF';
+        case 'LR' : return 'AF';
+        case 'LY' : return 'AF';
+        case 'LI' : return 'EU';
+        case 'LT' : return 'EU';
+        case 'LU' : return 'EU';
+        case 'MO' : return 'AS';
+        case 'MK' : return 'EU';
+        case 'MG' : return 'AF';
+        case 'MW' : return 'AF';
+        case 'MY' : return 'AS';
+        case 'MV' : return 'AS';
+        case 'ML' : return 'AF';
+        case 'MT' : return 'EU';
+        case 'MH' : return 'OC';
+        case 'MR' : return 'AF';
+        case 'MU' : return 'AF';
+        case 'MX' : return 'CA';
+        case 'MD' : return 'EU';
+        case 'MC' : return 'EU';
+        case 'MN' : return 'AS';
+        case 'ME' : return 'EU';
+        case 'MS' : return 'CA';
+        case 'MA' : return 'AF';
+        case 'MZ' : return 'AF';
+        case 'MM' : return 'AS';
+        case 'NA' : return 'AF';
+        case 'NR' : return 'OC';
+        case 'NP' : return 'AS';
+        case 'NL' : return 'EU';
+        case 'NC' : return 'OC';
+        case 'NZ' : return 'OC';
+        case 'NI' : return 'CA';
+        case 'NE' : return 'AF';
+        case 'NG' : return 'AF';
+        case 'NU' : return 'OC';
+        case 'NF' : return 'OC';
+        case 'KP' : return 'AS';
+        case 'MP' : return 'OC';
+        case 'NO' : return 'EU';
+        case 'OM' : return 'AS';
+        case 'PK' : return 'AS';
+        case 'PW' : return 'OC';
+        case 'PS' : return 'AS';
+        case 'PA' : return 'CA';
+        case 'PG' : return 'OC';
+        case 'PY' : return 'SA';
+        case 'PE' : return 'SA';
+        case 'PH' : return 'AS';
+        case 'PN' : return 'OC';
+        case 'PL' : return 'EU';
+        case 'PT' : return 'EU';
+        case 'PR' : return 'CA';
+        case 'QA' : return 'AS';
+        case 'CG' : return 'AF';
+        case 'RO' : return 'EU';
+        case 'RU' : return 'EU';
+        case 'RW' : return 'AF';
+        case 'BL' : return 'CA';
+        case 'SH' : return 'AF';
+        case 'KN' : return 'CA';
+        case 'LC' : return 'CA';
+        case 'MF' : return 'CA';
+        case 'PM' : return 'CA';
+        case 'VC' : return 'CA';
+        case 'WS' : return 'OC';
+        case 'SM' : return 'EU';
+        case 'ST' : return 'AF';
+        case 'SA' : return 'AS';
+        case 'SN' : return 'AF';
+        case 'RS' : return 'EU';
+        case 'SC' : return 'AF';
+        case 'SL' : return 'AF';
+        case 'SG' : return 'AS';
+        case 'SX' : return 'CA';
+        case 'SK' : return 'EU';
+        case 'SI' : return 'EU';
+        case 'SB' : return 'OC';
+        case 'SO' : return 'AF';
+        case 'ZA' : return 'AF';
+        case 'GS' : return 'AN';
+        case 'KR' : return 'AS';
+        case 'SS' : return 'AF';
+        case 'ES' : return 'EU';
+        case 'LK' : return 'AS';
+        case 'SD' : return 'AF';
+        case 'SR' : return 'SA';
+        case 'SJ' : return 'EU';
+        case 'SZ' : return 'AF';
+        case 'SE' : return 'EU';
+        case 'CH' : return 'EU';
+        case 'SY' : return 'AS';
+        case 'TW' : return 'AS';
+        case 'TJ' : return 'AS';
+        case 'TZ' : return 'AF';
+        case 'TH' : return 'AS';
+        case 'GM' : return 'AF';
+        case 'TL' : return 'AS';
+        case 'TG' : return 'AF';
+        case 'TK' : return 'OC';
+        case 'TO' : return 'OC';
+        case 'TT' : return 'CA';
+        case 'TN' : return 'AF';
+        case 'TR' : return 'EU';
+        case 'TM' : return 'AS';
+        case 'TC' : return 'CA';
+        case 'TV' : return 'OC';
+        case 'UG' : return 'AF';
+        case 'UA' : return 'EU';
+        case 'AE' : return 'AS';
+        case 'GB' : return 'EU';
+        case 'US' : return 'NA';
+        case 'UY' : return 'SA';
+        case 'UM' : return 'OC';
+        case 'VI' : return 'CA';
+        case 'UZ' : return 'AS';
+        case 'VU' : return 'OC';
+        case 'VA' : return 'EU';
+        case 'VE' : return 'SA';
+        case 'VN' : return 'AS';
+        case 'WF' : return 'OC';
+        case 'EH' : return 'AF';
+        case 'YE' : return 'AS';
+        case 'ZM' : return 'AF';
+        case 'ZW' : return 'AF';
+    }
+
+    return '';
+}
+
+
+// ~~
+
+export function getContinentSlugFromContinentCode(
+    continentCode
+    )
+{
+    switch ( continentCode )
+    {
+        case 'AF' : return 'africa';
+        case 'AN' : return 'antarctica';
+        case 'AS' : return 'asia';
+        case 'OC' : return 'oceania';
+        case 'CA' : return 'central-america';
+        case 'EU' : return 'europe';
+        case 'NA' : return 'north-america';
+        case 'SA' : return 'south-america';
     }
 
     return '';
@@ -1658,7 +2235,7 @@ export async function getLocationFromIpAddress(
             isAmerica: false,
             isAfrica: false,
             isEurope: false,
-            isAustralia: false,
+            isOceania: false,
             isAsia: false,
             isJapan: false
         };
@@ -1674,7 +2251,7 @@ export async function getLocationFromIpAddress(
                      && geographicData.status === 'success' )
                 {
                     location.service = 'ip-api.com';
-                    location.countryCode = geographicData.countryCode.toLowerCase();
+                    location.countryCode = geographicData.countryCode;
                     location.latitude = geographicData.lat;
                     location.longitude = geographicData.lon;
                     location.timeZone = geographicData.timezone;
@@ -1703,7 +2280,7 @@ export async function getLocationFromIpAddress(
                      && geographicData.status === 'success' )
                 {
                      location.service = 'ip-api.com';
-                     location.countryCode = geographicData.countryCode.toLowerCase();
+                     location.countryCode = geographicData.countryCode;
                      location.latitude = Number( geographicData.lat );
                      location.longitude = Number( geographicData.lon );
                      location.timeZone = geographicData.timezone;
@@ -1733,7 +2310,7 @@ export async function getLocationFromIpAddress(
                      && geographicData.geoplugin_status !== 404 )
                 {
                      location.service = 'geoplugin.net';
-                     location.countryCode = geographicData.geoplugin_countryCode.toLowerCase();
+                     location.countryCode = geographicData.geoplugin_countryCode;
                      location.latitude = Number( geographicData.geoplugin_latitude );
                      location.longitude = Number( geographicData.geoplugin_longitude );
                      location.timeZone = geographicData.geoplugin_timezone;
@@ -1761,7 +2338,7 @@ export async function getLocationFromIpAddress(
                      && geographicData.country_code !== null )
                 {
                     location.service = 'iplocate.io';
-                    location.countryCode = geographicData.country_code.toLowerCase();
+                    location.countryCode = geographicData.country_code;
                     location.latitude = Number( geographicData.latitude );
                     location.longitude = Number( geographicData.longitude );
                     location.timeZone = geographicData.time_zone;
@@ -1788,7 +2365,7 @@ export async function getLocationFromIpAddress(
                 {
                     location.service = 'hostip.info';
                     location.countryCode = geographicData.country_code;
-                    location.latitude = getCapitalLatitudeFromCountryCode( location.countryCode.toLowerCase() );
+                    location.latitude = getCapitalLatitudeFromCountryCode( location.countryCode );
                     location.longitude = getCapitalLongitudeFromCountryCode( location.countryCode );
                     location.timeZone = getTimeZoneFromLocation( location.latitude, location.longitude, location.countryCode );
                     location.isFound = true;
@@ -1800,56 +2377,24 @@ export async function getLocationFromIpAddress(
             }
         }
 
-        location.continentSlug = getContinentSlugFromCountryCode( location.countryCode );
-        location.isAntarctica = ( location.continentSlug === 'antarctica' );
-        location.isSouthAmerica = ( location.continentSlug === 'south-america' );
-        location.isCentralAmerica = ( location.continentSlug === 'central-america' );
-        location.isNorthAmerica = ( location.continentSlug === 'north-america' );
-        location.isAmerica = ( location.isSouthAmerica || location.isNorthAmerica );
-        location.isAfrica = ( location.continentSlug === 'africa' );
-        location.isEurope = ( location.continentSlug === 'europe' );
-        location.isAustralia = ( location.continentSlug === 'australia' );
-        location.isAsia = ( location.continentSlug === 'asia' );
-        location.isJapan = ( location.countryCode === 'jp' );
+        location.continentCode = getContinentCodeFromCountryCode( location.countryCode );
+        location.continentSlug = getContinentSlugFromContinentCode( location.continentCode );
+
+        location.isAntarctica = ( location.continentCode === 'AN' );
+        location.isSouthAmerica = ( location.continentCode === 'SA' );
+        location.isCentralAmerica = ( location.continentCode === 'CA' );
+        location.isNorthAmerica = ( location.continentCode === 'NA' );
+        location.isAmerica = ( location.isSouthAmerica || location.isCentralAmerica || location.isNorthAmerica );
+        location.isAfrica = ( location.continentCode === 'AF' );
+        location.isEurope = ( location.continentCode === 'EU' );
+        location.isOceania = ( location.continentCode === 'OC' );
+        location.isAsia = ( location.continentCode === 'AS' );
+        location.isJapan = ( location.countryCode === 'JP' );
 
         locationByIpAddressMap.set( ipAddress, location );
 
         return location;
     }
-}
-
-// ~~
-
-export function setCountryCode(
-    countryCode_
-    )
-{
-    countryCode = countryCode_;
-}
-
-// ~~
-
-export function getCountryCode(
-    )
-{
-    return countryCode;
-}
-
-// ~~
-
-export function setDefaultCountryCode(
-    defaultCountryCode_
-    )
-{
-    defaultCountryCode = defaultCountryCode_;
-}
-
-// ~~
-
-export function getDefaultCountryCode(
-    )
-{
-    return defaultCountryCode;
 }
 
 // ~~
@@ -1873,6 +2418,42 @@ export function getBrowserLanguageCode(
     }
 
     return defaultLanguageCode;
+}
+
+// ~~
+
+export function setContinentCode(
+    continentCode_
+    )
+{
+    continentCode = continentCode_;
+}
+
+// ~~
+
+export function getContinentCode(
+    )
+{
+    return continentCode;
+}
+
+// ~~
+
+export function setCountryCode(
+    countryCode_
+    )
+{
+    countryCode = countryCode_;
+
+    setContinentCode( getContinentCodeFromCountryCode( countryCode_ ) );
+}
+
+// ~~
+
+export function getCountryCode(
+    )
+{
+    return countryCode;
 }
 
 // ~~
@@ -1911,23 +2492,23 @@ export function getDefaultLanguageCode(
 
 // ~~
 
-export function setTextByLanguageTagsMapBySlug(
-    textByLanguageTagsMap,
+export function setTextBySlug(
+    text,
     textSlug
     )
 {
-    textByLanguageTagsMapBySlugMap.set( textSlug, textByLanguageTagsMap );
+    textBySlugMap.set( textSlug, text );
 }
 
 // ~~
 
-export function getTextByLanguageTagsMapBySlug(
+export function getTextBySlug(
     textSlug
     )
 {
-    if ( textByLanguageTagsMapBySlugMap.has( textSlug ) )
+    if ( textBySlugMap.has( textSlug ) )
     {
-        return textByLanguageTagsMapBySlugMap.get( textSlug );
+        return textBySlugMap.get( textSlug );
     }
     else
     {
@@ -1939,121 +2520,207 @@ export function getTextByLanguageTagsMapBySlug(
 
 // ~~
 
-export function getLanguageTagsText(
-    languageCode_ = undefined,
-    countryCode = undefined
+export function getUntranslatedText(
+    multilingualText
     )
 {
+    return multilingualText.split( '¨' )[ 0 ];
 }
 
 // ~~
 
-export function getTextByLanguageTagMap(
-    textByLanguageTagsMap
+export function matchesLanguages(
+    multilingualText,
+    languageSpecifier
     )
 {
-    let textByLanguageTagMap = {};
+    let languageTagPartArray = ( multilingualText + '--' ).split( '-' );
 
-    for ( let languageTags in textByLanguageTagsMap )
+    for ( let languageSpecifierTag of languageSpecifier.split( ',' ) )
     {
-        if ( textByLanguageTagsMap.hasOwnProperty( languageTags ) )
-        {
-            let text = textByLanguageTagsMap[ languageTags ];
+        let languageSpecifierTagPartArray = ( languageSpecifierTag + '--' ).split( '-' );
 
-            for ( let languageTag of languageTags.split( ' ' ) )
+        if ( ( languageTagPartArray[ 0 ] === ''
+               || languageSpecifierTagPartArray[ 0 ] === ''
+               || languageTagPartArray[ 0 ] === languageSpecifierTagPartArray[ 0 ] )
+             && ( languageTagPartArray[ 1 ] === ''
+                  || languageSpecifierTagPartArray[ 1 ] === ''
+                  || languageTagPartArray[ 1 ] === languageSpecifierTagPartArray[ 1 ] )
+             && ( languageTagPartArray[ 2 ] === ''
+                  || languageSpecifierTagPartArray[ 2 ] === ''
+                  || languageTagPartArray[ 2 ] === languageSpecifierTagPartArray[ 2 ] ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// ~~
+
+export function getTranslatedText(
+    multilingualText,
+    languageTag,
+    defaultLanguageTag = 'en'
+    )
+{
+    let translatedTextArray = multilingualText.split( '¨' );
+
+    if ( languageTag !== defaultLanguageTag )
+    {
+        for ( let translatedTextIndex = translatedTextArray.length - 1;
+              translatedTextIndex >= 1;
+              --translatedTextIndex )
+        {
+            let translatedText = translatedTextArray[ translatedTextIndex ];
+            let colonCharacterIndex = translatedText.indexOf( ':' );
+
+            if ( colonCharacterIndex >= 0 )
             {
-                textByLanguageTagMap[ languageTag ] = text;
+                if ( languageTag.matchesLanguages( translatedText.substring( 0, colonCharacterIndex ) ) )
+                {
+                    return translatedText.substring( colonCharacterIndex + 1 );
+                }
             }
         }
     }
 
-    return textByLanguageTagMap;
+    return translatedTextArray[ 0 ];
 }
 
 // ~~
 
-export function getTextFromLanguageTag(
-    textByLanguageTagMap,
-    languageTag
+export function getTranslatedNumber(
+    number,
+    decimalSeparator
     )
 {
-    if ( textByLanguageTagMap.hasOwnProperty( languageTag ) )
+    if ( decimalSeparator === ',' )
     {
-        return textByLanguageTagMap[ languageTag ];
+        return number.toString().replace( '.', ',' );
     }
     else
     {
-        return undefined;
+        return number.toString();
     }
+}
+
+// ~~
+
+export function getLanguageDecimalSeparator(
+    languageCode
+    )
+{
+    if ( languageCode === 'en'
+         || languageCode === 'ja'
+         || languageCode === 'ko'
+         || languageCode === 'zh' )
+    {
+        return '.';
+    }
+    else
+    {
+        return ',';
+    }
+}
+
+// ~~
+
+export function isMultilingualText(
+    multilingualText
+    )
+{
+    return multilingualText.indexOf( '¨' ) >= 0;
+}
+
+// ~~
+
+export function getTranslationArray(
+    multilingualText
+    )
+{
+    let translatedTextArray = multilingualText.split( '¨' );
+    let translationArray = [];
+
+    translationArray.push(
+        {
+            specifier : '',
+            data : translatedTextArray[ 0 ]
+        }
+        );
+
+    for ( let translatedTextIndex = 1;
+          translatedTextIndex < translatedTextArray.length;
+          ++translatedTextIndex )
+    {
+        let translatedText = translatedTextArray[ translatedTextIndex ];
+        let colonCharacterIndex = translatedText.indexOf( ':' );
+
+        if ( colonCharacterIndex >= 0 )
+        {
+            translationArray.push(
+                {
+                    specifier : translatedText.substring( 0, colonCharacterIndex ),
+                    data : translatedText.substring( colonCharacterIndex + 1 )
+                }
+                );
+        }
+    }
+
+    return translationArray;
+}
+
+// ~~
+
+export function getMultilingualText(
+    translationArray
+    )
+{
+    let multilingualText = '';
+
+    if ( translationArray.length > 0 )
+    {
+        multilingualText = translationArray[ 0 ].data;
+
+        for ( let translationIndex = 1;
+              translationIndex < translationArray.length;
+              ++translationIndex )
+        {
+            let translation = translationArray[ translationIndex ];
+
+            multilingualText += '¨' + translation.specifier + ':' + translation.data;
+        }
+    }
+
+    return multilingualText;
 }
 
 // ~~
 
 export function getLocalizedText(
-    textByLanguageTagsMap,
-    languageCode_ = undefined,
-    countryCode_ = undefined
+    text
     )
 {
-    if ( isString( textByLanguageTagsMap ) )
+    if ( isMultilingualText( text ) )
     {
-        return textByLanguageTagsMap;
+        return getTranslatedText( text, languageCode + '-' + countryCode + '-' + continentCode );
     }
     else
     {
-        let textByLanguageTagMap = getTextByLanguageTagMap( textByLanguageTagsMap );
-
-        if ( languageCode_ === undefined )
-        {
-            languageCode_ = languageCode;
-        }
-
-        if ( countryCode_ === undefined )
-        {
-            countryCode_ = countryCode;
-        }
-
-        let text = getTextFromLanguageTag( textByLanguageTagMap, languageCode_ + '-' + countryCode_ );
-
-        if ( text === undefined )
-        {
-            text = getTextFromLanguageTag( textByLanguageTagMap, languageCode_ );
-        }
-
-        if ( text === undefined )
-        {
-            text = getTextFromLanguageTag( textByLanguageTagMap, defaultLanguageCode + '-' + countryCode_ );
-        }
-
-        if ( text === undefined )
-        {
-            text = getTextFromLanguageTag( textByLanguageTagMap, defaultLanguageCode );
-        }
-
-        if ( text === undefined )
-        {
-            printWarning( 'Missing language tag ' + languageCode_ + '-' + countryCode_ + ' : ' + JSON.stringify( textByLanguageTagsMap ) );
-
-            return '';
-        }
-        else
-        {
-            return text;
-        }
+        return text;
     }
 }
 
 // ~~
 
 export function getLocalizedTextBySlug(
-    textSlug,
-    languageCode = undefined,
-    countryCode = undefined
+    textSlug
     )
 {
-    if ( textByLanguageTagsMapBySlugMap.has( textSlug ) )
+    if ( textBySlugMap.has( textSlug ) )
     {
-        return getLocalizedText( textByLanguageTagsMapBySlugMap.get( textSlug ), languageCode, countryCode );
+        return getLocalizedText( textBySlugMap.get( textSlug ) );
     }
     else
     {
@@ -2134,14 +2801,12 @@ export function defineColorTag(
 // ~~
 
 export function getProcessedText(
-    text,
-    languageCode = undefined,
-    countryCode = undefined
+    text
     )
 {
     if ( !isString( text ) )
     {
-        text = getLocalizedText( text, languageCode, countryCode );
+        text = getLocalizedText( text );
     }
 
     for ( let processedDualTag of processedDualTagArray )
@@ -2171,14 +2836,12 @@ export function getProcessedText(
 // ~~
 
 export function getProcessedMultilineText(
-    text,
-    languageCode = undefined,
-    countryCode = undefined
+    text
     )
 {
     if ( !isString( text ) )
     {
-        text = getLocalizedText( text, languageCode, countryCode );
+        text = getLocalizedText( text );
     }
 
     let processedLineTagCount = processedLineTagArray.length;
@@ -2206,7 +2869,7 @@ export function getProcessedMultilineText(
                     lineArray[ lineIndex ]
                         = processedLineTag.openingDefinition
                           + line.substring( processedLineTag.name.length )
-                          + processedLineTag.closingDefinition
+                          + processedLineTag.closingDefinition;
 
                     break;
                 }
@@ -2222,14 +2885,12 @@ export function getProcessedMultilineText(
 // ~~
 
 export function getProcessedTextBySlug(
-    textSlug,
-    languageCode = undefined,
-    countryCode = undefined
+    textSlug
     )
 {
-    if ( textByLanguageTagsMapBySlugMap.has( textSlug ) )
+    if ( textBySlugMap.has( textSlug ) )
     {
-        return getProcessedText( textByLanguageTagsMapBySlugMap.get( textSlug ), languageCode, countryCode );
+        return getProcessedText( textBySlugMap.get( textSlug ) );
     }
     else
     {
@@ -2242,14 +2903,12 @@ export function getProcessedTextBySlug(
 // ~~
 
 export function getProcessedMultilineTextBySlug(
-    textSlug,
-    languageCode = undefined,
-    countryCode = undefined
+    textSlug
     )
 {
-    if ( textByLanguageTagsMapBySlugMap.has( textSlug ) )
+    if ( textBySlugMap.has( textSlug ) )
     {
-        return getProcessedMultilineText( textByLanguageTagsMapBySlugMap.get( textSlug ), languageCode, countryCode );
+        return getProcessedMultilineText( textBySlugMap.get( textSlug ) );
     }
     else
     {
@@ -2352,9 +3011,3 @@ export function toggleClass(
 
     return element;
 }
-
-
-
-
-
-

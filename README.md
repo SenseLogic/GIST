@@ -6,7 +6,7 @@ Reusable base functions.
 
 ## Version
 
-0.1
+2.0
 
 ## Author
 

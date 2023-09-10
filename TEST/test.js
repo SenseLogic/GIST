@@ -23,7 +23,6 @@ import {
     getUuidFromTuid,
     setDefaultLanguageCode,
     setCountryCode,
-    setDefaultCountryCode,
     setLanguageCode
     } from '../src/index.js';
 
@@ -110,58 +109,49 @@ check( randomTuidUuidTuid, randomTuid );
 
 print( "-- GetLocalizedText --" );
 
-let textByLanguageTagsMap =
-    {
-        "en": "US",
-        "en-uk en-au": "UKAU",
-        "fr": "FR",
-        "fr-be fr-ca": "BECA",
-        "pt" : "PT",
-        "pt-br" : "BR"
-    };
+let multilingualText = 'US¨en-UK,en-AU:UKAU¨fr:FR¨fr-BE,fr-CA:BECA¨pt:PT¨pt-BR:BR';
 
 setDefaultLanguageCode( 'en' );
-setDefaultCountryCode( 'us' );
 
 setLanguageCode( 'en' );
-setCountryCode( 'us' );
-check( getLocalizedText( textByLanguageTagsMap ), 'US' );
+setCountryCode( 'US' );
+check( getLocalizedText( multilingualText ), 'US' );
 
 setLanguageCode( 'en' );
-setCountryCode( 'uk' );
-check( getLocalizedText( textByLanguageTagsMap ), 'UKAU' );
+setCountryCode( 'UK' );
+check( getLocalizedText( multilingualText ), 'UKAU' );
 
 setLanguageCode( 'en' );
-setCountryCode( 'au' );
-check( getLocalizedText( textByLanguageTagsMap ), 'UKAU' );
+setCountryCode( 'AU' );
+check( getLocalizedText( multilingualText ), 'UKAU' );
 
 setLanguageCode( 'en' );
-setCountryCode( 'ca' );
-check( getLocalizedText( textByLanguageTagsMap ), 'US' );
+setCountryCode( 'CA' );
+check( getLocalizedText( multilingualText ), 'US' );
 
 setLanguageCode( 'fr' );
-setCountryCode( 'fr' );
-check( getLocalizedText( textByLanguageTagsMap ), 'FR' );
+setCountryCode( 'FR' );
+check( getLocalizedText( multilingualText ), 'FR' );
 
 setLanguageCode( 'fr' );
-setCountryCode( 'be' );
-check( getLocalizedText( textByLanguageTagsMap ), 'BECA' );
+setCountryCode( 'BE' );
+check( getLocalizedText( multilingualText ), 'BECA' );
 
 setLanguageCode( 'fr' );
-setCountryCode( 'ca' );
-check( getLocalizedText( textByLanguageTagsMap ), 'BECA' );
+setCountryCode( 'CA' );
+check( getLocalizedText( multilingualText ), 'BECA' );
 
 setLanguageCode( 'fr' );
-setCountryCode( 'ch' );
-check( getLocalizedText( textByLanguageTagsMap ), 'FR' );
+setCountryCode( 'CH' );
+check( getLocalizedText( multilingualText ), 'FR' );
 
 setLanguageCode( 'de' );
-setCountryCode( 'ch' );
-check( getLocalizedText( textByLanguageTagsMap ), 'US' );
+setCountryCode( 'CH' );
+check( getLocalizedText( multilingualText ), 'US' );
 
 setLanguageCode( 'en' );
-setCountryCode( 'fr' );
-check( getLocalizedText( textByLanguageTagsMap ), 'US' );
+setCountryCode( 'FR' );
+check( getLocalizedText( multilingualText ), 'US' );
 
 print( "-- ProcessedText --" );
 
