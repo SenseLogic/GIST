@@ -241,6 +241,30 @@ export function isElement(
 
 // ~~
 
+export function getElementByIdMap(
+    array,
+    default_value = null
+    )
+{
+    if ( array )
+    {
+        let elementByIdMap = {};
+
+        for ( let element of array )
+        {
+            elementByIdMap[ element.id ] = element;
+        }
+
+        return elementByIdMap;
+    }
+    else
+    {
+        return default_value;
+    }
+}
+
+// ~~
+
 export function removePrefix(
     text,
     prefix
@@ -2578,7 +2602,7 @@ export function getTranslatedText(
 
             if ( colonCharacterIndex >= 0 )
             {
-                if ( languageTag.matchesLanguages( translatedText.substring( 0, colonCharacterIndex ) ) )
+                if ( matchesLanguages( languageTag, translatedText.substring( 0, colonCharacterIndex ) ) )
                 {
                     return translatedText.substring( colonCharacterIndex + 1 );
                 }
