@@ -241,21 +241,22 @@ export function isElement(
 
 // ~~
 
-export function getElementByIdMap(
+export function getMap(
     array,
+    keyName = "id",
     default_value = null
     )
 {
     if ( array )
     {
-        let elementByIdMap = {};
+        let map = {};
 
         for ( let element of array )
         {
-            elementByIdMap[ element.id ] = element;
+            map[ element[ keyName ] ] = element;
         }
 
-        return elementByIdMap;
+        return map;
     }
     else
     {
