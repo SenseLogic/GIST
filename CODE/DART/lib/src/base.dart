@@ -1,277 +1,154 @@
 // -- IMPORTS
 
-import crypto from 'crypto';
-import md5 from 'md5';
+import 'dart:core';
+import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
+import 'package:crypto/crypto.dart';
+//import 'package:uuid/uuid.dart';
 
-// -- CONSTANTS
+// -- TYPES
 
-export const
-    isBrowser = ( typeof window !== 'undefined' && typeof window.document !== 'undefined' ),
-    nullTuid = 'AAAAAAAAAAAAAAAAAAAAAA',
-    nullUuid = '00000000-0000-0000-0000-000000000000',
-    nullDate = {
-        year : 1000,
-        month : 1,
-        day : 1
-        },
-    nullTime = {
-        hour : 0,
-        minute : 0,
-        second : 0.0
-        },
-    nullDateTime = {
-        year : 1000,
-        month : 1,
-        day : 1,
-        hour : 0,
-        minute : 0,
-        second : 0.0
-        },
-    minimumInteger = -9007199254740991,
-    maximumInteger = 9007199254740991,
-    naturalExpression = /^[0-9][0-9]*$/,
-    integerExpression = /^-?[0-9][0-9]*$/,
-    realExpression = /^-?[0-9][0-9]*\.[0-9]*$/,
-    numericExpression = /^-?[0-9][0-9]*\.?[0-9]*$/,
-    slugExpression = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
-// -- VARIABLES
-
-export let
-    continentCode = '',
-    countryCode = '',
-    languageCode = 'en',
-    defaultLanguageCode = 'en',
-    textBySlugMap = new Map(),
-    processedLineTagArray = [],
-    processedDualTagArray = [],
-    processedTagArray = [],
-    locationByIpAddressMap = new Map(),
-    googleAnalyticsTrackingScript = null,
-    googleAnalyticsTrackingIsEnabled = false;
-
-// -- FUNCTIONS
-
-export const
-    raw = String.raw,
-    print = console.log,
-    printObject = console.dir,
-    printTable = console.table,
-    printStack = console.trace,
-    isNaN = Number.isNaN,
-    isInteger = Number.isInteger,
-    getReal = parseFloat,
-    getInteger = parseInt,
-    getNumber = Number,
-    getText = String,
-    getEscapedText = escape,
-    getUnescapedText = unescape,
-    getEncodedUri = encodeURI,
-    getDecodedUri = decodeURI,
-    getJsonText = JSON.stringify,
-    getJsonObject = JSON.parse;
-
-// ~~
-
-export function printValue(
-    value
-    )
+class Date_
 {
-    console.log( getJsonText( value ) );
-}
+    // -- ATTRIBUTES
 
-// ~~
+    final int
+        year,
+        month,
+        day;
 
-export function printWarning(
-    warning
-    )
-{
-    console.trace();
-    console.warn( warning );
-}
+    // -- CONSTRUCTORS
 
-// ~~
-
-export function printError(
-    error
-    )
-{
-    console.trace();
-    console.error( error );
-}
-
-// ~~
-
-export function isBooleanText(
-    text
-    )
-{
-    return text === 'false' || text === 'true';
-}
-
-// ~~
-
-export function isBinaryText(
-    text
-    )
-{
-    return text === '0' || text === '1';
-}
-
-// ~~
-
-export function isNaturalText(
-    text
-    )
-{
-    return text.match( naturalExpression );
-}
-
-// ~~
-
-export function isIntegerText(
-    text
-    )
-{
-    return text.match( integerExpression );
-}
-
-// ~~
-
-export function isRealText(
-    text
-    )
-{
-    return text.match( realExpression );
-}
-
-// ~~
-
-export function isNumericText(
-    text
-    )
-{
-    return text.match( numericExpression );
-}
-
-// ~~
-
-export function isSlugText(
-    text
-    )
-{
-    return text.match( slugExpression );
-}
-
-// ~~
-
-export function isBoolean(
-    value
-    )
-{
-    return typeof value === 'boolean';
-}
-
-// ~~
-
-export function isNatural(
-    value
-    )
-{
-    return isInteger( value ) && getInteger( value ) >= 0;
-}
-
-// ~~
-
-export function isNumber(
-    value
-    )
-{
-    return typeof value === 'number';
-}
-
-// ~~
-
-export function isString(
-    value
-    )
-{
-    return typeof value === 'string';
-}
-
-// ~~
-
-export function isObject(
-    value
-    )
-{
-    return (
-        value !== null
-        && typeof value === 'object'
-        && !Array.isArray( value )
+    Date_(
+        {
+            required this.year,
+            required this.month,
+            required this.day
+        }
         );
 }
 
 // ~~
 
-export function isArray(
-    value
-    )
+class Time_
 {
-    return value instanceof Array;
-}
+    // -- ATTRIBUTES
 
-// ~~
+    final int
+        hour,
+        minute,
+        second;
 
-export function isFunction(
-    value
-    )
-{
-    return value instanceof Function;
-}
+    // -- CONSTRUCTORS
 
-// ~~
-
-export function isElement(
-    value
-    )
-{
-    return value instanceof HTMLElement;
-}
-
-// ~~
-
-export function getMap(
-    array,
-    keyName = "id",
-    default_value = null
-    )
-{
-    if ( array )
-    {
-        let map = {};
-
-        for ( let element of array )
+    Time_(
         {
-            map[ element[ keyName ] ] = element;
+            required this.hour,
+            required this.minute,
+            required this.second
         }
-
-        return map;
-    }
-    else
-    {
-        return default_value;
-    }
+        );
 }
 
 // ~~
 
-export function removePrefix(
-    text,
-    prefix
+class DateTime_
+{
+    // -- ATTRIBUTES
+
+    final int
+        year,
+        month,
+        day,
+        hour,
+        minute,
+        second;
+
+    // -- CONSTRUCTORS
+
+    DateTime_(
+        {
+            required this.year,
+            required this.month,
+            required this.day,
+            required this.hour,
+            required this.minute,
+            required this.second
+        }
+        );
+}
+
+// ~~
+
+class Timestamp_
+{
+    // -- ATTRIBUTES
+
+    final int
+        year,
+        month,
+        day,
+        hour,
+        minute,
+        second,
+        millisecond;
+
+    // -- CONSTRUCTORS
+
+    Timestamp_(
+        {
+            required this.year,
+            required this.month,
+            required this.day,
+            required this.hour,
+            required this.minute,
+            required this.second,
+            required this.millisecond
+        }
+        );
+}
+
+// -- VARIABLES
+
+String
+    continentCode = '',
+    countryCode = '',
+    languageCode = 'en',
+    defaultLanguageCode = 'en';
+Map<String, String>
+    textBySlugMap = {};
+List<Map<String, String>>
+    processedLineTagArray = [],
+    processedDualTagArray = [],
+    processedTagArray = [];
+
+// -- FUNCTIONS
+
+void printWarning(
+    String message
     )
 {
-    if ( prefix !== ''
+    // :TODO:
+}
+
+// ~~
+
+bool isString(
+    Object? object
+    )
+{
+    return object is String;
+}
+
+// ~~
+
+String removePrefix(
+    String text,
+    String prefix
+    )
+{
+    if ( prefix.isNotEmpty
          && text.startsWith( prefix ) )
     {
         return text.substring( prefix.length );
@@ -284,12 +161,12 @@ export function removePrefix(
 
 // ~~
 
-export function removeSuffix(
-    text,
-    suffix
+String removeSuffix(
+    String text,
+    String suffix
     )
 {
-    if ( suffix !== ''
+    if ( suffix.isNotEmpty
          && text.endsWith( suffix ) )
     {
         return text.substring( 0, text.length - suffix.length );
@@ -302,10 +179,10 @@ export function removeSuffix(
 
 // ~~
 
-export function replacePrefix(
-    text,
-    oldPrefix,
-    newPrefix
+String replacePrefix(
+    String text,
+    String oldPrefix,
+    String newPrefix
     )
 {
     if ( text.startsWith( oldPrefix ) )
@@ -320,10 +197,10 @@ export function replacePrefix(
 
 // ~~
 
-export function replaceSuffix(
-    text,
-    oldSuffix,
-    newSuffix
+String replaceSuffix(
+    String text,
+    String oldSuffix,
+    String newSuffix
     )
 {
     if ( text.endsWith( oldSuffix ) )
@@ -338,256 +215,233 @@ export function replaceSuffix(
 
 // ~~
 
-export function replaceIteratively(
-    text,
-    oldText,
-    newText
+String replaceIteratively(
+    String text,
+    String oldText,
+    String newText
     )
 {
-    let replacedText = text;
+    String replacedText = text;
+    String oldReplacedText;
 
     do
     {
-        var oldReplacedText = replacedText;
-
+        oldReplacedText = replacedText;
         replacedText = replacedText.replaceAll( oldText, newText );
     }
-    while ( replacedText !== oldReplacedText );
+    while ( replacedText != oldReplacedText );
 
     return oldReplacedText;
 }
 
+
 // ~~
 
-export function getLeftPaddedText(
-    text,
-    minimumCharacterCount,
-    paddingCharacter = ' '
+String getLeftPaddedText(
+    String text,
+    int minimumCharacterCount,
+    [
+        String paddingCharacter = ' '
+    ]
     )
 {
-    if ( text.length < minimumCharacterCount )
-    {
-        return paddingCharacter.repeat( minimumCharacterCount - text.length ) + text;
-    }
-    else
-    {
-        return text;
-    }
+    return text.padLeft( minimumCharacterCount, paddingCharacter );
 }
 
 // ~~
 
-export function getRightPaddedText(
-    text,
-    minimumCharacterCount,
-    paddingCharacter = ' '
+String getRightPaddedText(
+    String text,
+    int minimumCharacterCount,
+    [
+        String paddingCharacter = ' '
+    ]
     )
 {
-    if ( text.length < minimumCharacterCount )
-    {
-        return text + paddingCharacter.repeat( minimumCharacterCount - text.length );
-    }
-    else
-    {
-        return text;
-    }
-}
-
-
-export function getEncodedName(
-    name
-    )
-{
-    return '`' + name + '`';
+    return text.padRight( minimumCharacterCount, paddingCharacter );
 }
 
 // ~~
 
-export function getQuotedText(
-    value
+String getEncodedName(
+    String name
     )
 {
-    return (
-        '"'
-        + value.toString()
-              .replaceAll( '\\', '\\\\' )
-              .replaceAll( '\n', '\\n' )
-              .replaceAll( '\r', '\\r' )
-              .replaceAll( '\t', '\\t' )
-              .replaceAll( '"', '\\"' )
-              .replaceAll( '\'', '\\\'' )
-        + '"'
-        );
+    return '`$name`';
 }
 
 // ~~
 
-export function getHexadecimalTextFromInteger(
-    integer
+String getQuotedText(
+    String text
     )
 {
-    return parseInt( integer ).toString( 16 );
+    final quotedText =
+        text
+            .replaceAll( '\\', '\\\\' )
+            .replaceAll( '\n', '\\n' )
+            .replaceAll( '\r', '\\r' )
+            .replaceAll( '\t', '\\t' )
+            .replaceAll( '"', '\\"' )
+            .replaceAll( '\'', '\\\'' );
+
+    return '"$quotedText"';
 }
 
 // ~~
 
-export function getBase64TextFromHexadecimalText(
-    hexadecimalText
+String getHexadecimalTextFromInteger(
+    int integer
     )
 {
-    if ( isBrowser )
-    {
-        let text = '';
-
-        for ( let byteIndex = 0;
-              byteIndex < hexadecimalText.length;
-              byteIndex += 2 )
-        {
-            text += String.fromCharCode( parseInt( hexadecimalText.slice( byteIndex, byteIndex + 2 ), 16 ) );
-        }
-
-        return btoa( text );
-    }
-    else
-    {
-        return Buffer.from( hexadecimalText, 'hex' ).toString( 'base64' );
-    }
+    return integer.toRadixString( 16 );
 }
 
 // ~~
 
-export function getTuidFromHexadecimalText(
-    hexadecimalText
+String getBase64TextFromHexadecimalText(
+    String hexadecimalText
     )
 {
-    return getBase64TextFromHexadecimalText( hexadecimalText ).replaceAll( '+', '-' ).replaceAll( '/', '_' ).replaceAll( '=', '' );
+    final Uint8List
+        byteArray = Uint8List( 0 );    // :TODO:
+
+    return base64Encode( byteArray );
 }
 
 // ~~
 
-export function getTuidFromText( text )
+String getTuidFromHexadecimalText(
+    String hexadecimalText
+    )
 {
-    if ( text === '' )
+    return getBase64TextFromHexadecimalText( hexadecimalText )
+            .replaceAll( '+', '-' )
+            .replaceAll( '/', '_' )
+            .replaceAll( '=', '' );
+}
+
+// ~~
+
+String getTuidFromText(
+    String text
+    )
+{
+    if ( text.isEmpty )
     {
         return '';
     }
     else
     {
-        return getTuidFromHexadecimalText( md5( text ) );
+        return getTuidFromHexadecimalText( md5.convert( utf8.encode( text ) ).toString() );
     }
 }
 
 // ~~
 
-export function getHexadecimalTextFromBase64Text(
-    base64Text
+String getHexadecimalTextFromBase64Text(
+    String base64Text
     )
 {
-    if ( isBrowser )
-    {
-        let text = atob( base64Text );
-        let hexadecimalText = '';
-
-        for ( let characterIndex = 0;
-              characterIndex < text.length;
-              ++characterIndex )
-        {
-            hexadecimalText += ( '0' + text.charCodeAt( characterIndex ).toString( 16 ) ).slice( -2 );
-        }
-
-        return hexadecimalText;
-    }
-    else
-    {
-        return Buffer.from( base64Text , 'base64' ).toString( 'hex' );
-    }
+    final bytes = base64Decode( base64Text );
+    return bytes.map( ( byte ) => byte.toRadixString( 16 ).padLeft( 2, '0' ) ).join();
 }
 
 // ~~
 
-export function getHexadecimalTextFromTuid(
-    tuid
+String getHexadecimalTextFromTuid(
+    String tuid
     )
 {
-    return getHexadecimalTextFromBase64Text( tuid.replaceAll( '-', '+' ).replaceAll( '_', '/' ) + '==' );
+    return
+        getHexadecimalTextFromBase64Text(
+            '${ tuid.replaceAll( '-', '+' ).replaceAll( '_', '/' ) }=='
+            );
 }
 
 // ~~
 
-export function getUuidFromHexadecimalText(
-    hexadecimalText
+String getUuidFromHexadecimalText(
+    String hexadecimalText
     )
 {
-    return (
-        hexadecimalText.substring( 0, 8 )
-        + '-'
-        + hexadecimalText.substring( 8, 12 )
-        + '-'
-        + hexadecimalText.substring( 12, 16 )
-        + '-'
-        + hexadecimalText.substring( 16, 20 )
-        + '-'
-        + hexadecimalText.substring( 20, 32 )
-        );
+    return
+        '${ hexadecimalText.substring( 0, 8 ) }-'
+        '${ hexadecimalText.substring( 8, 12 ) }-'
+        '${ hexadecimalText.substring( 12, 16 ) }-'
+        '${ hexadecimalText.substring( 16, 20 ) }-'
+        '${ hexadecimalText.substring( 20, 32 ) }';
 }
 
 // ~~
 
-export function getUuidFromText(
-    text
+String getUuidFromText(
+    String text
     )
 {
-    if ( text === '' )
+    if ( text.isEmpty )
     {
         return '00000000-0000-0000-0000-000000000000';
     }
     else
     {
-        return getUuidFromHexadecimalText( md5( text ) );
+        return getUuidFromHexadecimalText( md5.convert( utf8.encode( text ) ).toString() );
     }
 }
 
 // ~~
 
-export function getRandomByteArray(
-    byteCount
+Uint8List getRandomByteArray(
+    int byteCount
     )
 {
-    return crypto.randomBytes( byteCount );
+    final random = Random.secure();
+
+    return
+        Uint8List.fromList(
+            List<int>.generate( byteCount, ( byteIndex ) => random.nextInt( 256 ) )
+            );
+}
+
+
+// ~~
+
+String getRandomHexadecimalText(
+    int byteCount
+    )
+{
+    return
+        getRandomByteArray( byteCount )
+            .map( ( byte ) => byte.toRadixString( 16 ).padLeft( 2, '0' ) )
+            .join();
 }
 
 // ~~
 
-export function getRandomHexadecimalText(
-    byteCount
-    )
+String getTimeUuid()
 {
-    return crypto.randomBytes( byteCount ).toString( 'hex' );
+    return
+        getUuidFromHexadecimalText(
+            getHexadecimalTextFromInteger(
+                ( getMillisecondTimestamp() + 12219292800000 ) * 10000
+                )
+            + getRandomHexadecimalText( 16 ),
+            );
 }
 
 // ~~
 
-export function getTimeUuid(
-    )
+String getRandomUuid()
 {
-    return getUuidFromHexadecimalText(
-        getHexadecimalTextFromInteger( ( getMillisecondTimestamp() + 12219292800000 ) * 10000 )
-        + getRandomHexadecimalText( 16 )
-        );
+    // :TODO: return Uuid().v4();
+
+    return '';
 }
 
 // ~~
 
-export function getRandomUuid(
-    )
-{
-    return crypto.randomUUID();
-}
-
-// ~~
-
-export function getUuidFromTuid(
-    tuid
+String getUuidFromTuid(
+    String tuid
     )
 {
     return getUuidFromHexadecimalText( getHexadecimalTextFromTuid( tuid ) );
@@ -595,16 +449,15 @@ export function getUuidFromTuid(
 
 // ~~
 
-export function getRandomTuid(
-    )
+String getRandomTuid()
 {
     return getTuidFromUuid( getRandomUuid() );
 }
 
 // ~~
 
-export function getTuidFromUuid(
-    uuid
+String getTuidFromUuid(
+    String uuid
     )
 {
     return getTuidFromHexadecimalText( uuid.replaceAll( '-', '' ) );
@@ -612,255 +465,222 @@ export function getTuidFromUuid(
 
 // ~~
 
-export function getMillisecondTimestamp(
+int getMillisecondTimestamp(
     )
 {
-    if ( isBrowser )
-    {
-        return window.performance.timing.navigationStart + window.performance.now();
-    }
-    else
-    {
-        let hrTime = process.hrtime();
-
-        return parseInt( hrTime[ 0 ] * 1000 + hrTime[ 1 ] / 1000000 );
-    }
+    return DateTime.now().millisecondsSinceEpoch;
 }
 
 // ~~
 
-export function getLocalDate(
-    systemDate
+Date_ getLocalDate(
+    [
+        DateTime? systemDate
+    ]
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate ??= DateTime.now();
 
-    return {
-        year : systemDate.getFullYear(),
-        month : systemDate.getMonth() + 1,
-        day : systemDate.getDate()
-        };
+    return
+        Date_(
+            year: systemDate.year,
+            month: systemDate.month,
+            day: systemDate.day
+            );
 }
 
 // ~~
 
-export function getLocalTime(
-    systemDate
+Time_ getLocalTime(
+    [
+        DateTime? systemDate
+    ]
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate ??= DateTime.now();
 
-    return {
-        hour : systemDate.getHours(),
-        minute : systemDate.getMinutes(),
-        second : systemDate.getSeconds()
-        };
+    return
+        Time_(
+            hour: systemDate.hour,
+            minute: systemDate.minute,
+            second: systemDate.second
+            );
 }
 
 // ~~
 
-export function getLocalDateTime(
-    systemDate
+DateTime_ getLocalDateTime(
+    [
+        DateTime? systemDate
+    ]
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate ??= DateTime.now();
 
-    return {
-        year : systemDate.getFullYear(),
-        month : systemDate.getMonth() + 1,
-        day : systemDate.getDate(),
-        hour : systemDate.getHours(),
-        minute : systemDate.getMinutes(),
-        second : systemDate.getSeconds()
-        };
+    return
+        DateTime_(
+            year: systemDate.year,
+            month: systemDate.month,
+            day: systemDate.day,
+            hour: systemDate.hour,
+            minute: systemDate.minute,
+            second: systemDate.second
+            );
 }
 
 // ~~
 
-export function getUniversalDate(
-    systemDate
+Date_ getUniversalDate(
+    [
+        DateTime? systemDate
+    ]
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate ??= DateTime.now().toUtc();
 
-    return {
-        year : systemDate.getUTCFullYear(),
-        month : systemDate.getUTCMonth() + 1,
-        day : systemDate.getUTCDate()
-        };
+    return Date_( year: systemDate.year, month: systemDate.month, day: systemDate.day );
 }
 
 // ~~
 
-export function getUniversalTime(
-    systemDate
+Time_ getUniversalTime(
+    [
+        DateTime? systemDate
+    ]
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate ??= DateTime.now().toUtc();
 
-    return {
-        hour : systemDate.getUTCHours(),
-        minute : systemDate.getUTCMinutes(),
-        second : systemDate.getUTCSeconds()
-        };
+    return
+        Time_(
+            hour: systemDate.hour,
+            minute: systemDate.minute,
+            second: systemDate.second
+            );
 }
 
 // ~~
 
-export function getUniversalDateTime(
-    systemDate
+Timestamp_ getUniversalDateTime(
+    [
+        DateTime? systemDate
+    ]
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate ??= DateTime.now().toUtc();
 
-    return {
-        year : systemDate.getUTCFullYear(),
-        month : systemDate.getUTCMonth() + 1,
-        day : systemDate.getUTCDate(),
-        hour : systemDate.getUTCHours(),
-        minute : systemDate.getUTCMinutes(),
-        second : systemDate.getUTCSeconds(),
-        millisecond : systemDate.getUTCMilliseconds()
-        };
+    return
+        Timestamp_(
+            year: systemDate.year,
+            month: systemDate.month,
+            day: systemDate.day,
+            hour: systemDate.hour,
+            minute: systemDate.minute,
+            second: systemDate.second,
+            millisecond: systemDate.millisecond
+            );
 }
 
 // ~~
 
-export function getDateText(
-    date,
-    suffix = ''
+String getDateText(
+    Date_ date,
+    [
+        String suffix = ''
+    ]
     )
 {
-    return (
-        getLeftPaddedText( date.year.toString(), 4, '0' )
-        + ':'
-        + getLeftPaddedText( date.month.toString(), 2, '0' )
-        + ':'
-        + getLeftPaddedText( date.day.toString(), 2, '0' )
-        + suffix
-        );
+    return
+        '${ getLeftPaddedText( date.year.toString(), 4, '0' ) }:${ getLeftPaddedText( date.month.toString(), 2, '0' ) }:${ getLeftPaddedText( date.day.toString(), 2, '0' ) }'
+        '$suffix';
 }
 
 // ~~
 
-export function getTimeText(
-    time,
-    suffix = ''
+String getTimeText(
+    Time_ time,
+    [
+        String suffix = ''
+    ]
     )
 {
-    return (
-        getLeftPaddedText( time.hour.toString(), 2, '0' )
-        + '-'
-        + getLeftPaddedText( time.minute.toString(), 2, '0' )
-        + '-'
-        + getLeftPaddedText( time.second.toString(), 2, '0' )
-        + suffix
-        );
+    return
+        '${ getLeftPaddedText( time.hour.toString(), 2, '0' ) }-${ getLeftPaddedText( time.minute.toString(), 2, '0' ) }-${ getLeftPaddedText( time.second.toString(), 2, '0' ) }'
+        '$suffix';
 }
 
 // ~~
 
-export function getDateTimeText(
-    dateTime,
-    infix = ' ',
-    suffix = ''
+String getDateTimeText(
+    DateTime_ dateTime,
+    [
+        String infix = ' ',
+        String suffix = ''
+    ]
     )
 {
-    return (
-        getLeftPaddedText( dateTime.year.toString(), 4, '0' )
-        + '-'
-        + getLeftPaddedText( dateTime.month.toString(), 2, '0' )
-        + '-'
-        + getLeftPaddedText( dateTime.day.toString(), 2, '0' )
-        + infix
-        + getLeftPaddedText( dateTime.hour.toString(), 2, '0' )
-        + ':'
-        + getLeftPaddedText( dateTime.minute.toString(), 2, '0' )
-        + ':'
-        + getLeftPaddedText( dateTime.second.toString(), 2, '0' )
-        + suffix
-        );
+    return
+        '${ getLeftPaddedText( dateTime.year.toString(), 4, '0' ) }:${ getLeftPaddedText( dateTime.month.toString(), 2, '0' ) }:${ getLeftPaddedText( dateTime.day.toString(), 2, '0' ) }'
+        '$infix'
+        '${ getLeftPaddedText( dateTime.hour.toString(), 2, '0' ) }-${ getLeftPaddedText( dateTime.minute.toString(), 2, '0' ) }-${ getLeftPaddedText( dateTime.second.toString(), 2, '0' ) }'
+        '$suffix';
 }
 
 // ~~
 
-export function getTimestampText(
-    timestamp,
-    infix = ' ',
-    suffix = ''
+String getTimestampText(
+    Timestamp_ timestamp,
+    [
+        String infix = ' ',
+        String suffix = ''
+    ]
     )
 {
-    return (
-        getLeftPaddedText( timestamp.year.toString(), 4, '0' )
-        + '-'
-        + getLeftPaddedText( timestamp.month.toString(), 2, '0' )
-        + '-'
-        + getLeftPaddedText( timestamp.day.toString(), 2, '0' )
-        + infix
-        + getLeftPaddedText( timestamp.hour.toString(), 2, '0' )
-        + ':'
-        + getLeftPaddedText( timestamp.minute.toString(), 2, '0' )
-        + ':'
-        + getLeftPaddedText( timestamp.second.toString(), 2, '0' )
-        + '.'
-        + getLeftPaddedText( timestamp.millisecond.toString(), 3, '0' )
-        + suffix
-        );
+    return
+        '${ getLeftPaddedText( timestamp.year.toString(), 4, '0' ) }:${ getLeftPaddedText( timestamp.month.toString(), 2, '0' ) }:${ getLeftPaddedText( timestamp.day.toString(), 2, '0' ) }'
+        '$infix'
+        '${ getLeftPaddedText( timestamp.hour.toString(), 2, '0' ) }-${ getLeftPaddedText( timestamp.minute.toString(), 2, '0' ) }-${ getLeftPaddedText( timestamp.second.toString(), 2, '0' ) }'
+        '$infix'
+        '${ getLeftPaddedText( timestamp.millisecond.toString(), 3, '0' ) }'
+        '$suffix';
 }
 
 // ~~
 
-export function getDateTimeSuffix(
-    dateTime,
-    infix = '',
-    suffix = ''
+String getDateTimeSuffix(
+    Timestamp_ dateTime,
+    [
+        String infix = '',
+        String suffix = ''
+    ]
     )
 {
-    return (
-        getLeftPaddedText( dateTime.year.toString(), 4, '0' )
-        + infix
-        + getLeftPaddedText( dateTime.month.toString(), 2, '0' )
-        + infix
-        + getLeftPaddedText( dateTime.day.toString(), 2, '0' )
-        + infix
-        + getLeftPaddedText( dateTime.hour.toString(), 2, '0' )
-        + infix
-        + getLeftPaddedText( dateTime.minute.toString(), 2, '0' )
-        + infix
-        + getLeftPaddedText( dateTime.second.toString(), 2, '0' )
-        + infix
-        + getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' )
-        + suffix
-        );
+    return
+        '${ getLeftPaddedText( dateTime.year.toString(), 4, '0' ) }'
+        '$infix'
+        '${ getLeftPaddedText( dateTime.month.toString(), 2, '0' ) }'
+        '$infix'
+        '${ getLeftPaddedText( dateTime.day.toString(), 2, '0' ) }'
+        '$infix'
+        '${ getLeftPaddedText( dateTime.hour.toString(), 2, '0' ) }'
+        '$infix'
+        '${ getLeftPaddedText( dateTime.minute.toString(), 2, '0' ) }'
+        '$infix'
+        '${ getLeftPaddedText( dateTime.second.toString(), 2, '0' ) }'
+        '$infix'
+        '${ getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' ) }'
+        '$suffix';
 }
 
 // ~~
 
-export function getTimeZoneFromLocation(
-    latitude,
-    longitude,
-    countryCode
+String getTimeZoneFromLocation(
+    double latitude,
+    double longitude,
+    String countryCode
     )
 {
-    let timeShift = Math.max( Math.min( Math.round( longitude / 15.0 ), 12 ), -12 );
+    int timeShift = ( longitude / 15.0 ).round().clamp( -12, 12 );
 
     if ( timeShift >= 12 )
     {
@@ -1014,11 +834,19 @@ export function getTimeZoneFromLocation(
         case 'CV' : return 'Atlantic/Cape_Verde';
         case 'CW' : return 'America/Curacao';
         case 'CX' : return 'Indian/Christmas';
-        case 'CY' : return 'Asia/Famagusta';
-        case 'CY' : return 'Asia/Nicosia';
+        case 'CY' :
+        {
+            if ( latitude < 35 )
+            {
+                return 'Asia/Nicosia';
+            }
+            else
+            {
+                return 'Asia/Famagusta';
+            }
+        }
         case 'CZ' : return 'Europe/Prague';
         case 'DE' : return 'Europe/Berlin';
-        case 'DE' : return 'Europe/Busingen';
         case 'DJ' : return 'Africa/Djibouti';
         case 'DK' : return 'Europe/Copenhagen';
         case 'DM' : return 'America/Dominica';
@@ -1358,8 +1186,17 @@ export function getTimeZoneFromLocation(
             break;
         }
         case 'UY' : return 'America/Montevideo';
-        case 'UZ' : return 'Asia/Samarkand';
-        case 'UZ' : return 'Asia/Tashkent';
+        case 'UZ' :
+        {
+            if ( longitude < 68 )
+            {
+                return 'Asia/Samarkand';
+            }
+            else
+            {
+                return 'Asia/Tashkent';
+            }
+        }
         case 'VA' : return 'Europe/Vatican';
         case 'VC' : return 'America/St_Vincent';
         case 'VE' : return 'America/Caracas';
@@ -1409,8 +1246,8 @@ export function getTimeZoneFromLocation(
 
 // ~~
 
-export function getLogicalFilePath(
-    filePath
+String getLogicalFilePath(
+    String filePath
     )
 {
     return filePath.replaceAll( '\\', '/' );
@@ -1418,35 +1255,38 @@ export function getLogicalFilePath(
 
 // ~~
 
-export function getFolderPath(
-    filePath
+String getFolderPath(
+    String filePath
     )
 {
-    return filePath.substring( 0, filePath.lastIndexOf( '/' ) + 1 );
+    int index = filePath.lastIndexOf( '/' );
+    return filePath.substring( 0, index + 1 );
 }
 
 // ~~
 
-export function getFileName(
-    filePath
+String getFileName(
+    String filePath
     )
 {
-    return filePath.substring( filePath.lastIndexOf( '/' ) + 1 );
+    int index = filePath.lastIndexOf( '/' );
+    return filePath.substring( index + 1 );
 }
 
 // ~~
 
-export function getValidFileName(
-    fileName
+String getValidFileName(
+    String fileName
     )
 {
-    return replaceIteratively( fileName.replace( /[^\p{L}\p{N}\-_.]/gu, '_' ), '__', '_' );
+    fileName = fileName.replaceAll( RegExp( r'[^\p{L}\p{N}\-_.]', unicode: true ), '_' );
+    return replaceIteratively( fileName, '__', '_' );
 }
 
 // ~~
 
-export function getCapitalLatitudeFromCountryCode(
-    countryCode
+double getCapitalLatitudeFromCountryCode(
+    String countryCode
     )
 {
     switch ( countryCode )
@@ -1701,8 +1541,8 @@ export function getCapitalLatitudeFromCountryCode(
 
 // ~~
 
-export function getCapitalLongitudeFromCountryCode(
-    countryCode
+double getCapitalLongitudeFromCountryCode(
+    String countryCode
     )
 {
     switch ( countryCode )
@@ -1957,8 +1797,8 @@ export function getCapitalLongitudeFromCountryCode(
 
 // ~~
 
-function getContinentCodeFromCountryCode(
-    countryCode
+String getContinentCodeFromCountryCode(
+    String countryCode
     )
 {
     switch ( countryCode )
@@ -2211,11 +2051,10 @@ function getContinentCodeFromCountryCode(
     return '';
 }
 
-
 // ~~
 
-export function getContinentSlugFromContinentCode(
-    continentCode
+String getContinentSlugFromContinentCode(
+    String continentCode
     )
 {
     switch ( continentCode )
@@ -2235,220 +2074,8 @@ export function getContinentSlugFromContinentCode(
 
 // ~~
 
-export async function getLocationFromIpAddress(
-    ipAddress
-    )
-{
-    if ( locationByIpAddressMap.has( ipAddress ) )
-    {
-        return locationByIpAddressMap.get( ipAddress );
-    }
-    else
-    {
-        let location = {
-            service: '',
-            latitude: 0.0,
-            longitude: 0.0,
-            countryCode: '',
-            timeZone: '',
-            isFound: false,
-            continentSlug: '',
-            isAntarctica: false,
-            isSouthAmerica: false,
-            isCentralAmerica: false,
-            isNorthAmerica: false,
-            isAmerica: false,
-            isAfrica: false,
-            isEurope: false,
-            isOceania: false,
-            isAsia: false,
-            isJapan: false
-        };
-
-        if ( !location.isFound )
-        {
-            try
-            {
-                let response = await fetch( 'http://ip-api.com/json/' + ipAddress );
-                let geographicData = await response.json();
-
-                if ( geographicData
-                     && geographicData.status === 'success' )
-                {
-                    location.service = 'ip-api.com';
-                    location.countryCode = geographicData.countryCode;
-                    location.latitude = geographicData.lat;
-                    location.longitude = geographicData.lon;
-                    location.timeZone = geographicData.timezone;
-                    location.isFound = true;
-                }
-            }
-            catch ( error )
-            {
-                printError( error );
-            }
-        }
-
-        if ( !location.isFound )
-        {
-            try
-            {
-                const response = await fetch( 'http://ip-api.com/json/' + ipAddress );
-                const geographicData = await response.json();
-
-                if ( geographicData
-                     && geographicData.hasOwnProperty( 'countryCode' )
-                     && geographicData.hasOwnProperty( 'lat' )
-                     && geographicData.hasOwnProperty( 'lon' )
-                     && geographicData.hasOwnProperty( 'timezone' )
-                     && geographicData.hasOwnProperty( 'status' )
-                     && geographicData.status === 'success' )
-                {
-                     location.service = 'ip-api.com';
-                     location.countryCode = geographicData.countryCode;
-                     location.latitude = Number( geographicData.lat );
-                     location.longitude = Number( geographicData.lon );
-                     location.timeZone = geographicData.timezone;
-                     location.isFound = true;
-                }
-            }
-            catch ( error )
-            {
-                printError( error );
-            }
-        }
-
-        if ( !location.isFound )
-        {
-            try
-            {
-                const response = await fetch( 'http://www.geoplugin.net/json.gp?ip=' + ipAddress );
-                const geographicData = await response.json();
-
-                if ( geographicData
-                     && geographicData.hasOwnProperty( 'geoplugin_countryCode' )
-                     && geographicData.hasOwnProperty( 'geoplugin_latitude' )
-                     && geographicData.hasOwnProperty( 'geoplugin_longitude' )
-                     && geographicData.hasOwnProperty( 'geoplugin_timezone' )
-                     && geographicData.hasOwnProperty( 'geoplugin_status' )
-                     && geographicData.geoplugin_countryCode !== null
-                     && geographicData.geoplugin_status !== 404 )
-                {
-                     location.service = 'geoplugin.net';
-                     location.countryCode = geographicData.geoplugin_countryCode;
-                     location.latitude = Number( geographicData.geoplugin_latitude );
-                     location.longitude = Number( geographicData.geoplugin_longitude );
-                     location.timeZone = geographicData.geoplugin_timezone;
-                     location.isFound = true;
-                }
-            }
-            catch ( error )
-            {
-                printError( error );
-            }
-        }
-
-        if ( !location.isFound )
-        {
-            try
-            {
-                const response = await fetch( 'https://www.iplocate.io/api/lookup/' + ipAddress );
-                const geographicData = await response.json();
-
-                if ( geographicData
-                     && geographicData.hasOwnProperty( 'country_code' )
-                     && geographicData.hasOwnProperty( 'latitude' )
-                     && geographicData.hasOwnProperty( 'longitude' )
-                     && geographicData.hasOwnProperty( 'time_zone' )
-                     && geographicData.country_code !== null )
-                {
-                    location.service = 'iplocate.io';
-                    location.countryCode = geographicData.country_code;
-                    location.latitude = Number( geographicData.latitude );
-                    location.longitude = Number( geographicData.longitude );
-                    location.timeZone = geographicData.time_zone;
-                    location.isFound = true;
-                }
-            }
-            catch ( error )
-            {
-                printError( error );
-            }
-        }
-
-        if ( !location.isFound )
-        {
-            try
-            {
-                const response = await fetch( 'https://api.hostip.info/get_json.php?ip=' + ipAddress );
-                const geographicData = await response.json();
-
-                if ( geographicData
-                     && geographicData.hasOwnProperty( 'country_code' )
-                     && geographicData.country_code !== null
-                     && geographicData.country_code !== 'XX' )
-                {
-                    location.service = 'hostip.info';
-                    location.countryCode = geographicData.country_code;
-                    location.latitude = getCapitalLatitudeFromCountryCode( location.countryCode );
-                    location.longitude = getCapitalLongitudeFromCountryCode( location.countryCode );
-                    location.timeZone = getTimeZoneFromLocation( location.latitude, location.longitude, location.countryCode );
-                    location.isFound = true;
-                }
-            }
-            catch ( error )
-            {
-                printError( error );
-            }
-        }
-
-        location.continentCode = getContinentCodeFromCountryCode( location.countryCode );
-        location.continentSlug = getContinentSlugFromContinentCode( location.continentCode );
-
-        location.isAntarctica = ( location.continentCode === 'AN' );
-        location.isSouthAmerica = ( location.continentCode === 'SA' );
-        location.isCentralAmerica = ( location.continentCode === 'CA' );
-        location.isNorthAmerica = ( location.continentCode === 'NA' );
-        location.isAmerica = ( location.isSouthAmerica || location.isCentralAmerica || location.isNorthAmerica );
-        location.isAfrica = ( location.continentCode === 'AF' );
-        location.isEurope = ( location.continentCode === 'EU' );
-        location.isOceania = ( location.continentCode === 'OC' );
-        location.isAsia = ( location.continentCode === 'AS' );
-        location.isJapan = ( location.countryCode === 'JP' );
-
-        locationByIpAddressMap.set( ipAddress, location );
-
-        return location;
-    }
-}
-
-// ~~
-
-export function getBrowserLanguageCode(
-    browserLanguageText,
-    validLanguageCodeArray,
-    defaultLanguageCode = ''
-    )
-{
-    let browserLanguageArray = browserLanguageText.toLowerCase().split( ',' );
-
-    for ( let browserLanguage of browserLanguageArray )
-    {
-        let browserLanguageCode = browserLanguage.substring( 0, 2 );
-
-        if ( validLanguageCodeArray.indexOf( browserLanguageCode ) >= 0 )
-        {
-            return browserLanguageCode;
-        }
-    }
-
-    return defaultLanguageCode;
-}
-
-// ~~
-
-export function setContinentCode(
-    continentCode_
+void setContinentCode(
+    String continentCode_
     )
 {
     continentCode = continentCode_;
@@ -2456,35 +2083,32 @@ export function setContinentCode(
 
 // ~~
 
-export function getContinentCode(
-    )
+String getContinentCode()
 {
     return continentCode;
 }
 
 // ~~
 
-export function setCountryCode(
-    countryCode_
+void setCountryCode(
+    String countryCode_
     )
 {
     countryCode = countryCode_;
-
     setContinentCode( getContinentCodeFromCountryCode( countryCode_ ) );
 }
 
 // ~~
 
-export function getCountryCode(
-    )
+String getCountryCode()
 {
     return countryCode;
 }
 
 // ~~
 
-export function setLanguageCode(
-    languageCode_
+void setLanguageCode(
+    String languageCode_
     )
 {
     languageCode = languageCode_;
@@ -2492,16 +2116,15 @@ export function setLanguageCode(
 
 // ~~
 
-export function getLanguageCode(
-    )
+String getLanguageCode()
 {
     return languageCode;
 }
 
 // ~~
 
-export function setDefaultLanguageCode(
-    defaultLanguageCode_
+void setDefaultLanguageCode(
+    String defaultLanguageCode_
     )
 {
     defaultLanguageCode = defaultLanguageCode_;
@@ -2509,71 +2132,69 @@ export function setDefaultLanguageCode(
 
 // ~~
 
-export function getDefaultLanguageCode(
-    )
+String getDefaultLanguageCode()
 {
     return defaultLanguageCode;
 }
 
 // ~~
 
-export function setTextBySlug(
-    text,
-    textSlug
+void setTextBySlug(
+    String text,
+    String textSlug
     )
 {
-    textBySlugMap.set( textSlug, text );
+    textBySlugMap[ textSlug ] = text;
 }
 
 // ~~
 
-export function getTextBySlug(
-    textSlug
+String getTextBySlug(
+    String textSlug
     )
 {
-    if ( textBySlugMap.has( textSlug ) )
+    if ( textBySlugMap.containsKey( textSlug ) )
     {
-        return textBySlugMap.get( textSlug );
+        return textBySlugMap[ textSlug ]!;
     }
     else
     {
-        printWarning( 'Missing text slug : ' + textSlug );
-
+        printWarning( 'Missing text slug: $textSlug' );
         return '';
     }
 }
 
 // ~~
 
-export function getUntranslatedText(
-    multilingualText
+String getUntranslatedText(
+    String multilingualText
     )
 {
-    return multilingualText.split( '¨' )[ 0 ];
+    return multilingualText.split( '¨' ).first;
 }
 
 // ~~
 
-export function matchesLanguages(
-    multilingualText,
-    languageSpecifier
+bool matchesLanguages(
+    String multilingualText,
+    String languageSpecifier
     )
 {
-    let languageTagPartArray = ( multilingualText + '--' ).split( '-' );
+    List<String> languageTagPartArray = ( '$multilingualText--' ).split( '-' );
 
-    for ( let languageSpecifierTag of languageSpecifier.split( ',' ) )
+    for ( var languageSpecifierTag in languageSpecifier.split( ',' ) )
     {
-        let languageSpecifierTagPartArray = ( languageSpecifierTag + '--' ).split( '-' );
+        List<String> languageSpecifierTagPartArray = ( '$languageSpecifierTag--' ).split( '-' );
 
-        if ( ( languageTagPartArray[ 0 ] === ''
-               || languageSpecifierTagPartArray[ 0 ] === ''
-               || languageTagPartArray[ 0 ] === languageSpecifierTagPartArray[ 0 ] )
-             && ( languageTagPartArray[ 1 ] === ''
-                  || languageSpecifierTagPartArray[ 1 ] === ''
-                  || languageTagPartArray[ 1 ] === languageSpecifierTagPartArray[ 1 ] )
-             && ( languageTagPartArray[ 2 ] === ''
-                  || languageSpecifierTagPartArray[ 2 ] === ''
-                  || languageTagPartArray[ 2 ] === languageSpecifierTagPartArray[ 2 ] ) )
+        if ( ( languageTagPartArray[ 0 ] == ''
+               || languageSpecifierTagPartArray[ 0 ] == ''
+               || languageTagPartArray[ 0 ] == languageSpecifierTagPartArray[ 0 ] )
+             && ( languageTagPartArray[ 1 ] == ''
+                  || languageSpecifierTagPartArray[ 1 ] == ''
+                  || languageTagPartArray[ 1 ] == languageSpecifierTagPartArray[ 1 ] )
+             && ( languageTagPartArray[ 2 ] == ''
+                  || languageSpecifierTagPartArray[ 2 ] == ''
+                  || languageTagPartArray[ 2 ] == languageSpecifierTagPartArray[ 2 ] ) )
         {
             return true;
         }
@@ -2584,22 +2205,20 @@ export function matchesLanguages(
 
 // ~~
 
-export function getTranslatedText(
-    multilingualText,
-    languageTag,
-    defaultLanguageTag = 'en'
+String getTranslatedText(
+    String multilingualText,
+    String languageTag, [
+    String defaultLanguageTag = 'en' ]
     )
 {
-    let translatedTextArray = multilingualText.split( '¨' );
+    List<String> translatedTextArray = multilingualText.split( '¨' );
 
-    if ( languageTag !== defaultLanguageTag )
+    if ( languageTag != defaultLanguageTag )
     {
-        for ( let translatedTextIndex = translatedTextArray.length - 1;
-              translatedTextIndex >= 1;
-              --translatedTextIndex )
+        for ( int translatedTextIndex = translatedTextArray.length - 1; translatedTextIndex >= 1; --translatedTextIndex )
         {
-            let translatedText = translatedTextArray[ translatedTextIndex ];
-            let colonCharacterIndex = translatedText.indexOf( ':' );
+            String translatedText = translatedTextArray[ translatedTextIndex ];
+            int colonCharacterIndex = translatedText.indexOf( ':' );
 
             if ( colonCharacterIndex >= 0 )
             {
@@ -2611,19 +2230,19 @@ export function getTranslatedText(
         }
     }
 
-    return translatedTextArray[ 0 ];
+    return translatedTextArray.first;
 }
 
 // ~~
 
-export function getTranslatedNumber(
-    number,
-    decimalSeparator
+String getTranslatedNumber(
+    double number,
+    String decimalSeparator
     )
 {
-    if ( decimalSeparator === ',' )
+    if ( decimalSeparator == ',' )
     {
-        return number.toString().replace( '.', ',' );
+        return number.toString().replaceAll( '.', ',' );
     }
     else
     {
@@ -2633,14 +2252,14 @@ export function getTranslatedNumber(
 
 // ~~
 
-export function getLanguageDecimalSeparator(
-    languageCode
+String getLanguageDecimalSeparator(
+    String languageCode
     )
 {
-    if ( languageCode === 'en'
-         || languageCode === 'ja'
-         || languageCode === 'ko'
-         || languageCode === 'zh' )
+    if ( languageCode == 'en'
+         || languageCode == 'ja'
+         || languageCode == 'ko'
+         || languageCode == 'zh' )
     {
         return '.';
     }
@@ -2652,44 +2271,42 @@ export function getLanguageDecimalSeparator(
 
 // ~~
 
-export function isMultilingualText(
-    multilingualText
+bool isMultilingualText(
+    String multilingualText
     )
 {
-    return multilingualText.indexOf( '¨' ) >= 0;
+    return multilingualText.contains( '¨' );
 }
 
 // ~~
 
-export function getTranslationArray(
-    multilingualText
+List<Map<String, String>> getTranslationArray(
+    String multilingualText
     )
 {
-    let translatedTextArray = multilingualText.split( '¨' );
-    let translationArray = [];
+    List<String> translatedTextArray = multilingualText.split( '¨' );
+    List<Map<String, String>> translationArray = [];
 
-    translationArray.push(
-        {
-            specifier : '',
-            data : translatedTextArray[ 0 ]
-        }
-        );
-
-    for ( let translatedTextIndex = 1;
-          translatedTextIndex < translatedTextArray.length;
-          ++translatedTextIndex )
+    translationArray.add(
     {
-        let translatedText = translatedTextArray[ translatedTextIndex ];
-        let colonCharacterIndex = translatedText.indexOf( ':' );
+        'specifier': '',
+        'data': translatedTextArray[ 0 ],
+    }
+    );
+
+    for ( int translatedTextIndex = 1; translatedTextIndex < translatedTextArray.length; ++translatedTextIndex )
+    {
+        String translatedText = translatedTextArray[ translatedTextIndex ];
+        int colonCharacterIndex = translatedText.indexOf( ':' );
 
         if ( colonCharacterIndex >= 0 )
         {
-            translationArray.push(
-                {
-                    specifier : translatedText.substring( 0, colonCharacterIndex ),
-                    data : translatedText.substring( colonCharacterIndex + 1 )
-                }
-                );
+            translationArray.add(
+            {
+                'specifier': translatedText.substring( 0, colonCharacterIndex ),
+                'data': translatedText.substring( colonCharacterIndex + 1 ),
+            }
+            );
         }
     }
 
@@ -2698,23 +2315,20 @@ export function getTranslationArray(
 
 // ~~
 
-export function getMultilingualText(
-    translationArray
+String getMultilingualText(
+    List<Map<String, String>> translationArray
     )
 {
-    let multilingualText = '';
+    String multilingualText = '';
 
-    if ( translationArray.length > 0 )
+    if ( translationArray.isNotEmpty )
     {
-        multilingualText = translationArray[ 0 ].data;
+        multilingualText = translationArray[ 0 ][ 'data' ]!;
 
-        for ( let translationIndex = 1;
-              translationIndex < translationArray.length;
-              ++translationIndex )
+        for ( int translationIndex = 1; translationIndex < translationArray.length; ++translationIndex )
         {
-            let translation = translationArray[ translationIndex ];
-
-            multilingualText += '¨' + translation.specifier + ':' + translation.data;
+            var translation = translationArray[ translationIndex ];
+            multilingualText += '¨${ translation[ 'specifier' ]! }:${ translation[ 'data' ]! }';
         }
     }
 
@@ -2723,13 +2337,13 @@ export function getMultilingualText(
 
 // ~~
 
-export function getLocalizedText(
-    text
+String getLocalizedText(
+    String text
     )
 {
     if ( isMultilingualText( text ) )
     {
-        return getTranslatedText( text, languageCode + '-' + countryCode + '-' + continentCode );
+        return getTranslatedText( text, '$languageCode-$countryCode-$continentCode' );
     }
     else
     {
@@ -2739,94 +2353,93 @@ export function getLocalizedText(
 
 // ~~
 
-export function getLocalizedTextBySlug(
-    textSlug
+String getLocalizedTextBySlug(
+    String textSlug
     )
 {
-    if ( textBySlugMap.has( textSlug ) )
+    if ( textBySlugMap.containsKey( textSlug ) )
     {
-        return getLocalizedText( textBySlugMap.get( textSlug ) );
+        return getLocalizedText( textBySlugMap[ textSlug ]! );
     }
     else
     {
-        printWarning( 'Missing text slug : ' + textSlug );
-
+        printWarning( 'Missing text slug: $textSlug' );
         return textSlug;
     }
 }
 
 // ~~
 
-export function defineLineTag(
-    name,
-    openingDefinition,
-    closingDefinition
+void defineLineTag(
+    String name,
+    String openingDefinition,
+    String closingDefinition,
     )
 {
-    processedLineTagArray.push(
+    processedLineTagArray.add(
         {
-            name,
-            openingDefinition,
-            closingDefinition
+            'name': name,
+            'openingDefinition': openingDefinition,
+            'closingDefinition': closingDefinition,
         }
         );
 }
 
 // ~~
 
-export function defineDualTag(
-    name,
-    openingDefinition,
-    closingDefinition
-    )
+void defineDualTag(
+    String name,
+    String openingDefinition,
+    String closingDefinition,
+)
 {
-    processedDualTagArray.push(
+    processedDualTagArray.add(
         {
-            name,
-            openingDefinition,
-            closingDefinition
+            'name': name,
+            'openingDefinition': openingDefinition,
+            'closingDefinition': closingDefinition,
         }
         );
 }
 
 // ~~
 
-export function defineTag(
-    name,
-    definition
+void defineTag(
+    String name,
+    String definition
     )
 {
-    processedTagArray.push(
+    processedTagArray.add(
         {
-            name,
-            definition
+            'name': name,
+            'definition': definition,
         }
         );
 }
 
 // ~~
 
-export function defineColorTag(
-    name,
-    color = ''
+void defineColorTag(
+    String name, [
+    String color = '' ]
     )
 {
-    if ( color === '' )
+    if ( color == '' )
     {
-        defineTag( '<' + name + '>', '<span class="color-' + name + '">' );
+        defineTag( '<$name>', '<span class="color-$name">' );
     }
     else
     {
-        defineTag( '<' + name + '>', '<span style="color:' + color + '">' );
+        defineTag( '<$name>', '<span style="color:$color">' );
     }
 
-    defineTag( '</' + name + '>', '</span>' );
+    defineTag( '</$name>', '</span>' );
 }
 
 // ~~
 
-export function getProcessedText(
-    text
+String getProcessedText(
+    String text
     )
 {
     if ( !isString( text ) )
@@ -2834,25 +2447,23 @@ export function getProcessedText(
         text = getLocalizedText( text );
     }
 
-    for ( let processedDualTag of processedDualTagArray )
+    for ( var processedDualTag in processedDualTagArray )
     {
-        let partArray = text.split( processedDualTag.name );
-        let partCount = partArray.length;
+        var partArray = text.split( processedDualTag[ 'name' ]! );
+        var partCount = partArray.length;
 
-        for ( let partIndex = 0;
-              partIndex + 1 < partCount;
-              partIndex += 2 )
+        for ( int partIndex = 0; partIndex + 1 < partCount; partIndex += 2 )
         {
-            partArray[ partIndex ] += processedDualTag.openingDefinition;
-            partArray[ partIndex + 1 ] += processedDualTag.closingDefinition;
+            partArray[ partIndex ] += processedDualTag[ 'openingDefinition' ]!;
+            partArray[ partIndex + 1 ] += processedDualTag[ 'closingDefinition' ]!;
         }
 
         text = partArray.join( '' );
     }
 
-    for ( let processedTag of processedTagArray )
+    for ( var processedTag in processedTagArray )
     {
-        text = text.replaceAll( processedTag.name, processedTag.definition );
+        text = text.replaceAll( processedTag[ 'name' ]!, processedTag[ 'definition' ]! );
     }
 
     return text;
@@ -2860,8 +2471,8 @@ export function getProcessedText(
 
 // ~~
 
-export function getProcessedMultilineText(
-    text
+String getProcessedMultilineText(
+    String text
     )
 {
     if ( !isString( text ) )
@@ -2869,33 +2480,26 @@ export function getProcessedMultilineText(
         text = getLocalizedText( text );
     }
 
-    let processedLineTagCount = processedLineTagArray.length;
-
-    if ( processedLineTagCount > 0 )
+    if ( processedLineTagArray.isNotEmpty )
     {
-        let lineArray = text.replaceAll( '\r', '' ).split( '\n' );
-        let lineCount = lineArray.length;
+        var lineArray = text.replaceAll( '\r', '' ).split( '\n' );
 
-        for ( let lineIndex = 0;
-              lineIndex < lineCount;
-              ++lineIndex )
+        for ( int lineIndex = 0; lineIndex < lineArray.length; ++lineIndex )
         {
-            let line = lineArray[ lineIndex ];
+            var line = lineArray[ lineIndex ];
 
             while ( line.startsWith( '\n' ) )
             {
                 line = line.substring( 1 );
             }
 
-            for ( let processedLineTag of processedLineTagArray )
+            for ( var processedLineTag in processedLineTagArray )
             {
-                if ( line.startsWith( processedLineTag.name ) )
+                if ( line.startsWith( processedLineTag[ 'name' ]! ) )
                 {
-                    lineArray[ lineIndex ]
-                        = processedLineTag.openingDefinition
-                          + line.substring( processedLineTag.name.length )
-                          + processedLineTag.closingDefinition;
-
+                    lineArray[ lineIndex ] = processedLineTag[ 'openingDefinition' ]! +
+                            line.substring( processedLineTag[ 'name' ]!.length ) +
+                            processedLineTag[ 'closingDefinition' ]!;
                     break;
                 }
             }
@@ -2909,17 +2513,17 @@ export function getProcessedMultilineText(
 
 // ~~
 
-export function getProcessedTextBySlug(
-    textSlug
+String getProcessedTextBySlug(
+    String textSlug
     )
 {
-    if ( textBySlugMap.has( textSlug ) )
+    if ( textBySlugMap.containsKey( textSlug ) )
     {
-        return getProcessedText( textBySlugMap.get( textSlug ) );
+        return getProcessedText( textBySlugMap[ textSlug ]! );
     }
     else
     {
-        printWarning( 'Missing text slug : ' + textSlug );
+        printWarning( 'Missing text slug: $textSlug' );
 
         return textSlug;
     }
@@ -2927,112 +2531,18 @@ export function getProcessedTextBySlug(
 
 // ~~
 
-export function getProcessedMultilineTextBySlug(
-    textSlug
+String getProcessedMultilineTextBySlug(
+    String textSlug
     )
 {
-    if ( textBySlugMap.has( textSlug ) )
+    if ( textBySlugMap.containsKey( textSlug ) )
     {
-        return getProcessedMultilineText( textBySlugMap.get( textSlug ) );
+        return getProcessedMultilineText( textBySlugMap[ textSlug ]! );
     }
     else
     {
-        printWarning( 'Missing text slug : ' + textSlug );
+        printWarning( 'Missing text slug: $textSlug' );
 
         return textSlug;
     }
-}
-
-// ~~
-
-export function toggleGoogleAnalytics(
-    trackingIsEnabled,
-    trackingId
-    )
-{
-    if ( trackingIsEnabled )
-    {
-        if ( !googleAnalyticsTrackingIsEnabled )
-        {
-            googleAnalyticsTrackingIsEnabled = true;
-            googleAnalyticsTrackingScript = document.createElement( 'script' );
-            googleAnalyticsTrackingScript.async = true;
-            googleAnalyticsTrackingScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + trackingId;
-
-            document.head.appendChild( googleAnalyticsTrackingScript );
-
-            window.dataLayer = window.dataLayer || [];
-            window.gtag = ( ...argumentArray ) => window.dataLayer.push( ...argumentArray );
-
-            gtag( 'js', new Date() );
-            gtag( 'config', trackingId );
-        }
-    }
-    else
-    {
-        if ( googleAnalyticsTrackingIsEnabled )
-        {
-            document.head.removeChild( googleAnalyticsTrackingScript );
-
-            window.dataLayer = [];
-
-            googleAnalyticsTrackingIsEnabled = false;
-            googleAnalyticsTrackingScript = null;
-        }
-    }
-}
-
-// ~~
-
-export function addClass(
-    element,
-    className
-    )
-{
-    element.classList.add( className );
-
-    return element;
-}
-
-// ~~
-
-export function removeClass(
-    element,
-    className
-    )
-{
-    element.classList.remove( className );
-
-    return element;
-}
-
-// ~~
-
-export function toggleClass(
-    element,
-    className,
-    condition = undefined
-    )
-{
-    if ( condition === undefined )
-    {
-        if ( element.classList.contains( className ) )
-        {
-            element.classList.remove( className );
-        }
-        else
-        {
-            element.classList.add( className );
-        }
-    }
-    else if ( condition )
-    {
-        element.classList.add( className );
-    }
-    else
-    {
-        element.classList.remove( className );
-    }
-
-    return element;
 }
