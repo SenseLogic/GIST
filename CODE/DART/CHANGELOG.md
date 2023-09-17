@@ -1,3 +1,7 @@
+## 0.0.3
+
+* Added logger and uuid
+
 ## 0.0.2
 
 * Updated dependencies

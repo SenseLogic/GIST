@@ -5,7 +5,9 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
-//import 'package:uuid/uuid.dart';
+import 'package:uuid/uuid.dart';
+
+import 'package:logger/logger.dart';
 
 // -- TYPES
 
@@ -111,6 +113,10 @@ class Timestamp_
 
 // -- VARIABLES
 
+Logger
+    logger = Logger();
+Uuid
+    uuidGenerator = Uuid();
 String
     continentCode = '',
     countryCode = '',
@@ -123,13 +129,115 @@ List<Map<String, String>>
     processedDualTagArray = [],
     processedTagArray = [];
 
+
 // -- FUNCTIONS
+
+bool isBrowser(
+    )
+{
+    return identical( 1, 1.0 );
+}
+
+// ~~
+
+void showTrace(
+    )
+{
+    Logger.level = Level.trace;
+}
+
+// ~~
+
+void showDebug(
+    )
+{
+    Logger.level = Level.debug;
+}
+
+// ~~
+
+void showInfo(
+    )
+{
+    Logger.level = Level.info;
+}
+
+// ~~
+
+void showWarning(
+    )
+{
+    Logger.level = Level.warning;
+}
+
+// ~~
+
+void showError(
+    )
+{
+    Logger.level = Level.error;
+}
+
+// ~~
+
+void showFatal(
+    )
+{
+    Logger.level = Level.fatal;
+}
+
+// ~~
+
+void printTrace(
+    String message
+    )
+{
+    logger.t( message );
+}
+
+// ~~
+
+void printDebug(
+    String message
+    )
+{
+    logger.d( message );
+}
+
+// ~~
+
+void printInfo(
+    String message
+    )
+{
+    logger.i( message );
+}
+
+// ~~
 
 void printWarning(
     String message
     )
 {
-    // :TODO:
+    logger.w( message );
+}
+
+// ~~
+
+void printError(
+    String message
+    )
+{
+    logger.e( message );
+}
+
+// ~~
+
+void printFatal(
+    String message
+    )
+{
+    logger.f( message );
 }
 
 // ~~
@@ -303,10 +411,15 @@ String getBase64TextFromHexadecimalText(
     String hexadecimalText
     )
 {
-    final Uint8List
-        byteArray = Uint8List( 0 );    // :TODO:
-
-    return base64Encode( byteArray );
+    return
+        base64Encode(
+            Uint8List.fromList(
+                List<int>.generate(
+                    ( hexadecimalText.length / 2 ).floor(),
+                    ( index ) => int.parse( hexadecimalText.substring( index * 2, index * 2 + 2 ), radix: 16 )
+                    )
+                )
+            );
 }
 
 // ~~
@@ -418,24 +531,24 @@ String getRandomHexadecimalText(
 
 // ~~
 
-String getTimeUuid()
+String getTimeUuid(
+    )
 {
     return
         getUuidFromHexadecimalText(
             getHexadecimalTextFromInteger(
                 ( getMillisecondTimestamp() + 12219292800000 ) * 10000
                 )
-            + getRandomHexadecimalText( 16 ),
+            + getRandomHexadecimalText( 16 )
             );
 }
 
 // ~~
 
-String getRandomUuid()
+String getRandomUuid(
+    )
 {
-    // :TODO: return Uuid().v4();
-
-    return '';
+    return Uuid().v4();
 }
 
 // ~~
@@ -2364,185 +2477,6 @@ String getLocalizedTextBySlug(
     else
     {
         printWarning( 'Missing text slug: $textSlug' );
-        return textSlug;
-    }
-}
-
-// ~~
-
-void defineLineTag(
-    String name,
-    String openingDefinition,
-    String closingDefinition,
-    )
-{
-    processedLineTagArray.add(
-        {
-            'name': name,
-            'openingDefinition': openingDefinition,
-            'closingDefinition': closingDefinition,
-        }
-        );
-}
-
-// ~~
-
-void defineDualTag(
-    String name,
-    String openingDefinition,
-    String closingDefinition,
-)
-{
-    processedDualTagArray.add(
-        {
-            'name': name,
-            'openingDefinition': openingDefinition,
-            'closingDefinition': closingDefinition,
-        }
-        );
-}
-
-// ~~
-
-void defineTag(
-    String name,
-    String definition
-    )
-{
-    processedTagArray.add(
-        {
-            'name': name,
-            'definition': definition,
-        }
-        );
-}
-
-// ~~
-
-void defineColorTag(
-    String name, [
-    String color = '' ]
-    )
-{
-    if ( color == '' )
-    {
-        defineTag( '<$name>', '<span class="color-$name">' );
-    }
-    else
-    {
-        defineTag( '<$name>', '<span style="color:$color">' );
-    }
-
-    defineTag( '</$name>', '</span>' );
-}
-
-// ~~
-
-String getProcessedText(
-    String text
-    )
-{
-    if ( !isString( text ) )
-    {
-        text = getLocalizedText( text );
-    }
-
-    for ( var processedDualTag in processedDualTagArray )
-    {
-        var partArray = text.split( processedDualTag[ 'name' ]! );
-        var partCount = partArray.length;
-
-        for ( int partIndex = 0; partIndex + 1 < partCount; partIndex += 2 )
-        {
-            partArray[ partIndex ] += processedDualTag[ 'openingDefinition' ]!;
-            partArray[ partIndex + 1 ] += processedDualTag[ 'closingDefinition' ]!;
-        }
-
-        text = partArray.join( '' );
-    }
-
-    for ( var processedTag in processedTagArray )
-    {
-        text = text.replaceAll( processedTag[ 'name' ]!, processedTag[ 'definition' ]! );
-    }
-
-    return text;
-}
-
-// ~~
-
-String getProcessedMultilineText(
-    String text
-    )
-{
-    if ( !isString( text ) )
-    {
-        text = getLocalizedText( text );
-    }
-
-    if ( processedLineTagArray.isNotEmpty )
-    {
-        var lineArray = text.replaceAll( '\r', '' ).split( '\n' );
-
-        for ( int lineIndex = 0; lineIndex < lineArray.length; ++lineIndex )
-        {
-            var line = lineArray[ lineIndex ];
-
-            while ( line.startsWith( '\n' ) )
-            {
-                line = line.substring( 1 );
-            }
-
-            for ( var processedLineTag in processedLineTagArray )
-            {
-                if ( line.startsWith( processedLineTag[ 'name' ]! ) )
-                {
-                    lineArray[ lineIndex ] = processedLineTag[ 'openingDefinition' ]! +
-                            line.substring( processedLineTag[ 'name' ]!.length ) +
-                            processedLineTag[ 'closingDefinition' ]!;
-                    break;
-                }
-            }
-        }
-
-        text = lineArray.join( '\n' );
-    }
-
-    return getProcessedText( text );
-}
-
-// ~~
-
-String getProcessedTextBySlug(
-    String textSlug
-    )
-{
-    if ( textBySlugMap.containsKey( textSlug ) )
-    {
-        return getProcessedText( textBySlugMap[ textSlug ]! );
-    }
-    else
-    {
-        printWarning( 'Missing text slug: $textSlug' );
-
-        return textSlug;
-    }
-}
-
-// ~~
-
-String getProcessedMultilineTextBySlug(
-    String textSlug
-    )
-{
-    if ( textBySlugMap.containsKey( textSlug ) )
-    {
-        return getProcessedMultilineText( textBySlugMap[ textSlug ]! );
-    }
-    else
-    {
-        printWarning( 'Missing text slug: $textSlug' );
-
         return textSlug;
     }
 }
