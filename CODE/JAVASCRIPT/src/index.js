@@ -54,10 +54,10 @@ export let
 
 export const
     raw = String.raw,
-    print = console.log,
-    printObject = console.dir,
-    printTable = console.table,
-    printStack = console.trace,
+    log = console.log,
+    logObject = console.dir,
+    logTable = console.table,
+    logStack = console.trace,
     isNaN = Number.isNaN,
     isInteger = Number.isInteger,
     getReal = parseFloat,
@@ -73,7 +73,7 @@ export const
 
 // ~~
 
-export function printValue(
+export function logValue(
     value
     )
 {
@@ -82,7 +82,7 @@ export function printValue(
 
 // ~~
 
-export function printWarning(
+export function logWarning(
     warning
     )
 {
@@ -92,7 +92,7 @@ export function printWarning(
 
 // ~~
 
-export function printError(
+export function logError(
     error
     )
 {
@@ -2303,7 +2303,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                printError( error );
+                logError( error );
             }
         }
 
@@ -2332,7 +2332,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                printError( error );
+                logError( error );
             }
         }
 
@@ -2362,7 +2362,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                printError( error );
+                logError( error );
             }
         }
 
@@ -2390,7 +2390,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                printError( error );
+                logError( error );
             }
         }
 
@@ -2416,7 +2416,7 @@ export async function getLocationFromIpAddress(
             }
             catch ( error )
             {
-                printError( error );
+                logError( error );
             }
         }
 
@@ -2555,7 +2555,7 @@ export function getTextBySlug(
     }
     else
     {
-        printWarning( 'Missing text slug : ' + textSlug );
+        logWarning( 'Missing text slug : ' + textSlug );
 
         return '';
     }
@@ -2767,7 +2767,7 @@ export function getLocalizedTextBySlug(
     }
     else
     {
-        printWarning( 'Missing text slug : ' + textSlug );
+        logWarning( 'Missing text slug : ' + textSlug );
 
         return textSlug;
     }
@@ -2937,7 +2937,7 @@ export function getProcessedTextBySlug(
     }
     else
     {
-        printWarning( 'Missing text slug : ' + textSlug );
+        logWarning( 'Missing text slug : ' + textSlug );
 
         return textSlug;
     }
@@ -2955,7 +2955,7 @@ export function getProcessedMultilineTextBySlug(
     }
     else
     {
-        printWarning( 'Missing text slug : ' + textSlug );
+        logWarning( 'Missing text slug : ' + textSlug );
 
         return textSlug;
     }
