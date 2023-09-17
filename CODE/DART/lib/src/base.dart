@@ -129,7 +129,6 @@ List<Map<String, String>>
     processedDualTagArray = [],
     processedTagArray = [];
 
-
 // -- FUNCTIONS
 
 bool isBrowser(
@@ -140,7 +139,15 @@ bool isBrowser(
 
 // ~~
 
-void showTrace(
+void logAnyLevel(
+    )
+{
+    Logger.level = Level.all;
+}
+
+// ~~
+
+void logTraceLevel(
     )
 {
     Logger.level = Level.trace;
@@ -148,7 +155,7 @@ void showTrace(
 
 // ~~
 
-void showDebug(
+void logDebugLevel(
     )
 {
     Logger.level = Level.debug;
@@ -156,7 +163,7 @@ void showDebug(
 
 // ~~
 
-void showInfo(
+void logFromInfoLevel(
     )
 {
     Logger.level = Level.info;
@@ -164,7 +171,7 @@ void showInfo(
 
 // ~~
 
-void showWarning(
+void logWarningLevel(
     )
 {
     Logger.level = Level.warning;
@@ -172,7 +179,7 @@ void showWarning(
 
 // ~~
 
-void showError(
+void logErrorLevel(
     )
 {
     Logger.level = Level.error;
@@ -180,7 +187,7 @@ void showError(
 
 // ~~
 
-void showFatal(
+void logFatalLevel(
     )
 {
     Logger.level = Level.fatal;
@@ -188,56 +195,56 @@ void showFatal(
 
 // ~~
 
-void printTrace(
-    String message
+void logTrace(
+    dynamic value
     )
 {
-    logger.t( message );
+    logger.t( value );
 }
 
 // ~~
 
-void printDebug(
-    String message
+void logDebug(
+    dynamic value
     )
 {
-    logger.d( message );
+    logger.d( value );
 }
 
 // ~~
 
-void printInfo(
-    String message
+void logInfo(
+    dynamic value
     )
 {
-    logger.i( message );
+    logger.i( value );
 }
 
 // ~~
 
-void printWarning(
-    String message
+void logWarning(
+    dynamic value
     )
 {
-    logger.w( message );
+    logger.w( value );
 }
 
 // ~~
 
-void printError(
-    String message
+void logError(
+    dynamic value
     )
 {
-    logger.e( message );
+    logger.e( value );
 }
 
 // ~~
 
-void printFatal(
-    String message
+void logFatal(
+    dynamic value
     )
 {
-    logger.f( message );
+    logger.f( value );
 }
 
 // ~~
@@ -2272,7 +2279,8 @@ String getTextBySlug(
     }
     else
     {
-        printWarning( 'Missing text slug: $textSlug' );
+        logWarning( 'Missing text slug: $textSlug' );
+
         return '';
     }
 }
@@ -2476,7 +2484,8 @@ String getLocalizedTextBySlug(
     }
     else
     {
-        printWarning( 'Missing text slug: $textSlug' );
+        logWarning( 'Missing text slug: $textSlug' );
+
         return textSlug;
     }
 }
