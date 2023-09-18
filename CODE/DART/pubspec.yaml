@@ -2,7 +2,7 @@ name: senselogic_gist
 description: Reusable base functions.
 homepage: https://github.com/senselogic/GIST
 repository: https://github.com/senselogic/GIST
-version: 0.0.5
+version: 2.0.6
 
 environment:
   sdk: '>=2.14.0 <4.0.0'

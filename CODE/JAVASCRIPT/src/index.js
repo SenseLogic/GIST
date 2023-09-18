@@ -395,15 +395,6 @@ export function getRightPaddedText(
 
 // ~~
 
-export function getEncodedName(
-    name
-    )
-{
-    return '`' + name + '`';
-}
-
-// ~~
-
 export function getQuotedText(
     value
     )
@@ -419,6 +410,149 @@ export function getQuotedText(
               .replaceAll( '\'', '\\\'' )
         + '"'
         );
+}
+
+// ~~
+
+export function getUnaccentedCharacter(
+    character,
+    languageCode = ""
+    )
+{
+    switch ( character )
+    {
+        case 'á':
+        case 'à':
+        case 'â':
+        {
+            return 'a';
+        }
+        case 'ä':
+        {
+            return ( languageCode == 'de' ) ? 'ae' : 'a';
+        }
+        case 'é':
+        case 'è':
+        case 'ê':
+        case 'ë':
+        {
+            return 'e';
+        }
+        case 'í':
+        case 'ì':
+        case 'î':
+        case 'ï':
+        {
+            return 'i';
+        }
+        case 'ó':
+        case 'ò':
+        case 'ô':
+        {
+            return 'o';
+        }
+        case 'ö':
+        {
+            return ( languageCode == 'de' ) ? 'oe' : 'o';
+        }
+        case 'ú':
+        case 'ù':
+        case 'û':
+        {
+            return 'u';
+        }
+        case 'ü':
+        {
+            return ( languageCode == 'de' ) ? 'ue' : 'u';
+        }
+        case 'ç':
+        {
+            return 'c';
+        }
+        case 'ñ':
+        {
+            return 'n';
+        }
+        case 'ß':
+        {
+            return 'ss';
+        }
+        case 'Á':
+        case 'À':
+        case 'Â':
+        {
+            return 'A';
+        }
+        case 'Ä':
+        {
+            return ( languageCode == 'de' ) ? 'Ae' : 'A';
+        }
+        case 'É':
+        case 'È':
+        case 'Ê':
+        case 'Ë':
+        {
+            return 'E';
+        }
+        case 'Í':
+        case 'Ì':
+        case 'Î':
+        case 'Ï':
+        {
+            return 'I';
+        }
+        case 'Ó':
+        case 'Ò':
+        case 'Ô':
+        {
+            return 'O';
+        }
+        case 'Ö':
+        {
+            return ( languageCode == 'de' ) ? 'Oe' : 'O';
+        }
+        case 'Ú':
+        case 'Ù':
+        case 'Û':
+        {
+            return 'U';
+        }
+        case 'Ü':
+        {
+            return ( languageCode == 'de' ) ? 'Ue' : 'U';
+        }
+        case 'Ç':
+        {
+            return 'C';
+        }
+        case 'Ñ':
+        {
+            return 'N';
+        }
+        default:
+        {
+            return character;
+        }
+    }
+}
+
+// ~~
+
+function getUnaccentedText(
+    text,
+    languageCode = ''
+    )
+{
+    let unaccentedTextArray = [];
+
+    for ( let characterIndex = 0;
+          characterIndex < text.length;
+          ++characterIndex )
+    {
+        unaccentedTextArray.push( getUnaccentedCharacter( text.charAt( characterIndex ), languageCode ) );
+    }
+
+    return unaccentedTextArray.join( '' );
 }
 
 // ~~

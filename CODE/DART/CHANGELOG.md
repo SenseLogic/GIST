@@ -1,3 +1,7 @@
+## 0.0.6
+
+* Added string functions
+
 ## 0.0.5
 
 * Fixed log functions
