@@ -416,7 +416,8 @@ export function getQuotedText(
 
 export function getUnaccentedCharacter(
     character,
-    languageCode = ""
+    languageCode = "",
+    nextCharacterIsLowerCase = false
     )
 {
     switch ( character )
@@ -429,7 +430,14 @@ export function getUnaccentedCharacter(
         }
         case 'ä':
         {
-            return ( languageCode == 'de' ) ? 'ae' : 'a';
+            if ( languageCode == 'de' )
+            {
+                return 'ae';
+            }
+            else
+            {
+                return 'a';
+            }
         }
         case 'é':
         case 'è':
@@ -453,7 +461,18 @@ export function getUnaccentedCharacter(
         }
         case 'ö':
         {
-            return ( languageCode == 'de' ) ? 'oe' : 'o';
+            if ( languageCode == 'de' )
+            {
+                return 'oe';
+            }
+            else
+            {
+                return 'o';
+            }
+        }
+        case 'œ' :
+        {
+            return 'oe';
         }
         case 'ú':
         case 'ù':
@@ -463,7 +482,14 @@ export function getUnaccentedCharacter(
         }
         case 'ü':
         {
-            return ( languageCode == 'de' ) ? 'ue' : 'u';
+            if ( languageCode == 'de' )
+            {
+                return 'ue';
+            }
+            else
+            {
+                return 'u';
+            }
         }
         case 'ç':
         {
@@ -485,7 +511,21 @@ export function getUnaccentedCharacter(
         }
         case 'Ä':
         {
-            return ( languageCode == 'de' ) ? 'Ae' : 'A';
+            if ( languageCode == 'de' )
+            {
+                if ( nextCharacterIsLowerCase )
+                {
+                    return 'Ae';
+                }
+                else
+                {
+                    return 'AE';
+                }
+            }
+            else
+            {
+                return 'A';
+            }
         }
         case 'É':
         case 'È':
@@ -509,7 +549,25 @@ export function getUnaccentedCharacter(
         }
         case 'Ö':
         {
-            return ( languageCode == 'de' ) ? 'Oe' : 'O';
+            if ( languageCode == 'de' )
+            {
+                if ( nextCharacterIsLowerCase )
+                {
+                    return 'Oe';
+                }
+                else
+                {
+                    return 'OE';
+                }
+            }
+            else
+            {
+                return 'O';
+            }
+        }
+        case 'Œ' :
+        {
+            return 'Oe';
         }
         case 'Ú':
         case 'Ù':
@@ -519,7 +577,21 @@ export function getUnaccentedCharacter(
         }
         case 'Ü':
         {
-            return ( languageCode == 'de' ) ? 'Ue' : 'U';
+            if ( languageCode == 'de' )
+            {
+                if ( nextCharacterIsLowerCase )
+                {
+                    return 'Ue';
+                }
+                else
+                {
+                    return 'UE';
+                }
+            }
+            else
+            {
+                return 'U';
+            }
         }
         case 'Ç':
         {
@@ -528,6 +600,17 @@ export function getUnaccentedCharacter(
         case 'Ñ':
         {
             return 'N';
+        }
+        case 'ẞ' :
+        {
+            if ( nextCharacterIsLowerCase )
+            {
+                return 'Ss';
+            }
+            else
+            {
+                return 'SS';
+            }
         }
         default:
         {

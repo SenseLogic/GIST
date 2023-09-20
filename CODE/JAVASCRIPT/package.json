@@ -1,7 +1,7 @@
 {
     "name": "senselogic-gist",
     "description": "Reusable base functions.",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "author": "Eric Pelzer <ecstatic.coder@gmail.com>",
     "license": "LGPL-3.0-only",
     "repository": {
