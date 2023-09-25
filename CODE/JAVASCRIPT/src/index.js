@@ -847,14 +847,31 @@ export function getMillisecondTimestamp(
 
 // ~~
 
-export function getLocalDate(
+export function getSystemDate(
     systemDate
     )
 {
     if ( systemDate === undefined )
     {
-        systemDate = new Date();
+        return new Date();
     }
+    else if ( isString( systemDate ) )
+    {
+        return new Date( systemDate );
+    }
+    else
+    {
+        return systemDate;
+    }
+}
+
+// ~~
+
+export function getLocalDate(
+    systemDate
+    )
+{
+    systemDate = getSystemDate( systemDate );
 
     return {
         year : systemDate.getFullYear(),
@@ -869,10 +886,7 @@ export function getLocalTime(
     systemDate
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate = getSystemDate( systemDate );
 
     return {
         hour : systemDate.getHours(),
@@ -887,10 +901,7 @@ export function getLocalDateTime(
     systemDate
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate = getSystemDate( systemDate );
 
     return {
         year : systemDate.getFullYear(),
@@ -908,10 +919,7 @@ export function getUniversalDate(
     systemDate
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate = getSystemDate( systemDate );
 
     return {
         year : systemDate.getUTCFullYear(),
@@ -926,10 +934,7 @@ export function getUniversalTime(
     systemDate
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate = getSystemDate( systemDate );
 
     return {
         hour : systemDate.getUTCHours(),
@@ -944,10 +949,7 @@ export function getUniversalDateTime(
     systemDate
     )
 {
-    if ( systemDate === undefined )
-    {
-        systemDate = new Date();
-    }
+    systemDate = getSystemDate( systemDate );
 
     return {
         year : systemDate.getUTCFullYear(),

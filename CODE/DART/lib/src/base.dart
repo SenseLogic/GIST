@@ -6,110 +6,7 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
-
 import 'package:logger/logger.dart';
-
-// -- TYPES
-
-class Date_
-{
-    // -- ATTRIBUTES
-
-    final int
-        year,
-        month,
-        day;
-
-    // -- CONSTRUCTORS
-
-    Date_(
-        {
-            required this.year,
-            required this.month,
-            required this.day
-        }
-        );
-}
-
-// ~~
-
-class Time_
-{
-    // -- ATTRIBUTES
-
-    final int
-        hour,
-        minute,
-        second;
-
-    // -- CONSTRUCTORS
-
-    Time_(
-        {
-            required this.hour,
-            required this.minute,
-            required this.second
-        }
-        );
-}
-
-// ~~
-
-class DateTime_
-{
-    // -- ATTRIBUTES
-
-    final int
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        second;
-
-    // -- CONSTRUCTORS
-
-    DateTime_(
-        {
-            required this.year,
-            required this.month,
-            required this.day,
-            required this.hour,
-            required this.minute,
-            required this.second
-        }
-        );
-}
-
-// ~~
-
-class Timestamp_
-{
-    // -- ATTRIBUTES
-
-    final int
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        second,
-        millisecond;
-
-    // -- CONSTRUCTORS
-
-    Timestamp_(
-        {
-            required this.year,
-            required this.month,
-            required this.day,
-            required this.hour,
-            required this.minute,
-            required this.second,
-            required this.millisecond
-        }
-        );
-}
 
 // -- VARIABLES
 
@@ -347,33 +244,6 @@ String replaceIteratively(
     while ( replacedText != oldReplacedText );
 
     return oldReplacedText;
-}
-
-
-// ~~
-
-String getLeftPaddedText(
-    String text,
-    int minimumCharacterCount,
-    [
-        String paddingCharacter = ' '
-    ]
-    )
-{
-    return text.padLeft( minimumCharacterCount, paddingCharacter );
-}
-
-// ~~
-
-String getRightPaddedText(
-    String text,
-    int minimumCharacterCount,
-    [
-        String paddingCharacter = ' '
-    ]
-    )
-{
-    return text.padRight( minimumCharacterCount, paddingCharacter );
 }
 
 // ~~
@@ -816,203 +686,261 @@ int getMillisecondTimestamp(
 
 // ~~
 
-Date_ getLocalDate(
-    [
-        DateTime? systemDate
-    ]
+DateTime parseLocalDateTimeText(
+    String localDateTimeText
     )
 {
-    systemDate ??= DateTime.now();
+    return DateTime.parse( localDateTimeText );
+}
+
+// ~~
+
+DateTime parseUniversalDateTimeText(
+    String universalDateTimeText
+    )
+{
+    var dateTime = DateTime.parse( universalDateTimeText );
 
     return
-        Date_(
-            year: systemDate.year,
-            month: systemDate.month,
-            day: systemDate.day
+        DateTime.utc(
+            dateTime.year,
+            dateTime.month,
+            dateTime.day,
+            dateTime.hour,
+            dateTime.minute,
+            dateTime.second,
+            dateTime.millisecond,
+            dateTime.microsecond
             );
 }
 
 // ~~
 
-Time_ getLocalTime(
+DateTime getLocalTimestamp(
     [
-        DateTime? systemDate
+        String? text
     ]
     )
 {
-    systemDate ??= DateTime.now();
-
-    return
-        Time_(
-            hour: systemDate.hour,
-            minute: systemDate.minute,
-            second: systemDate.second
-            );
+    if ( text != null
+         && text.isNotEmpty )
+    {
+        return parseLocalDateTimeText( text );
+    }
+    else
+    {
+        return DateTime.now();
+    }
 }
 
 // ~~
 
-DateTime_ getLocalDateTime(
+DateTime getLocalDateTime(
     [
-        DateTime? systemDate
+        String? text
     ]
     )
 {
-    systemDate ??= DateTime.now();
-
-    return
-        DateTime_(
-            year: systemDate.year,
-            month: systemDate.month,
-            day: systemDate.day,
-            hour: systemDate.hour,
-            minute: systemDate.minute,
-            second: systemDate.second
-            );
+    if ( text != null
+         && text.isNotEmpty )
+    {
+        return parseLocalDateTimeText( text );
+    }
+    else
+    {
+        return DateTime.now();
+    }
 }
 
 // ~~
 
-Date_ getUniversalDate(
+DateTime getLocalDate(
     [
-        DateTime? systemDate
+        String? text
     ]
     )
 {
-    systemDate ??= DateTime.now().toUtc();
-
-    return Date_( year: systemDate.year, month: systemDate.month, day: systemDate.day );
+    if ( text != null
+         && text.isNotEmpty )
+    {
+        return parseLocalDateTimeText( text );
+    }
+    else
+    {
+        return DateTime.now();
+    }
 }
 
 // ~~
 
-Time_ getUniversalTime(
+DateTime getLocalTime(
     [
-        DateTime? systemDate
+        String? text
     ]
     )
 {
-    systemDate ??= DateTime.now().toUtc();
-
-    return
-        Time_(
-            hour: systemDate.hour,
-            minute: systemDate.minute,
-            second: systemDate.second
-            );
+    if ( text != null
+         && text.isNotEmpty )
+    {
+        return parseLocalDateTimeText( text );
+    }
+    else
+    {
+        return DateTime.now();
+    }
 }
 
 // ~~
 
-Timestamp_ getUniversalDateTime(
+DateTime getUniversalTimestamp(
     [
-        DateTime? systemDate
+        String? text
     ]
     )
 {
-    systemDate ??= DateTime.now().toUtc();
-
-    return
-        Timestamp_(
-            year: systemDate.year,
-            month: systemDate.month,
-            day: systemDate.day,
-            hour: systemDate.hour,
-            minute: systemDate.minute,
-            second: systemDate.second,
-            millisecond: systemDate.millisecond
-            );
+    if ( text != null
+         && text.isNotEmpty )
+    {
+        return parseUniversalDateTimeText( text );
+    }
+    else
+    {
+        return DateTime.now().toUtc();
+    }
 }
 
 // ~~
 
-String getDateText(
-    Date_ date,
+DateTime getUniversalDateTime(
     [
-        String suffix = ''
+        String? text
     ]
     )
 {
-    return
-        '${ getLeftPaddedText( date.year.toString(), 4, '0' ) }:${ getLeftPaddedText( date.month.toString(), 2, '0' ) }:${ getLeftPaddedText( date.day.toString(), 2, '0' ) }'
-        '$suffix';
+    if ( text != null
+         && text.isNotEmpty )
+    {
+        return parseUniversalDateTimeText( text );
+    }
+    else
+    {
+        return DateTime.now().toUtc();
+    }
 }
 
 // ~~
 
-String getTimeText(
-    Time_ time,
+DateTime getUniversalDate(
     [
-        String suffix = ''
+        String? text
     ]
     )
 {
-    return
-        '${ getLeftPaddedText( time.hour.toString(), 2, '0' ) }-${ getLeftPaddedText( time.minute.toString(), 2, '0' ) }-${ getLeftPaddedText( time.second.toString(), 2, '0' ) }'
-        '$suffix';
+    if ( text != null
+         && text.isNotEmpty )
+    {
+        return parseUniversalDateTimeText( text );
+    }
+    else
+    {
+        return DateTime.now().toUtc();
+    }
 }
 
 // ~~
 
-String getDateTimeText(
-    DateTime_ dateTime,
+DateTime getUniversalTime(
     [
-        String infix = ' ',
-        String suffix = ''
+        String? text
     ]
     )
 {
-    return
-        '${ getLeftPaddedText( dateTime.year.toString(), 4, '0' ) }:${ getLeftPaddedText( dateTime.month.toString(), 2, '0' ) }:${ getLeftPaddedText( dateTime.day.toString(), 2, '0' ) }'
-        '$infix'
-        '${ getLeftPaddedText( dateTime.hour.toString(), 2, '0' ) }-${ getLeftPaddedText( dateTime.minute.toString(), 2, '0' ) }-${ getLeftPaddedText( dateTime.second.toString(), 2, '0' ) }'
-        '$suffix';
+    if ( text != null
+         && text.isNotEmpty )
+    {
+        return parseUniversalDateTimeText( text );
+    }
+    else
+    {
+        return DateTime.now().toUtc();
+    }
 }
 
 // ~~
 
 String getTimestampText(
-    Timestamp_ timestamp,
-    [
-        String infix = ' ',
-        String suffix = ''
-    ]
+    DateTime dateTime
     )
 {
     return
-        '${ getLeftPaddedText( timestamp.year.toString(), 4, '0' ) }:${ getLeftPaddedText( timestamp.month.toString(), 2, '0' ) }:${ getLeftPaddedText( timestamp.day.toString(), 2, '0' ) }'
-        '$infix'
-        '${ getLeftPaddedText( timestamp.hour.toString(), 2, '0' ) }-${ getLeftPaddedText( timestamp.minute.toString(), 2, '0' ) }-${ getLeftPaddedText( timestamp.second.toString(), 2, '0' ) }'
-        '$infix'
-        '${ getLeftPaddedText( timestamp.millisecond.toString(), 3, '0' ) }'
-        '$suffix';
+        '${ dateTime.year }'
+        '-'
+        '${ dateTime.month.toString().padLeft( 2, '0' ) }'
+        '-'
+        '${ dateTime.day.toString().padLeft( 2, '0' ) }'
+        ' '
+        '${ dateTime.hour.toString().padLeft( 2, '0' ) }'
+        ':'
+        '${ dateTime.minute.toString().padLeft( 2, '0' ) }'
+        ':'
+        '${ dateTime.second.toString().padLeft( 2, '0' ) }'
+        '.'
+        '${ dateTime.millisecond.toString().padLeft( 3, '0' ) }'
+        '${ dateTime.microsecond.toString().padLeft( 6, '0' ) }';
 }
 
 // ~~
 
-String getDateTimeSuffix(
-    Timestamp_ dateTime,
-    [
-        String infix = '',
-        String suffix = ''
-    ]
+String getDateTimeText(
+    DateTime dateTime
     )
 {
     return
-        '${ getLeftPaddedText( dateTime.year.toString(), 4, '0' ) }'
-        '$infix'
-        '${ getLeftPaddedText( dateTime.month.toString(), 2, '0' ) }'
-        '$infix'
-        '${ getLeftPaddedText( dateTime.day.toString(), 2, '0' ) }'
-        '$infix'
-        '${ getLeftPaddedText( dateTime.hour.toString(), 2, '0' ) }'
-        '$infix'
-        '${ getLeftPaddedText( dateTime.minute.toString(), 2, '0' ) }'
-        '$infix'
-        '${ getLeftPaddedText( dateTime.second.toString(), 2, '0' ) }'
-        '$infix'
-        '${ getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' ) }'
-        '$suffix';
+        '${ dateTime.year }'
+        '-'
+        '${ dateTime.month.toString().padLeft( 2, '0' ) }'
+        '-'
+        '${ dateTime.day.toString().padLeft( 2, '0' ) }'
+        ' '
+        '${ dateTime.hour.toString().padLeft( 2, '0' ) }'
+        ':'
+        '${ dateTime.minute.toString().padLeft( 2, '0' ) }'
+        ':'
+        '${ dateTime.second.toString().padLeft( 2, '0' ) }'
+        '.'
+        '${ dateTime.millisecond.toString().padLeft( 3, '0' ) }'
+        '${ dateTime.microsecond.toString().padLeft( 3, '0' ) }';
+}
+
+// ~~
+
+String getDateText(
+    DateTime dateTime
+    )
+{
+    return
+        '${ dateTime.year }'
+        '-'
+        '${ dateTime.month.toString().padLeft( 2, '0' ) }'
+        '-'
+        '${ dateTime.day.toString().padLeft( 2, '0' ) }';
+}
+
+// ~~
+
+String getTimeText(
+    DateTime dateTime
+    )
+{
+    return
+        '${ dateTime.hour.toString().padLeft( 2, '0' ) }'
+        ':'
+        '${ dateTime.minute.toString().padLeft( 2, '0' ) }'
+        ':'
+        '${ dateTime.second.toString().padLeft( 2, '0' ) }'
+        '.'
+        '${ dateTime.millisecond.toString().padLeft( 3, '0' ) }'
+        '${ dateTime.microsecond.toString().padLeft( 3, '0' ) }';
 }
 
 // ~~

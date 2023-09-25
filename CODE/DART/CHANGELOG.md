@@ -1,3 +1,7 @@
+## 2.0.8
+
+* Fixed date functions
+
 ## 2.0.7
 
 * Fixed string functions
