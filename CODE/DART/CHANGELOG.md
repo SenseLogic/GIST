@@ -1,3 +1,7 @@
+## 2.0.9
+
+* Added real to text function
+
 ## 2.0.8
 
 * Fixed date functions

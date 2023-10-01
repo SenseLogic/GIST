@@ -640,6 +640,29 @@ function getUnaccentedText(
 
 // ~~
 
+export function getRealText(
+    real,
+    minimumDecimalCount,
+    maximumDecimalCount
+    )
+{
+    let multiplier = Math.pow( 10, maximumDecimalCount );
+    real = Math.round( real * multiplier ) / multiplier;
+
+    let realText = real.toFixed( maximumDecimalCount );
+
+    while ( realText.includes( '.' )
+            && ( realText.endsWith( '0' )
+                 || realText.endsWith( '.' ) ) )
+    {
+        realText = realText.slice( 0, -1 );
+    }
+
+    return realText;
+}
+
+// ~~
+
 export function getHexadecimalTextFromInteger(
     integer
     )

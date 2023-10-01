@@ -498,6 +498,26 @@ String getUnaccentedText(
 
 // ~~
 
+String getRealText(
+    double real,
+    int minimumDecimalCount,
+    int maximumDecimalCount
+    )
+{
+    String realText = real.toStringAsFixed( maximumDecimalCount );
+
+    while ( realText.contains( '.' )
+            && ( realText.endsWith( '0' )
+                 || realText.endsWith( '.' ) ) )
+    {
+        realText = realText.substring( 0, realText.length - 1 );
+    }
+
+    return realText;
+}
+
+// ~~
+
 String getHexadecimalTextFromInteger(
     int integer
     )
