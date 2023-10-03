@@ -29,6 +29,11 @@ export const
         },
     minimumInteger = -9007199254740991,
     maximumInteger = 9007199254740991,
+    halfPi = Math.PI * 0.5,
+    pi = Math.PI,
+    twoPi = Math.PI * 2,
+    degreesToRadians = Math.PI / 180,
+    radiansToDegrees = 180 / Math.PI,
     naturalExpression = /^[0-9][0-9]*$/,
     integerExpression = /^-?[0-9][0-9]*$/,
     realExpression = /^-?[0-9][0-9]*\.[0-9]*$/,
@@ -63,6 +68,22 @@ export const
     getReal = parseFloat,
     getInteger = parseInt,
     getNumber = Number,
+    getMinimumReal = Math.min,
+    getMaximumReal = Math.max,
+    getPositiveReal = Math.abs,
+    getSign = Math.sign,
+    getFloorInteger = Math.floor,
+    getCeilInteger = Math.ceil,
+    getRoundInteger = Math.round,
+    getSquareRoot = Math.sqrt,
+    getPower = Math.pow,
+    getCosinus = Math.cos,
+    getSinus = Math.sin,
+    getTangent = Math.tan,
+    getArcCosinus = Math.acos,
+    getArcSinus = Math.asin,
+    getArcTangent = Math.atan,
+    getRandom = Math.random,
     getText = String,
     getEscapedText = escape,
     getUnescapedText = unescape,
@@ -98,6 +119,66 @@ export function logError(
 {
     console.trace();
     console.error( error );
+}
+
+// ~~
+
+function getClampValue(
+    value,
+    minimumValue,
+    maximumValue
+    )
+{
+    if ( value < minimumValue )
+    {
+        return minimumValue;
+    }
+    else if ( value > maximumValue )
+    {
+        return maximumValue;
+    }
+    else
+    {
+        return value;
+    }
+}
+
+// ~~
+
+export function getRadianAngle(
+    degreeAngle
+    )
+{
+    return degreeAngle * degreesToRadians;
+}
+
+// ~~
+
+export function getDegreeAngle(
+    radianAngle
+    )
+{
+    return radianAngle * radiansToDegrees;
+}
+
+// ~~
+
+export function getRandomReal(
+    firstReal,
+    postReal
+    )
+{
+    return firstReal + getRandom() * ( postReal - firstReal );
+}
+
+// ~~
+
+export function getRandomInteger(
+    firstInteger,
+    lastInteger
+    )
+{
+    return getFloorInteger( firstInteger + getRandom() * ( lastInteger - firstInteger + 1 ) );
 }
 
 // ~~

@@ -8,6 +8,14 @@ import 'package:crypto/crypto.dart';
 import 'package:uuid/uuid.dart';
 import 'package:logger/logger.dart';
 
+// -- CONSTANTS
+
+final double
+    halfPi = pi * 0.5,
+    twoPi = pi * 2,
+    degreesToRadians = pi / 180,
+    radiansToDegrees = 180 / pi;
+
 // -- VARIABLES
 
 Logger
@@ -146,11 +154,289 @@ void logFatal(
 
 // ~~
 
+double getReal(
+    String text
+    )
+{
+    return double.parse( text );
+}
+
+// ~~
+
+int getInteger(
+    String text
+    )
+{
+    return int.parse( text );
+}
+
+// ~~
+
+double getMinimumReal(
+    double firstReal,
+    double secondReal
+    )
+{
+    return min( firstReal, secondReal );
+}
+
+// ~~
+
+double getMaximumReal(
+    double firstReal,
+    double secondReal
+    )
+{
+    return max( firstReal, secondReal );
+}
+
+// ~~
+
+double getPositiveReal(
+    double real
+    )
+{
+    return real.abs();
+}
+
+// ~~
+
+double getRealSign(
+    double real
+    )
+{
+    return real.sign;
+}
+
+// ~~
+
+int getFloorInteger(
+    double real
+    )
+{
+    return real.floor();
+}
+
+// ~~
+
+int getCeilInteger(
+    double real
+    )
+{
+    return real.ceil();
+}
+
+// ~~
+
+int getRoundInteger(
+    double real
+    )
+{
+    return real.round();
+}
+
+// ~~
+
+double getSquareRoot(
+    double real
+    )
+{
+    return sqrt( real );
+}
+
+// ~~
+
+double getPower(
+    double base,
+    double exponent
+    )
+{
+    return pow( base, exponent ).toDouble();
+}
+
+// ~~
+
+double getCosinus(
+    double radianAngle
+    )
+{
+    return cos( radianAngle );
+}
+
+// ~~
+
+double getSinus(
+    double radianAngle
+    )
+{
+    return sin( radianAngle );
+}
+
+// ~~
+
+double getTangent(
+    double radianAngle
+    )
+{
+    return tan( radianAngle );
+}
+
+// ~~
+
+double getArcCosinus(
+    double cosinus
+    )
+{
+    return acos( cosinus );
+}
+
+// ~~
+
+double getArcSinus(
+    double sinus
+    )
+{
+    return asin( sinus );
+}
+
+// ~~
+
+double getArcTangent(
+    double tangent
+    )
+{
+    return atan( tangent );
+}
+
+// ~~
+
+double getClampValue(
+    double real,
+    double minimumReal,
+    double maximumReal
+    )
+{
+    if ( real < minimumReal )
+    {
+        return minimumReal;
+    }
+    else if ( real > maximumReal )
+    {
+        return maximumReal;
+    }
+    else
+    {
+        return real;
+    }
+}
+
+// ~~
+
+double getRadianAngle(
+    double degreeAngle
+    )
+{
+    return degreeAngle * degreesToRadians;
+}
+
+// ~~
+
+double getDegreeAngle(
+    double radianAngle
+    )
+{
+    return radianAngle * radiansToDegrees;
+}
+
+// ~~
+
+double getRandom(
+    )
+{
+    return Random().nextDouble();
+}
+
+// ~~
+
+double getRandomReal(
+    double firstReal,
+    double postReal
+    )
+{
+    return firstReal + getRandom() * ( postReal - firstReal );
+}
+
+// ~~
+
+int getRandomInteger(
+    int firstInteger,
+    int lastInteger
+    )
+{
+    return getFloorInteger( firstInteger + getRandom() * ( lastInteger - firstInteger + 1 ) );
+}
+
+// ~~
+
 bool isString(
     Object? object
     )
 {
     return object is String;
+}
+
+// ~~
+
+String getEscapedText(
+    String source
+    )
+{
+    return Uri.encodeFull( source );
+}
+
+// ~~
+
+String getUnescapedText(
+    String source
+    )
+{
+    return Uri.decodeFull( source );
+}
+
+// ~~
+
+String getEncodedUri(
+    String uri
+    )
+{
+    return Uri.encodeFull( uri );
+}
+
+// ~~
+
+String getDecodedUri(
+    String uri
+    )
+{
+    return Uri.decodeFull( uri );
+}
+
+// ~~
+
+String getJsonText(
+    dynamic object
+    )
+{
+    return jsonEncode( object );
+}
+
+// ~~
+
+dynamic getJsonObject(
+    String source
+    )
+{
+    return jsonDecode( source );
 }
 
 // ~~

@@ -1,3 +1,7 @@
+## 2.0.10
+
+* Added math functions
+
 ## 2.0.9
 
 * Added real to text function
