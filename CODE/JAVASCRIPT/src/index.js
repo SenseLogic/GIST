@@ -42,12 +42,12 @@ export const
 
 // -- VARIABLES
 
-export let,
+export let
     languageTag = 'en',
     continentCode = '',
     countryCode = '',
     languageCode = 'en',
-    defaultLanguageCode = 'en'
+    defaultLanguageCode = 'en',
     textBySlugMap = new Map(),
     processedLineTagArray = [],
     processedDualTagArray = [],
@@ -3209,7 +3209,7 @@ export function getProcessedText(
 {
     if ( !isString( text ) )
     {
-        text = getLocalizedText( text, $languageTagStore );
+        text = getLocalizedText( text );
     }
 
     for ( let processedDualTag of processedDualTagArray )
@@ -3244,7 +3244,7 @@ export function getProcessedMultilineText(
 {
     if ( !isString( text ) )
     {
-        text = getLocalizedText( text, $languageTagStore );
+        text = getLocalizedText( text );
     }
 
     let processedLineTagCount = processedLineTagArray.length;
