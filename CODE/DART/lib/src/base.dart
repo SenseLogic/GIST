@@ -23,6 +23,7 @@ Logger
 Uuid
     uuidGenerator = Uuid();
 String
+    languageTag = 'en',
     continentCode = '',
     countryCode = '',
     languageCode = 'en',
@@ -968,7 +969,8 @@ String getUuidFromTuid(
 
 // ~~
 
-String getRandomTuid()
+String getRandomTuid(
+    )
 {
     return getTuidFromUuid( getRandomUuid() );
 }
@@ -2651,16 +2653,44 @@ String getContinentSlugFromContinentCode(
 
 // ~~
 
+void setLanguageTag(
+    String languageTag_
+    )
+{
+    languageTag = languageTag_;
+}
+
+// ~~
+
+String getLanguageTag(
+    )
+{
+    return languageTag;
+}
+
+// ~~
+
+void updateLanguageTag(
+    )
+{
+    languageTag = '$languageCode-$countryCode-$continentCode';
+}
+
+// ~~
+
 void setContinentCode(
     String continentCode_
     )
 {
     continentCode = continentCode_;
+
+    updateLanguageTag();
 }
 
 // ~~
 
-String getContinentCode()
+String getContinentCode(
+    )
 {
     return continentCode;
 }
@@ -2677,7 +2707,8 @@ void setCountryCode(
 
 // ~~
 
-String getCountryCode()
+String getCountryCode(
+    )
 {
     return countryCode;
 }
@@ -2689,6 +2720,8 @@ void setLanguageCode(
     )
 {
     languageCode = languageCode_;
+
+    updateLanguageTag();
 }
 
 // ~~
@@ -2709,7 +2742,8 @@ void setDefaultLanguageCode(
 
 // ~~
 
-String getDefaultLanguageCode()
+String getDefaultLanguageCode(
+    )
 {
     return defaultLanguageCode;
 }
@@ -2785,13 +2819,20 @@ bool matchesLanguages(
 
 String getTranslatedText(
     String multilingualText,
-    String languageTag, [
-    String defaultLanguageTag = 'en' ]
+    [
+        String? languageTag_,
+        String defaultLanguageTag = 'en'
+    ]
     )
 {
     List<String> translatedTextArray = multilingualText.split( '¨' );
 
-    if ( languageTag != defaultLanguageTag )
+    if ( languageTag_ == null )
+    {
+        languageTag_ = languageTag;
+    }
+
+    if ( languageTag_ != defaultLanguageTag )
     {
         for ( int translatedTextIndex = translatedTextArray.length - 1; translatedTextIndex >= 1; --translatedTextIndex )
         {
@@ -2800,7 +2841,7 @@ String getTranslatedText(
 
             if ( colonCharacterIndex >= 0 )
             {
-                if ( matchesLanguages( languageTag, translatedText.substring( 0, colonCharacterIndex ) ) )
+                if ( matchesLanguages( languageTag_, translatedText.substring( 0, colonCharacterIndex ) ) )
                 {
                     return translatedText.substring( colonCharacterIndex + 1 );
                 }
@@ -2916,12 +2957,15 @@ String getMultilingualText(
 // ~~
 
 String getLocalizedText(
-    String text
+    String text,
+    [
+        String? languageTag
+    ]
     )
 {
     if ( isMultilingualText( text ) )
     {
-        return getTranslatedText( text, '$languageCode-$countryCode-$continentCode' );
+        return getTranslatedText( text, languageTag );
     }
     else
     {
@@ -2932,12 +2976,15 @@ String getLocalizedText(
 // ~~
 
 String getLocalizedTextBySlug(
-    String textSlug
+    String textSlug,
+    [
+        String? languageTag
+    ]
     )
 {
     if ( textBySlugMap.containsKey( textSlug ) )
     {
-        return getLocalizedText( textBySlugMap[ textSlug ]! );
+        return getLocalizedText( textBySlugMap[ textSlug ]!, languageTag );
     }
     else
     {

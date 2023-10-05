@@ -42,11 +42,12 @@ export const
 
 // -- VARIABLES
 
-export let
+export let,
+    languageTag = 'en',
     continentCode = '',
     countryCode = '',
     languageCode = 'en',
-    defaultLanguageCode = 'en',
+    defaultLanguageCode = 'en'
     textBySlugMap = new Map(),
     processedLineTagArray = [],
     processedDualTagArray = [],
@@ -123,7 +124,7 @@ export function logError(
 
 // ~~
 
-function getClampValue(
+export function getClampValue(
     value,
     minimumValue,
     maximumValue
@@ -702,7 +703,7 @@ export function getUnaccentedCharacter(
 
 // ~~
 
-function getUnaccentedText(
+export function getUnaccentedText(
     text,
     languageCode = ''
     )
@@ -2788,11 +2789,38 @@ export function getBrowserLanguageCode(
 
 // ~~
 
+export function setLanguageTag(
+    languageTag_
+    )
+{
+    languageTag = languageTag_;
+}
+
+// ~~
+
+export function getLanguageTag(
+    )
+{
+    return languageTag;
+}
+
+// ~~
+
+export function updateLanguageTag(
+    )
+{
+    languageTag = languageCode + '-' + countryCode + '-' + continentCode;
+}
+
+// ~~
+
 export function setContinentCode(
     continentCode_
     )
 {
     continentCode = continentCode_;
+
+    updateLanguageTag();
 }
 
 // ~~
@@ -2829,6 +2857,8 @@ export function setLanguageCode(
     )
 {
     languageCode = languageCode_;
+
+    updateLanguageTag();
 }
 
 // ~~
@@ -2927,13 +2957,18 @@ export function matchesLanguages(
 
 export function getTranslatedText(
     multilingualText,
-    languageTag,
+    languageTag_,
     defaultLanguageTag = 'en'
     )
 {
     let translatedTextArray = multilingualText.split( '¨' );
 
-    if ( languageTag !== defaultLanguageTag )
+    if ( languageTag_ === undefined )
+    {
+        languageTag_ = languageTag;
+    }
+
+    if ( languageTag_ !== defaultLanguageTag )
     {
         for ( let translatedTextIndex = translatedTextArray.length - 1;
               translatedTextIndex >= 1;
@@ -2944,7 +2979,7 @@ export function getTranslatedText(
 
             if ( colonCharacterIndex >= 0 )
             {
-                if ( matchesLanguages( languageTag, translatedText.substring( 0, colonCharacterIndex ) ) )
+                if ( matchesLanguages( languageTag_, translatedText.substring( 0, colonCharacterIndex ) ) )
                 {
                     return translatedText.substring( colonCharacterIndex + 1 );
                 }
@@ -3065,12 +3100,13 @@ export function getMultilingualText(
 // ~~
 
 export function getLocalizedText(
-    text
+    text,
+    languageTag
     )
 {
     if ( isMultilingualText( text ) )
     {
-        return getTranslatedText( text, languageCode + '-' + countryCode + '-' + continentCode );
+        return getTranslatedText( text, languageTag );
     }
     else
     {
@@ -3081,12 +3117,13 @@ export function getLocalizedText(
 // ~~
 
 export function getLocalizedTextBySlug(
-    textSlug
+    textSlug,
+    languageTag
     )
 {
     if ( textBySlugMap.has( textSlug ) )
     {
-        return getLocalizedText( textBySlugMap.get( textSlug ) );
+        return getLocalizedText( textBySlugMap.get( textSlug ), languageTag );
     }
     else
     {
@@ -3172,7 +3209,7 @@ export function getProcessedText(
 {
     if ( !isString( text ) )
     {
-        text = getLocalizedText( text );
+        text = getLocalizedText( text, $languageTagStore );
     }
 
     for ( let processedDualTag of processedDualTagArray )
@@ -3207,7 +3244,7 @@ export function getProcessedMultilineText(
 {
     if ( !isString( text ) )
     {
-        text = getLocalizedText( text );
+        text = getLocalizedText( text, $languageTagStore );
     }
 
     let processedLineTagCount = processedLineTagArray.length;

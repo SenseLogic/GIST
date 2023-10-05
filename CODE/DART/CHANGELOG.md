@@ -1,3 +1,7 @@
+## 2.0.11
+
+* Added languageTag variable
+
 ## 2.0.10
 
 * Added math functions
