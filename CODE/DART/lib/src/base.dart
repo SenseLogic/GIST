@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:crypto/crypto.dart';
-import 'package:uuid/uuid.dart';
 import 'package:logger/logger.dart';
+import 'package:uuid/uuid.dart';
 
 // -- CONSTANTS
 

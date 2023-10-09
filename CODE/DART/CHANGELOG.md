@@ -1,3 +1,7 @@
+## 2.0.12
+
+* Fixed imports
+
 ## 2.0.11
 
 * Added languageTag variable
