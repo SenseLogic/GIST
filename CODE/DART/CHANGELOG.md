@@ -1,3 +1,7 @@
+## 2.0.13
+
+* Fixed time functions
+
 ## 2.0.12
 
 * Fixed imports

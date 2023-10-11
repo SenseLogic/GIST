@@ -17,7 +17,9 @@ export const
     nullTime = {
         hour : 0,
         minute : 0,
-        second : 0.0
+        second : 0,
+        millisecond : 0,
+        microsecond : 0
         },
     nullDateTime = {
         year : 1000,
@@ -25,7 +27,9 @@ export const
         day : 1,
         hour : 0,
         minute : 0,
-        second : 0.0
+        second : 0,
+        millisecond : 0,
+        microsecond : 0
         },
     minimumInteger = -9007199254740991,
     maximumInteger = 9007199254740991,
@@ -894,7 +898,7 @@ export function getTimeUuid(
     )
 {
     return getUuidFromHexadecimalText(
-        getHexadecimalTextFromInteger( ( getMillisecondTimestamp() + 12219292800000 ) * 10000 )
+        getHexadecimalTextFromInteger( ( getCurrentMillisecondCount() + 12219292800000 ) * 10000 )
         + getRandomHexadecimalText( 16 )
         );
 }
@@ -935,7 +939,7 @@ export function getTuidFromUuid(
 
 // ~~
 
-export function getMillisecondTimestamp(
+export function getCurrentMillisecondCount(
     )
 {
     if ( isBrowser )
@@ -948,6 +952,34 @@ export function getMillisecondTimestamp(
 
         return parseInt( hrTime[ 0 ] * 1000 + hrTime[ 1 ] / 1000000 );
     }
+}
+
+// ~~
+
+export function getCurrentLocalDateTime(
+    )
+{
+    return new Date();
+}
+
+// ~~
+
+export function getCurrentUniversalDateTime(
+    )
+{
+    let currentLocalDateTime = new Date();
+
+    return new Date(
+        Date.UTC(
+            currentLocalDateTime.getUTCFullYear(),
+            currentLocalDateTime.getUTCMonth(),
+            currentLocalDateTime.getUTCDate(),
+            currentLocalDateTime.getUTCHours(),
+            currentLocalDateTime.getUTCMinutes(),
+            currentLocalDateTime.getUTCSeconds(),
+            currentLocalDateTime.getUTCMilliseconds()
+            )
+        );
 }
 
 // ~~
@@ -996,7 +1028,9 @@ export function getLocalTime(
     return {
         hour : systemDate.getHours(),
         minute : systemDate.getMinutes(),
-        second : systemDate.getSeconds()
+        second : systemDate.getSeconds(),
+        millisecond : systemDate.getMilliseconds(),
+        microsecond : 0
         };
 }
 
@@ -1014,7 +1048,9 @@ export function getLocalDateTime(
         day : systemDate.getDate(),
         hour : systemDate.getHours(),
         minute : systemDate.getMinutes(),
-        second : systemDate.getSeconds()
+        second : systemDate.getSeconds(),
+        millisecond : systemDate.getMilliseconds(),
+        microsecond : 0
         };
 }
 
@@ -1044,7 +1080,9 @@ export function getUniversalTime(
     return {
         hour : systemDate.getUTCHours(),
         minute : systemDate.getUTCMinutes(),
-        second : systemDate.getUTCSeconds()
+        second : systemDate.getUTCSeconds(),
+        millisecond : systemDate.getUTCMilliseconds(),
+        microsecond : 0
         };
 }
 
@@ -1063,22 +1101,55 @@ export function getUniversalDateTime(
         hour : systemDate.getUTCHours(),
         minute : systemDate.getUTCMinutes(),
         second : systemDate.getUTCSeconds(),
-        millisecond : systemDate.getUTCMilliseconds()
+        millisecond : systemDate.getUTCMilliseconds(),
+        microsecond : 0
         };
+}
+
+// ~~
+
+export function getSubsecondTimeText(
+    dateTime
+    )
+{
+    if ( dateTime.millisecond !== 0
+         || dateTime.microsecond !== 0 )
+    {
+        if ( dateTime.microsecond !== 0 )
+        {
+            return (
+                '.'
+                + getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' )
+                + getLeftPaddedText( dateTime.microsecond.toString(), 3, '0' )
+                );
+        }
+        else
+        {
+            return (
+                '.'
+                + getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' )
+                );
+        }
+    }
+    else
+    {
+        return '';
+    }
 }
 
 // ~~
 
 export function getDateText(
     date,
+    infix = ':',
     suffix = ''
     )
 {
     return (
         getLeftPaddedText( date.year.toString(), 4, '0' )
-        + ':'
+        + infix
         + getLeftPaddedText( date.month.toString(), 2, '0' )
-        + ':'
+        + infix
         + getLeftPaddedText( date.day.toString(), 2, '0' )
         + suffix
         );
@@ -1088,14 +1159,15 @@ export function getDateText(
 
 export function getTimeText(
     time,
+    infix = '-',
     suffix = ''
     )
 {
     return (
         getLeftPaddedText( time.hour.toString(), 2, '0' )
-        + '-'
+        + infix
         + getLeftPaddedText( time.minute.toString(), 2, '0' )
-        + '-'
+        + infix
         + getLeftPaddedText( time.second.toString(), 2, '0' )
         + suffix
         );
@@ -1105,48 +1177,25 @@ export function getTimeText(
 
 export function getDateTimeText(
     dateTime,
+    dateInfix = '-',
     infix = ' ',
+    timeInfix = ':',
     suffix = ''
     )
 {
     return (
         getLeftPaddedText( dateTime.year.toString(), 4, '0' )
-        + '-'
+        + dateInfix
         + getLeftPaddedText( dateTime.month.toString(), 2, '0' )
-        + '-'
+        + dateInfix
         + getLeftPaddedText( dateTime.day.toString(), 2, '0' )
         + infix
         + getLeftPaddedText( dateTime.hour.toString(), 2, '0' )
-        + ':'
+        + timeInfix
         + getLeftPaddedText( dateTime.minute.toString(), 2, '0' )
-        + ':'
+        + timeInfix
         + getLeftPaddedText( dateTime.second.toString(), 2, '0' )
-        + suffix
-        );
-}
-
-// ~~
-
-export function getTimestampText(
-    timestamp,
-    infix = ' ',
-    suffix = ''
-    )
-{
-    return (
-        getLeftPaddedText( timestamp.year.toString(), 4, '0' )
-        + '-'
-        + getLeftPaddedText( timestamp.month.toString(), 2, '0' )
-        + '-'
-        + getLeftPaddedText( timestamp.day.toString(), 2, '0' )
-        + infix
-        + getLeftPaddedText( timestamp.hour.toString(), 2, '0' )
-        + ':'
-        + getLeftPaddedText( timestamp.minute.toString(), 2, '0' )
-        + ':'
-        + getLeftPaddedText( timestamp.second.toString(), 2, '0' )
-        + '.'
-        + getLeftPaddedText( timestamp.millisecond.toString(), 3, '0' )
+        + getSubsecondTimeText( dateTime )
         + suffix
         );
 }
@@ -1171,8 +1220,7 @@ export function getDateTimeSuffix(
         + getLeftPaddedText( dateTime.minute.toString(), 2, '0' )
         + infix
         + getLeftPaddedText( dateTime.second.toString(), 2, '0' )
-        + infix
-        + getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' )
+        + getSubsecondTimeText( dateTime )
         + suffix
         );
 }

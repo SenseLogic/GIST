@@ -944,7 +944,7 @@ String getTimeUuid(
     return
         getUuidFromHexadecimalText(
             getHexadecimalTextFromInteger(
-                ( getMillisecondTimestamp() + 12219292800000 ) * 10000
+                ( getCurrentMillisecondCount() + 12219292800000 ) * 10000
                 )
             + getRandomHexadecimalText( 16 )
             );
@@ -986,7 +986,7 @@ String getTuidFromUuid(
 
 // ~~
 
-int getMillisecondTimestamp(
+int getCurrentMillisecondCount(
     )
 {
     return DateTime.now().millisecondsSinceEpoch;
@@ -994,20 +994,36 @@ int getMillisecondTimestamp(
 
 // ~~
 
-DateTime parseLocalDateTimeText(
-    String localDateTimeText
+DateTime getCurrentLocalDateTime(
     )
 {
-    return DateTime.parse( localDateTimeText );
+    return DateTime.now();
 }
 
 // ~~
 
-DateTime parseUniversalDateTimeText(
-    String universalDateTimeText
+DateTime getCurrentUniversalDateTime(
     )
 {
-    var dateTime = DateTime.parse( universalDateTimeText );
+    return DateTime.now().toUtc();
+}
+
+// ~~
+
+DateTime getLocalDateTime(
+    String dateTimeText
+    )
+{
+    return DateTime.parse( dateTimeText );
+}
+
+// ~~
+
+DateTime getUniversalDateTime(
+    String dateTimeText
+    )
+{
+    var dateTime = DateTime.parse( dateTimeText );
 
     return
         DateTime.utc(
@@ -1024,200 +1040,31 @@ DateTime parseUniversalDateTimeText(
 
 // ~~
 
-DateTime getLocalTimestamp(
-    [
-        String? text
-    ]
+String getSubsecondTimeText(
+    dateTime
     )
 {
-    if ( text != null
-         && text.isNotEmpty )
+    if ( dateTime.millisecond != 0
+         || dateTime.microsecond != 0 )
     {
-        return parseLocalDateTimeText( text );
+        if ( dateTime.microsecond != 0 )
+        {
+            return
+                '.'
+                '${ dateTime.millisecond.toString().padLeft( 3, '0' ) }'
+                '${ dateTime.microsecond.toString().padLeft( 3, '0' ) }';
+        }
+        else
+        {
+            return
+                '.'
+                '${ dateTime.millisecond.toString().padLeft( 3, '0' ) }';
+        }
     }
     else
     {
-        return DateTime.now();
+        return '';
     }
-}
-
-// ~~
-
-DateTime getLocalDateTime(
-    [
-        String? text
-    ]
-    )
-{
-    if ( text != null
-         && text.isNotEmpty )
-    {
-        return parseLocalDateTimeText( text );
-    }
-    else
-    {
-        return DateTime.now();
-    }
-}
-
-// ~~
-
-DateTime getLocalDate(
-    [
-        String? text
-    ]
-    )
-{
-    if ( text != null
-         && text.isNotEmpty )
-    {
-        return parseLocalDateTimeText( text );
-    }
-    else
-    {
-        return DateTime.now();
-    }
-}
-
-// ~~
-
-DateTime getLocalTime(
-    [
-        String? text
-    ]
-    )
-{
-    if ( text != null
-         && text.isNotEmpty )
-    {
-        return parseLocalDateTimeText( text );
-    }
-    else
-    {
-        return DateTime.now();
-    }
-}
-
-// ~~
-
-DateTime getUniversalTimestamp(
-    [
-        String? text
-    ]
-    )
-{
-    if ( text != null
-         && text.isNotEmpty )
-    {
-        return parseUniversalDateTimeText( text );
-    }
-    else
-    {
-        return DateTime.now().toUtc();
-    }
-}
-
-// ~~
-
-DateTime getUniversalDateTime(
-    [
-        String? text
-    ]
-    )
-{
-    if ( text != null
-         && text.isNotEmpty )
-    {
-        return parseUniversalDateTimeText( text );
-    }
-    else
-    {
-        return DateTime.now().toUtc();
-    }
-}
-
-// ~~
-
-DateTime getUniversalDate(
-    [
-        String? text
-    ]
-    )
-{
-    if ( text != null
-         && text.isNotEmpty )
-    {
-        return parseUniversalDateTimeText( text );
-    }
-    else
-    {
-        return DateTime.now().toUtc();
-    }
-}
-
-// ~~
-
-DateTime getUniversalTime(
-    [
-        String? text
-    ]
-    )
-{
-    if ( text != null
-         && text.isNotEmpty )
-    {
-        return parseUniversalDateTimeText( text );
-    }
-    else
-    {
-        return DateTime.now().toUtc();
-    }
-}
-
-// ~~
-
-String getTimestampText(
-    DateTime dateTime
-    )
-{
-    return
-        '${ dateTime.year }'
-        '-'
-        '${ dateTime.month.toString().padLeft( 2, '0' ) }'
-        '-'
-        '${ dateTime.day.toString().padLeft( 2, '0' ) }'
-        ' '
-        '${ dateTime.hour.toString().padLeft( 2, '0' ) }'
-        ':'
-        '${ dateTime.minute.toString().padLeft( 2, '0' ) }'
-        ':'
-        '${ dateTime.second.toString().padLeft( 2, '0' ) }'
-        '.'
-        '${ dateTime.millisecond.toString().padLeft( 3, '0' ) }'
-        '${ dateTime.microsecond.toString().padLeft( 6, '0' ) }';
-}
-
-// ~~
-
-String getDateTimeText(
-    DateTime dateTime
-    )
-{
-    return
-        '${ dateTime.year }'
-        '-'
-        '${ dateTime.month.toString().padLeft( 2, '0' ) }'
-        '-'
-        '${ dateTime.day.toString().padLeft( 2, '0' ) }'
-        ' '
-        '${ dateTime.hour.toString().padLeft( 2, '0' ) }'
-        ':'
-        '${ dateTime.minute.toString().padLeft( 2, '0' ) }'
-        ':'
-        '${ dateTime.second.toString().padLeft( 2, '0' ) }'
-        '.'
-        '${ dateTime.millisecond.toString().padLeft( 3, '0' ) }'
-        '${ dateTime.microsecond.toString().padLeft( 3, '0' ) }';
 }
 
 // ~~
@@ -1246,7 +1093,43 @@ String getTimeText(
         '${ dateTime.minute.toString().padLeft( 2, '0' ) }'
         ':'
         '${ dateTime.second.toString().padLeft( 2, '0' ) }'
-        '.'
+        '${ getSubsecondTimeText( dateTime ) }';
+}
+
+// ~~
+
+String getDateTimeText(
+    DateTime dateTime
+    )
+{
+    return
+        '${ dateTime.year }'
+        '-'
+        '${ dateTime.month.toString().padLeft( 2, '0' ) }'
+        '-'
+        '${ dateTime.day.toString().padLeft( 2, '0' ) }'
+        ' '
+        '${ dateTime.hour.toString().padLeft( 2, '0' ) }'
+        ':'
+        '${ dateTime.minute.toString().padLeft( 2, '0' ) }'
+        ':'
+        '${ dateTime.second.toString().padLeft( 2, '0' ) }'
+        '${ getSubsecondTimeText( dateTime ) }';
+}
+
+// ~~
+
+String getDateTimeSuffix(
+    DateTime dateTime
+    )
+{
+    return
+        '${ dateTime.year }'
+        '${ dateTime.month.toString().padLeft( 2, '0' ) }'
+        '${ dateTime.day.toString().padLeft( 2, '0' ) }'
+        '${ dateTime.hour.toString().padLeft( 2, '0' ) }'
+        '${ dateTime.minute.toString().padLeft( 2, '0' ) }'
+        '${ dateTime.second.toString().padLeft( 2, '0' ) }'
         '${ dateTime.millisecond.toString().padLeft( 3, '0' ) }'
         '${ dateTime.microsecond.toString().padLeft( 3, '0' ) }';
 }

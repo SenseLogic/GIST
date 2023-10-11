@@ -2,14 +2,14 @@ name: senselogic_gist
 description: Reusable base functions.
 homepage: https://github.com/senselogic/GIST
 repository: https://github.com/senselogic/GIST
-version: 2.0.12
+version: 2.0.13
 
 environment:
   sdk: '>=2.14.0 <4.0.0'
 
 dependencies:
   crypto: ^3.0.3
-  logger: ^2.0.2
-  uuid: ^4.0.0
+  logger: ^2.0.2+1
+  uuid: ^4.1.0
 
 dev_dependencies:
