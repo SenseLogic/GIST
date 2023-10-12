@@ -1,3 +1,7 @@
+## 2.0.14
+
+* Added map functions
+
 ## 2.0.13
 
 * Fixed time functions

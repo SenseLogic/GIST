@@ -388,6 +388,46 @@ bool isString(
 
 // ~~
 
+Map<KeyType, ElementType> getMapByCode<KeyType, ElementType>(
+    List<dynamic> elementList
+    )
+{
+    final Map<KeyType, ElementType> map = {};
+
+    for ( final element in elementList )
+    {
+        if ( element != null
+             && element.code != null )
+        {
+            map[ element.code ] = element;
+        }
+    }
+
+    return map;
+}
+
+// ~~
+
+Map<KeyType, ElementType> getMapById<KeyType, ElementType>(
+    List<dynamic> elementList
+    )
+{
+    final Map<KeyType, ElementType> map = {};
+
+    for ( final element in elementList )
+    {
+        if ( element != null
+             && element.id != null )
+        {
+            map[ element.id ] = element;
+        }
+    }
+
+    return map;
+}
+
+// ~~
+
 String getEscapedText(
     String source
     )

@@ -327,9 +327,57 @@ export function isElement(
 
 // ~~
 
+export function getMapByCode(
+    array,
+    default_value = null
+    )
+{
+    if ( array )
+    {
+        let map = {};
+
+        for ( let element of array )
+        {
+            map[ element.code ] = element;
+        }
+
+        return map;
+    }
+    else
+    {
+        return default_value;
+    }
+}
+
+// ~~
+
+export function getMapById(
+    array,
+    default_value = null
+    )
+{
+    if ( array )
+    {
+        let map = {};
+
+        for ( let element of array )
+        {
+            map[ element.id ] = element;
+        }
+
+        return map;
+    }
+    else
+    {
+        return default_value;
+    }
+}
+
+// ~~
+
 export function getMap(
     array,
-    keyName = "id",
+    keyName = 'id',
     default_value = null
     )
 {
