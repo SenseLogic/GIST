@@ -400,6 +400,57 @@ export function getMap(
 
 // ~~
 
+export function getIntegerComparison(
+    firstInteger,
+    secondInteger
+    )
+{
+    return firstInteger - secondInteger;
+}
+
+// ~~
+
+export function getRealComparison(
+    firstReal,
+    secondReal
+    )
+{
+    return firstReal - secondReal;
+}
+
+// ~~
+
+export function getTextComparison(
+    firstText,
+    secondText
+    )
+{
+    if ( firstText < secondText )
+    {
+        return -1;
+    }
+    else if ( firstText > secondText )
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+// ~~
+
+export function getNaturalTextComparison(
+    firstText,
+    secondText
+    )
+{
+    return firstText.localeCompare( second_text, undefined, { numeric : true } );
+}
+
+// ~~
+
 export function removePrefix(
     text,
     prefix

@@ -4,6 +4,7 @@ import 'dart:core';
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
+import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -478,6 +479,68 @@ dynamic getJsonObject(
     )
 {
     return jsonDecode( source );
+}
+
+// ~~
+
+int getIntegerComparison(
+    firstInteger,
+    secondInteger
+    )
+{
+    return firstInteger - secondInteger;
+}
+
+// ~~
+
+int getRealComparison(
+    double firstReal,
+    double secondReal
+    )
+{
+    if ( firstReal < secondReal )
+    {
+        return -1;
+    }
+    else if ( firstReal > secondReal )
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+// ~~
+
+int getTextComparison(
+    String firstText,
+    String secondText
+    )
+{
+    if ( firstText < secondText )
+    {
+        return -1;
+    }
+    else if ( firstText > secondText )
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+// ~~
+
+int getNaturalTextComparison(
+    String firstText,
+    String secondText
+    )
+{
+    return compareNatural( firstText, second_text );
 }
 
 // ~~
