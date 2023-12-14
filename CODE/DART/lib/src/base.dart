@@ -519,18 +519,7 @@ int getTextComparison(
     String secondText
     )
 {
-    if ( firstText < secondText )
-    {
-        return -1;
-    }
-    else if ( firstText > secondText )
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+    return firstText.compareTo( secondText );
 }
 
 // ~~
@@ -540,7 +529,7 @@ int getNaturalTextComparison(
     String secondText
     )
 {
-    return compareNatural( firstText, second_text );
+    return compareNatural( firstText, secondText );
 }
 
 // ~~

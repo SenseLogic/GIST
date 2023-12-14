@@ -1319,7 +1319,8 @@ export function getDateTimeSuffix(
         + getLeftPaddedText( dateTime.minute.toString(), 2, '0' )
         + infix
         + getLeftPaddedText( dateTime.second.toString(), 2, '0' )
-        + getSubsecondTimeText( dateTime )
+        + getLeftPaddedText( dateTime.millisecond.toString(), 3, '0' )
+        + getLeftPaddedText( dateTime.microsecond.toString(), 3, '0' )
         + suffix
         );
 }
