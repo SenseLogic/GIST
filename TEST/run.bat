@@ -1,1 +1,1 @@
-node test.js
+yarn dev --open

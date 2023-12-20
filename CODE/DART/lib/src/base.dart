@@ -2762,9 +2762,9 @@ String getUntranslatedText(
 
 // ~~
 
-bool matchesLanguages(
-    String multilingualText,
-    String languageSpecifier
+bool matchesLanguageSpecifier(
+    String languageSpecifier,
+    String multilingualText
     )
 {
     List<String> languageTagPartArray = ( '$multilingualText--' ).split( '-' );
@@ -2816,7 +2816,7 @@ String getTranslatedText(
 
             if ( colonCharacterIndex >= 0 )
             {
-                if ( matchesLanguages( languageTag_, translatedText.substring( 0, colonCharacterIndex ) ) )
+                if ( matchesLanguageSpecifier( translatedText.substring( 0, colonCharacterIndex ), languageTag_ ) )
                 {
                     return translatedText.substring( colonCharacterIndex + 1 );
                 }

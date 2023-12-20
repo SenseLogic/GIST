@@ -42,7 +42,9 @@ export const
     integerExpression = /^-?[0-9][0-9]*$/,
     realExpression = /^-?[0-9][0-9]*\.[0-9]*$/,
     numericExpression = /^-?[0-9][0-9]*\.?[0-9]*$/,
-    slugExpression = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+    slugExpression = /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+    valueExpression = /^(.*)(<|<=|=|<>|>=|>)(.*)$/,
+    invalidCharacterExpression = /[^\p{L}\p{N}\-_.]/gu;
 
 // -- VARIABLES
 
@@ -1930,7 +1932,7 @@ export function getValidFileName(
     fileName
     )
 {
-    return replaceIteratively( fileName.replace( /[^\p{L}\p{N}\-_.]/gu, '_' ), '__', '_' );
+    return replaceIteratively( fileName.replace( invalidCharacterExpression, '_' ), '__', '_' );
 }
 
 // ~~
@@ -3073,12 +3075,12 @@ export function getUntranslatedText(
 
 // ~~
 
-export function matchesLanguages(
-    multilingualText,
-    languageSpecifier
+export function matchesLanguageSpecifier(
+    languageSpecifier,
+    languageTag
     )
 {
-    let languageTagPartArray = ( multilingualText + '--' ).split( '-' );
+    let languageTagPartArray = ( languageTag + '--' ).split( '-' );
 
     for ( let languageSpecifierTag of languageSpecifier.split( ',' ) )
     {
@@ -3103,12 +3105,117 @@ export function matchesLanguages(
 
 // ~~
 
+export function matchesValueSpecifier(
+    valueSpecifier,
+    valueByNameMap = {}
+    )
+{
+    let match = valueSpecifier.match( valueExpression );
+
+    if ( match )
+    {
+        let valueName = match[ 1 ];
+        let operator = match[ 2 ];
+        let otherValue = match[ 3 ];
+
+        if ( valueName in valueByNameMap )
+        {
+            let value = valueByNameMap[ valueName ];
+
+            if ( typeof value === 'number' )
+            {
+                otherValue = Number( otherValue );
+            }
+
+            if ( ( operator === '='
+                   && value === otherValue )
+                 || ( operator === '<'
+                      && value < otherValue )
+                 || ( operator === '<='
+                      && value <= otherValue )
+                 || ( operator === '>='
+                      && value >= otherValue )
+                 || ( operator === '>'
+                      && value > otherValue )
+                 || ( operator === '<>'
+                      && value != otherValue ) )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    logWarning( 'Bad value specifier : ' + valueSpecifier );
+
+    return false;
+}
+
+// ~~
+
+export function matchesConditionSpecifier(
+    specifier,
+    valueByNameMap = {}
+    )
+{
+    for ( let valueSpecifier of specifier.split( ',' ) )
+    {
+        if ( matchesValueSpecifier( valueSpecifier, valueByNameMap ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// ~~
+
+export function matchesTranslationSpecifier(
+    translationSpecifier,
+    languageTag,
+    valueByNameMap = {}
+    )
+{
+    let conditionSpecifierArray = translationSpecifier.split( '&' );
+
+    if ( matchesLanguageSpecifier( conditionSpecifierArray[ 0 ], languageTag ) )
+    {
+        for ( let conditionSpecifierIndex = 1;
+              conditionSpecifierIndex < conditionSpecifierArray.length;
+              ++conditionSpecifierIndex )
+        {
+            if ( !matchesConditionSpecifier( conditionSpecifierArray[ conditionSpecifierIndex ], valueByNameMap ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+// ~~
+
 export function getTranslatedText(
     multilingualText,
     languageTag_,
+    valueByNameMap = {},
     defaultLanguageTag = 'en'
     )
 {
+    if ( languageTag_ !== undefined
+         && !isString( languageTag_ ) )
+    {
+        valueByNameMap = languageTag_;
+        languageTag_ = undefined;
+    }
+
     let translatedTextArray = multilingualText.split( '¨' );
 
     if ( languageTag_ === undefined )
@@ -3127,7 +3234,7 @@ export function getTranslatedText(
 
             if ( colonCharacterIndex >= 0 )
             {
-                if ( matchesLanguages( languageTag_, translatedText.substring( 0, colonCharacterIndex ) ) )
+                if ( matchesTranslationSpecifier( translatedText.substring( 0, colonCharacterIndex ), languageTag_, valueByNameMap ) )
                 {
                     return translatedText.substring( colonCharacterIndex + 1 );
                 }
@@ -3249,12 +3356,13 @@ export function getMultilingualText(
 
 export function getLocalizedText(
     text,
-    languageTag
+    languageTag,
+    valueByNameMap = {}
     )
 {
     if ( isMultilingualText( text ) )
     {
-        return getTranslatedText( text, languageTag );
+        return getTranslatedText( text, languageTag, valueByNameMap );
     }
     else
     {
@@ -3266,12 +3374,13 @@ export function getLocalizedText(
 
 export function getLocalizedTextBySlug(
     textSlug,
-    languageTag
+    languageTag,
+    valueByNameMap = {}
     )
 {
     if ( textBySlugMap.has( textSlug ) )
     {
-        return getLocalizedText( textBySlugMap.get( textSlug ), languageTag );
+        return getLocalizedText( textBySlugMap.get( textSlug ), languageTag, valueByNameMap );
     }
     else
     {
