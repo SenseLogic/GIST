@@ -3210,7 +3210,7 @@ export function getSubstitutedText(
     for ( let [ name, value ] of Object.entries( valueByNameMap ) )
     {
         console.log( name, value );
-        text = text.replaceAll( '{#' + name + '#}', value );
+        text = text.replaceAll( '{' + name + '}', value );
     }
 
     return text;
