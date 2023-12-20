@@ -157,19 +157,19 @@
         setCountryCode( 'FR' );
         check( getLocalizedText( multilingualText ), 'US' );
 
-        multilingualText = 'Bathrooms¨en&n=1:Bathroom¨fr:Salles de bain¨fr&n<2:Salle de bain';
+        multilingualText = '{#n#} bathrooms¨en&n=1:{#n#} bathroom¨fr:{#n#} salles de bain¨fr&n<2:{#n#} salle de bain';
 
         setLanguageCode( 'en' );
         setCountryCode( 'US' );
-        check( getLocalizedText( multilingualText, { n: 0 } ), 'Bathrooms' );
-        check( getLocalizedText( multilingualText, { n: 1 } ), 'Bathroom' );
-        check( getLocalizedText( multilingualText, { n: 2 } ), 'Bathrooms' );
+        check( getLocalizedText( multilingualText, { n: 0 } ), '0 bathrooms' );
+        check( getLocalizedText( multilingualText, { n: 1 } ), '1 bathroom' );
+        check( getLocalizedText( multilingualText, { n: 2 } ), '2 bathrooms' );
 
         setLanguageCode( 'fr' );
         setCountryCode( 'FR' );
-        check( getLocalizedText( multilingualText, { n: 0 } ), 'Salle de bain' );
-        check( getLocalizedText( multilingualText, { n: 1 } ), 'Salle de bain' );
-        check( getLocalizedText( multilingualText, { n: 2 } ), 'Salles de bain' );
+        check( getLocalizedText( multilingualText, { n: 0 } ), '0 salle de bain' );
+        check( getLocalizedText( multilingualText, { n: 1 } ), '1 salle de bain' );
+        check( getLocalizedText( multilingualText, { n: 2 } ), '2 salles de bain' );
 
         print( "-- ProcessedText --" );
 

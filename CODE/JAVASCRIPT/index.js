@@ -3202,6 +3202,22 @@ export function matchesTranslationSpecifier(
 
 // ~~
 
+export function getSubstitutedText(
+    text,
+    valueByNameMap
+    )
+{
+    for ( let [ name, value ] of Object.entries( valueByNameMap ) )
+    {
+        console.log( name, value );
+        text = text.replaceAll( '{#' + name + '#}', value );
+    }
+
+    return text;
+}
+
+// ~~
+
 export function getTranslatedText(
     multilingualText,
     languageTag_,
@@ -3236,13 +3252,13 @@ export function getTranslatedText(
             {
                 if ( matchesTranslationSpecifier( translatedText.substring( 0, colonCharacterIndex ), languageTag_, valueByNameMap ) )
                 {
-                    return translatedText.substring( colonCharacterIndex + 1 );
+                    return getSubstitutedText( translatedText.substring( colonCharacterIndex + 1 ), valueByNameMap );
                 }
             }
         }
     }
 
-    return translatedTextArray[ 0 ];
+    return getSubstitutedText( translatedTextArray[ 0 ], valueByNameMap );
 }
 
 // ~~
