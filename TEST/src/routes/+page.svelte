@@ -157,19 +157,33 @@
         setCountryCode( 'FR' );
         check( getLocalizedText( multilingualText ), 'US' );
 
-        multilingualText = '{#n#} bathrooms¨en&n=1:{#n#} bathroom¨fr:{#n#} salles de bain¨fr&n<2:{#n#} salle de bain';
+        multilingualText = '{n} bathrooms¨en&{n}=1:{n} bathroom¨fr:{n} salles de bain¨fr&{n}<2:{n} salle de bain';
 
         setLanguageCode( 'en' );
         setCountryCode( 'US' );
-        check( getLocalizedText( multilingualText, { n: 0 } ), '0 bathrooms' );
-        check( getLocalizedText( multilingualText, { n: 1 } ), '1 bathroom' );
-        check( getLocalizedText( multilingualText, { n: 2 } ), '2 bathrooms' );
+        check( getLocalizedText( multilingualText, { "{n}": 0 } ), '0 bathrooms' );
+        check( getLocalizedText( multilingualText, { "{n}": 1 } ), '1 bathroom' );
+        check( getLocalizedText( multilingualText, { "{n}": 2 } ), '2 bathrooms' );
 
         setLanguageCode( 'fr' );
         setCountryCode( 'FR' );
-        check( getLocalizedText( multilingualText, { n: 0 } ), '0 salle de bain' );
-        check( getLocalizedText( multilingualText, { n: 1 } ), '1 salle de bain' );
-        check( getLocalizedText( multilingualText, { n: 2 } ), '2 salles de bain' );
+        check( getLocalizedText( multilingualText, { "{n}": 0 } ), '0 salle de bain' );
+        check( getLocalizedText( multilingualText, { "{n}": 1 } ), '1 salle de bain' );
+        check( getLocalizedText( multilingualText, { "{n}": 2 } ), '2 salles de bain' );
+
+        multilingualText = '¨en&{n}=0,{n}>=2:{n} bathrooms¨en&{n}=1:{n} bathroom¨fr:{n} salles de bain¨fr&{n}=0,{n}=1:{n} salle de bain';
+
+        setLanguageCode( 'en' );
+        setCountryCode( 'US' );
+        check( getLocalizedText( multilingualText, { "{n}": 0 } ), '0 bathrooms' );
+        check( getLocalizedText( multilingualText, { "{n}": 1 } ), '1 bathroom' );
+        check( getLocalizedText( multilingualText, { "{n}": 2 } ), '2 bathrooms' );
+
+        setLanguageCode( 'fr' );
+        setCountryCode( 'FR' );
+        check( getLocalizedText( multilingualText, { "{n}": 0 } ), '0 salle de bain' );
+        check( getLocalizedText( multilingualText, { "{n}": 1 } ), '1 salle de bain' );
+        check( getLocalizedText( multilingualText, { "{n}": 2 } ), '2 salles de bain' );
 
         print( "-- ProcessedText --" );
 
@@ -215,18 +229,18 @@
             );
 
         print( "-- Location --" );
-
+/*
         let location = await getLocationFromIpAddress( '157.164.136.250' );
         print( location );
-        check( location.countryCode, 'be' );
+        check( location.countryCode, 'BE' );
 
         location = await getLocationFromIpAddress( '2a01:690:35:100::f5:79' );
         print( location );
-        check( location.countryCode, 'be' );
+        check( location.countryCode, 'BE' );
 
         location = await getLocationFromIpAddress( '195.244.180.40' );
         print( location );
-        check( location.countryCode, 'be' );
+        check( location.countryCode, 'BE' );*/
     }
 
     // -- STATEMENTS

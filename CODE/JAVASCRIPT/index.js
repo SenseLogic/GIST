@@ -43,7 +43,7 @@ export const
     realExpression = /^-?[0-9][0-9]*\.[0-9]*$/,
     numericExpression = /^-?[0-9][0-9]*\.?[0-9]*$/,
     slugExpression = /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-    valueExpression = /^(.*)(<|<=|=|<>|>=|>)(.*)$/,
+    valueExpression = /^(.*?)([<=>]+)(.*)$/,
     invalidCharacterExpression = /[^\p{L}\p{N}\-_.]/gu;
 
 // -- VARIABLES
@@ -3107,7 +3107,7 @@ export function matchesLanguageSpecifier(
 
 export function matchesValueSpecifier(
     valueSpecifier,
-    valueByNameMap = {}
+    valueByNameMap
     )
 {
     let match = valueSpecifier.match( valueExpression );
@@ -3118,7 +3118,8 @@ export function matchesValueSpecifier(
         let operator = match[ 2 ];
         let otherValue = match[ 3 ];
 
-        if ( valueName in valueByNameMap )
+        if ( valueByNameMap !== undefined
+             && valueName in valueByNameMap )
         {
             let value = valueByNameMap[ valueName ];
 
@@ -3158,7 +3159,7 @@ export function matchesValueSpecifier(
 
 export function matchesConditionSpecifier(
     specifier,
-    valueByNameMap = {}
+    valueByNameMap
     )
 {
     for ( let valueSpecifier of specifier.split( ',' ) )
@@ -3177,7 +3178,7 @@ export function matchesConditionSpecifier(
 export function matchesTranslationSpecifier(
     translationSpecifier,
     languageTag,
-    valueByNameMap = {}
+    valueByNameMap
     )
 {
     let conditionSpecifierArray = translationSpecifier.split( '&' );
@@ -3207,10 +3208,12 @@ export function getSubstitutedText(
     valueByNameMap
     )
 {
-    for ( let [ name, value ] of Object.entries( valueByNameMap ) )
+    if ( valueByNameMap !== undefined )
     {
-        console.log( name, value );
-        text = text.replaceAll( '{' + name + '}', value );
+        for ( let [ name, value ] of Object.entries( valueByNameMap ) )
+        {
+            text = text.replaceAll( name, value );
+        }
     }
 
     return text;
@@ -3221,7 +3224,7 @@ export function getSubstitutedText(
 export function getTranslatedText(
     multilingualText,
     languageTag_,
-    valueByNameMap = {},
+    valueByNameMap,
     defaultLanguageTag = 'en'
     )
 {
@@ -3373,7 +3376,7 @@ export function getMultilingualText(
 export function getLocalizedText(
     text,
     languageTag,
-    valueByNameMap = {}
+    valueByNameMap
     )
 {
     if ( isMultilingualText( text ) )
@@ -3391,7 +3394,7 @@ export function getLocalizedText(
 export function getLocalizedTextBySlug(
     textSlug,
     languageTag,
-    valueByNameMap = {}
+    valueByNameMap
     )
 {
     if ( textBySlugMap.has( textSlug ) )
