@@ -4,6 +4,21 @@
 
 Reusable base functions.
 
+## Features
+
+*   logging
+*   math
+*   string
+*   base64
+*   UUID
+*   random
+*   time
+*   date
+*   path
+*   continent
+*   country
+*   localization
+
 ## Version
 
 2.0

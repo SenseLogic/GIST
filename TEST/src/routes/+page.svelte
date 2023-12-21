@@ -229,7 +229,7 @@
             );
 
         print( "-- Location --" );
-/*
+
         let location = await getLocationFromIpAddress( '157.164.136.250' );
         print( location );
         check( location.countryCode, 'BE' );
@@ -240,7 +240,7 @@
 
         location = await getLocationFromIpAddress( '195.244.180.40' );
         print( location );
-        check( location.countryCode, 'BE' );*/
+        check( location.countryCode, 'BE' );
     }
 
     // -- STATEMENTS
