@@ -54,6 +54,8 @@ export let
     countryCode = '',
     languageCode = 'en',
     defaultLanguageCode = 'en',
+    substitutionPrefix = '{',
+    substitutionSuffix = '}',
     textBySlugMap = new Map(),
     processedLineTagArray = [],
     processedDualTagArray = [],
@@ -3038,6 +3040,40 @@ export function getDefaultLanguageCode(
 
 // ~~
 
+export function setSubstitutionPrefix(
+    substitutionPrefix_
+    )
+{
+    substitutionPrefix = substitutionPrefix_;
+}
+
+// ~~
+
+export function getSubstitutionPrefix(
+    )
+{
+    return substitutionPrefix;
+}
+
+// ~~
+
+export function setSubstitutionSuffix(
+    substitutionSuffix_
+    )
+{
+    substitutionSuffix = substitutionSuffix_;
+}
+
+// ~~
+
+export function getSubstitutionSuffix(
+    )
+{
+    return substitutionSuffix;
+}
+
+// ~~
+
 export function setTextBySlug(
     text,
     textSlug
@@ -3177,11 +3213,11 @@ export function matchesConditionSpecifier(
 
 export function matchesTranslationSpecifier(
     translationSpecifier,
-    languageTag,
-    valueByNameMap
+    valueByNameMap,
+    languageTag
     )
 {
-    let conditionSpecifierArray = translationSpecifier.split( '&' );
+    let conditionSpecifierArray = translationSpecifier.split( '?' );
 
     if ( matchesLanguageSpecifier( conditionSpecifierArray[ 0 ], languageTag ) )
     {
@@ -3212,7 +3248,7 @@ export function getSubstitutedText(
     {
         for ( let [ name, value ] of Object.entries( valueByNameMap ) )
         {
-            text = text.replaceAll( name, value );
+            text = text.replaceAll( substitutionPrefix + name + substitutionSuffix, value );
         }
     }
 
@@ -3223,16 +3259,16 @@ export function getSubstitutedText(
 
 export function getTranslatedText(
     multilingualText,
-    languageTag_,
     valueByNameMap,
+    languageTag_,
     defaultLanguageTag = 'en'
     )
 {
     if ( languageTag_ !== undefined
-         && !isString( languageTag_ ) )
+         && isString( valueByNameMap ) )
     {
-        valueByNameMap = languageTag_;
-        languageTag_ = undefined;
+        languageTag_ = valueByNameMap;
+        valueByNameMap = undefined;
     }
 
     let translatedTextArray = multilingualText.split( '¨' );
@@ -3253,7 +3289,7 @@ export function getTranslatedText(
 
             if ( colonCharacterIndex >= 0 )
             {
-                if ( matchesTranslationSpecifier( translatedText.substring( 0, colonCharacterIndex ), languageTag_, valueByNameMap ) )
+                if ( matchesTranslationSpecifier( translatedText.substring( 0, colonCharacterIndex ), valueByNameMap, languageTag_ ) )
                 {
                     return getSubstitutedText( translatedText.substring( colonCharacterIndex + 1 ), valueByNameMap );
                 }

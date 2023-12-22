@@ -113,9 +113,35 @@
 
         print( "-- GetLocalizedText --" );
 
-        let multilingualText = 'US¨en-UK,en-AU:UKAU¨fr:FR¨fr-BE,fr-CA:BECA¨pt:PT¨pt-BR:BR';
-
         setDefaultLanguageCode( 'en' );
+
+        let multilingualText = 'trunk¨en-UK,en--OC:boot¨fr:coffre¨pt:mala¨pt-BR:porta-malas';
+
+        setLanguageCode( 'en' );
+        setCountryCode( 'US' );
+        check( getLocalizedText( multilingualText ), 'trunk' );
+
+        setLanguageCode( 'en' );
+        setCountryCode( 'UK' );
+        check( getLocalizedText( multilingualText ), 'boot' );
+
+        setLanguageCode( 'en' );
+        setCountryCode( 'AU' );
+        check( getLocalizedText( multilingualText ), 'boot' );
+
+        setLanguageCode( 'fr' );
+        setCountryCode( 'FR' );
+        check( getLocalizedText( multilingualText ), 'coffre' );
+
+        setLanguageCode( 'pt' );
+        setCountryCode( 'PT' );
+        check( getLocalizedText( multilingualText ), 'mala' );
+
+        setLanguageCode( 'pt' );
+        setCountryCode( 'BR' );
+        check( getLocalizedText( multilingualText ), 'porta-malas' );
+
+        multilingualText = 'US¨en-UK,en-AU:UKAU¨fr:FR¨fr-BE,fr-CA:BECA¨pt:PT¨pt-BR:BR';
 
         setLanguageCode( 'en' );
         setCountryCode( 'US' );
@@ -157,33 +183,33 @@
         setCountryCode( 'FR' );
         check( getLocalizedText( multilingualText ), 'US' );
 
-        multilingualText = '{n} bathrooms¨en&{n}=1:{n} bathroom¨fr:{n} salles de bain¨fr&{n}<2:{n} salle de bain';
+        multilingualText = '{count} bathrooms¨en?count=1:{count} bathroom¨fr:{count} salles de bain¨fr?count<2:{count} salle de bain';
 
         setLanguageCode( 'en' );
         setCountryCode( 'US' );
-        check( getLocalizedText( multilingualText, { "{n}": 0 } ), '0 bathrooms' );
-        check( getLocalizedText( multilingualText, { "{n}": 1 } ), '1 bathroom' );
-        check( getLocalizedText( multilingualText, { "{n}": 2 } ), '2 bathrooms' );
+        check( getLocalizedText( multilingualText, { count: 0 } ), '0 bathrooms' );
+        check( getLocalizedText( multilingualText, { count: 1 } ), '1 bathroom' );
+        check( getLocalizedText( multilingualText, { count: 2 } ), '2 bathrooms' );
 
         setLanguageCode( 'fr' );
         setCountryCode( 'FR' );
-        check( getLocalizedText( multilingualText, { "{n}": 0 } ), '0 salle de bain' );
-        check( getLocalizedText( multilingualText, { "{n}": 1 } ), '1 salle de bain' );
-        check( getLocalizedText( multilingualText, { "{n}": 2 } ), '2 salles de bain' );
+        check( getLocalizedText( multilingualText, { count: 0 } ), '0 salle de bain' );
+        check( getLocalizedText( multilingualText, { count: 1 } ), '1 salle de bain' );
+        check( getLocalizedText( multilingualText, { count: 2 } ), '2 salles de bain' );
 
-        multilingualText = '¨en&{n}=0,{n}>=2:{n} bathrooms¨en&{n}=1:{n} bathroom¨fr:{n} salles de bain¨fr&{n}=0,{n}=1:{n} salle de bain';
+        multilingualText = '¨en?count=0,count>=2:{count} bathrooms¨en?count=1:{count} bathroom¨fr:{count} salles de bain¨fr?count=0,count=1:{count} salle de bain';
 
         setLanguageCode( 'en' );
         setCountryCode( 'US' );
-        check( getLocalizedText( multilingualText, { "{n}": 0 } ), '0 bathrooms' );
-        check( getLocalizedText( multilingualText, { "{n}": 1 } ), '1 bathroom' );
-        check( getLocalizedText( multilingualText, { "{n}": 2 } ), '2 bathrooms' );
+        check( getLocalizedText( multilingualText, { count: 0 } ), '0 bathrooms' );
+        check( getLocalizedText( multilingualText, { count: 1 } ), '1 bathroom' );
+        check( getLocalizedText( multilingualText, { count: 2 } ), '2 bathrooms' );
 
         setLanguageCode( 'fr' );
         setCountryCode( 'FR' );
-        check( getLocalizedText( multilingualText, { "{n}": 0 } ), '0 salle de bain' );
-        check( getLocalizedText( multilingualText, { "{n}": 1 } ), '1 salle de bain' );
-        check( getLocalizedText( multilingualText, { "{n}": 2 } ), '2 salles de bain' );
+        check( getLocalizedText( multilingualText, { count: 0 } ), '0 salle de bain' );
+        check( getLocalizedText( multilingualText, { count: 1 } ), '1 salle de bain' );
+        check( getLocalizedText( multilingualText, { count: 2 } ), '2 salles de bain' );
 
         print( "-- ProcessedText --" );
 
