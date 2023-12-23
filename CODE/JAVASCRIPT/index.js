@@ -1,7 +1,7 @@
 // -- IMPORTS
 
 import crypto from 'crypto';
-import md5 from 'md5';
+//import md5 from 'md5';
 
 // -- CONSTANTS
 
@@ -3146,42 +3146,45 @@ export function matchesValueSpecifier(
     valueByNameMap
     )
 {
-    let match = valueSpecifier.match( valueExpression );
-
-    if ( match )
+    if ( valueByNameMap !== undefined )
     {
-        let valueName = match[ 1 ];
-        let operator = match[ 2 ];
-        let otherValue = match[ 3 ];
+        let match = valueSpecifier.match( valueExpression );
 
-        if ( valueByNameMap !== undefined
-             && valueName in valueByNameMap )
+        if ( match )
         {
-            let value = valueByNameMap[ valueName ];
+            let valueName = match[ 1 ];
+            let operator = match[ 2 ];
+            let otherValue = match[ 3 ];
 
-            if ( typeof value === 'number' )
+            if ( valueByNameMap !== undefined
+                 && valueName in valueByNameMap )
             {
-                otherValue = Number( otherValue );
-            }
+                let value = valueByNameMap[ valueName ];
 
-            if ( ( operator === '='
-                   && value === otherValue )
-                 || ( operator === '<'
-                      && value < otherValue )
-                 || ( operator === '<='
-                      && value <= otherValue )
-                 || ( operator === '>='
-                      && value >= otherValue )
-                 || ( operator === '>'
-                      && value > otherValue )
-                 || ( operator === '<>'
-                      && value != otherValue ) )
-            {
-                return true;
-            }
-            else
-            {
-                return false;
+                if ( typeof value === 'number' )
+                {
+                    otherValue = Number( otherValue );
+                }
+
+                if ( ( operator === '='
+                       && value === otherValue )
+                     || ( operator === '<'
+                          && value < otherValue )
+                     || ( operator === '<='
+                          && value <= otherValue )
+                     || ( operator === '>='
+                          && value >= otherValue )
+                     || ( operator === '>'
+                          && value > otherValue )
+                     || ( operator === '<>'
+                          && value != otherValue ) )
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
     }
@@ -3411,13 +3414,13 @@ export function getMultilingualText(
 
 export function getLocalizedText(
     text,
-    languageTag,
-    valueByNameMap
+    valueByNameMap,
+    languageTag
     )
 {
     if ( isMultilingualText( text ) )
     {
-        return getTranslatedText( text, languageTag, valueByNameMap );
+        return getTranslatedText( text, valueByNameMap, languageTag );
     }
     else
     {
@@ -3429,13 +3432,13 @@ export function getLocalizedText(
 
 export function getLocalizedTextBySlug(
     textSlug,
-    languageTag,
-    valueByNameMap
+    valueByNameMap,
+    languageTag
     )
 {
     if ( textBySlugMap.has( textSlug ) )
     {
-        return getLocalizedText( textBySlugMap.get( textSlug ), languageTag, valueByNameMap );
+        return getLocalizedText( textBySlugMap.get( textSlug ), valueByNameMap, languageTag );
     }
     else
     {

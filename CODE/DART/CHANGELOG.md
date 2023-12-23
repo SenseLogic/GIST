@@ -1,3 +1,7 @@
+## 2.0.18
+
+* Fixed translation functions
+
 ## 2.0.17
 
 * Fixed translation functions

@@ -16,6 +16,9 @@ final double
     twoPi = pi * 2,
     degreesToRadians = pi / 180,
     radiansToDegrees = 180 / pi;
+final RegExp
+    valueExpression = RegExp( r'^(.*?)([<=>]+)(.*)$' ),
+    invalidCharacterExpression = RegExp( r'[^\p{L}\p{N}\-_.]', unicode: true );
 
 // -- VARIABLES
 
@@ -28,7 +31,9 @@ String
     continentCode = '',
     countryCode = '',
     languageCode = 'en',
-    defaultLanguageCode = 'en';
+    defaultLanguageCode = 'en',
+    substitutionPrefix = '{',
+    substitutionSuffix = '}';
 Map<String, String>
     textBySlugMap = {};
 List<Map<String, String>>
@@ -1833,7 +1838,8 @@ String getValidFileName(
     String fileName
     )
 {
-    fileName = fileName.replaceAll( RegExp( r'[^\p{L}\p{N}\-_.]', unicode: true ), '_' );
+    fileName = fileName.replaceAll( invalidCharacterExpression, '_' );
+
     return replaceIteratively( fileName, '__', '_' );
 }
 
@@ -2764,10 +2770,10 @@ String getUntranslatedText(
 
 bool matchesLanguageSpecifier(
     String languageSpecifier,
-    String multilingualText
+    String languageTag
     )
 {
-    List<String> languageTagPartArray = ( '$multilingualText--' ).split( '-' );
+    List<String> languageTagPartArray = ( '$languageTag--' ).split( '-' );
 
     for ( var languageSpecifierTag in languageSpecifier.split( ',' ) )
     {
@@ -2792,9 +2798,128 @@ bool matchesLanguageSpecifier(
 
 // ~~
 
+bool matchesValueSpecifier(
+    String valueSpecifier,
+    Map<String, dynamic> ?valueByNameMap
+    )
+{
+    if ( valueByNameMap != null )
+    {
+        final match = valueExpression.firstMatch( valueSpecifier );
+
+        if ( match != null )
+        {
+            final String valueName = match.group( 1 )!;
+            final String operator = match.group( 2 )!;
+            dynamic otherValue = match.group( 3 )!;
+
+            if ( valueByNameMap.containsKey( valueName ) )
+            {
+                var value = valueByNameMap[ valueName ];
+
+                if ( value is num )
+                {
+                    otherValue = num.tryParse( otherValue ) ?? 0;
+                }
+
+                if ( ( operator == '='
+                       && value == otherValue )
+                     || ( operator == '<'
+                          && value < otherValue )
+                     || ( operator == '<='
+                          && value <= otherValue )
+                     || ( operator == '>='
+                          && value >= otherValue )
+                     || ( operator == '>'
+                          && value > otherValue )
+                     || ( operator == '<>'
+                          && value != otherValue ) )
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+    }
+
+    logWarning( 'Bad value specifier: $valueSpecifier' );
+
+    return false;
+}
+
+// ~~
+
+bool matchesConditionSpecifier(
+    String specifier,
+    Map<String, dynamic>? valueByNameMap
+    )
+{
+    for ( String valueSpecifier in specifier.split( ',' ) )
+    {
+        if ( matchesValueSpecifier( valueSpecifier, valueByNameMap ) )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// ~~
+
+bool matchesTranslationSpecifier(
+    String translationSpecifier,
+    Map<String, dynamic>? valueByNameMap,
+    String languageTag
+    )
+{
+    List<String> conditionSpecifierArray = translationSpecifier.split( '?' );
+
+    if ( matchesLanguageSpecifier( conditionSpecifierArray[ 0 ], languageTag ) )
+    {
+        for ( int conditionSpecifierIndex = 1;
+              conditionSpecifierIndex < conditionSpecifierArray.length;
+              ++conditionSpecifierIndex )
+        {
+            if ( !matchesConditionSpecifier( conditionSpecifierArray[ conditionSpecifierIndex ], valueByNameMap ) )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+// ~~
+
+String getSubstitutedText(
+    String text,
+    Map<String, dynamic>? valueByNameMap
+    )
+{
+    if ( valueByNameMap != null )
+    {
+        for ( var entry in valueByNameMap.entries )
+        {
+            text = text.replaceAll( '$substitutionPrefix${entry.key}$substitutionSuffix', entry.value.toString() );
+        }
+    }
+
+    return text;
+}
+
+// ~~
+
 String getTranslatedText(
     String multilingualText,
     [
+        Map<String, dynamic>? valueByNameMap,
         String? languageTag_,
         String defaultLanguageTag = 'en'
     ]
@@ -2816,15 +2941,15 @@ String getTranslatedText(
 
             if ( colonCharacterIndex >= 0 )
             {
-                if ( matchesLanguageSpecifier( translatedText.substring( 0, colonCharacterIndex ), languageTag_ ) )
+                if ( matchesTranslationSpecifier( translatedText.substring( 0, colonCharacterIndex ), valueByNameMap, languageTag_ ) )
                 {
-                    return translatedText.substring( colonCharacterIndex + 1 );
+                    return getSubstitutedText( translatedText.substring( colonCharacterIndex + 1 ), valueByNameMap );
                 }
             }
         }
     }
 
-    return translatedTextArray.first;
+    return getSubstitutedText( translatedTextArray.first, valueByNameMap );
 }
 
 // ~~
@@ -2934,13 +3059,14 @@ String getMultilingualText(
 String getLocalizedText(
     String text,
     [
+        Map<String, dynamic>? valueByNameMap,
         String? languageTag
     ]
     )
 {
     if ( isMultilingualText( text ) )
     {
-        return getTranslatedText( text, languageTag );
+        return getTranslatedText( text, valueByNameMap, languageTag );
     }
     else
     {
@@ -2953,13 +3079,14 @@ String getLocalizedText(
 String getLocalizedTextBySlug(
     String textSlug,
     [
+        Map<String, dynamic>? valueByNameMap,
         String? languageTag
     ]
     )
 {
     if ( textBySlugMap.containsKey( textSlug ) )
     {
-        return getLocalizedText( textBySlugMap[ textSlug ]!, languageTag );
+        return getLocalizedText( textBySlugMap[ textSlug ]!, valueByNameMap, languageTag );
     }
     else
     {
