@@ -19,6 +19,62 @@ Reusable base functions.
 *   country
 *   localization
 
+## Internationalization
+
+Any string can be internationalized by providing additional translations after an umlaut character followed by a **language specifier**.
+
+Translations are tested from **right to left**, the first translation being used by **default**.
+
+A language specifier can contain one or several **language tags** separated by commas.
+
+A language tag can define a **language code**, a **country code** and a **continent code**, separated by dashes.
+
+```
+multilingualText = 'trunk¨en-UK,en--OC:boot¨fr:coffre¨pt:mala¨pt-BR:porta-malas';
+
+setLanguageCode( 'en' );
+setCountryCode( 'US' );
+assert( getLocalizedText( multilingualText ) === 'trunk' );
+
+setLanguageCode( 'en' );
+setCountryCode( 'UK' );
+assert( getLocalizedText( multilingualText ) === 'boot' );
+
+setLanguageCode( 'en' );
+setCountryCode( 'AU' );
+assert( getLocalizedText( multilingualText ) === 'boot' );
+
+setLanguageCode( 'fr' );
+setCountryCode( 'FR' );
+assert( getLocalizedText( multilingualText ) === 'coffre' );
+
+setLanguageCode( 'pt' );
+setCountryCode( 'PT' );
+assert( getLocalizedText( multilingualText ) === 'mala' );
+
+setLanguageCode( 'pt' );
+setCountryCode( 'BR' );
+assert( getLocalizedText( multilingualText ) === 'porta-malas' );
+```
+
+Translations can also include variables, and use them to define additional **conditions**.
+
+```
+multilingualText = '{count} bathrooms¨en?count=1:{count} bathroom¨fr:{count} salles de bain¨fr?count<2:{count} salle de bain';
+
+setLanguageCode( 'en' );
+setCountryCode( 'US' );
+assert( getLocalizedText( multilingualText, { count: 0 } ) === '0 bathrooms' );
+assert( getLocalizedText( multilingualText, { count: 1 } ) === '1 bathroom' );
+assert( getLocalizedText( multilingualText, { count: 2 } ) === '2 bathrooms' );
+
+setLanguageCode( 'fr' );
+setCountryCode( 'FR' );
+assert( getLocalizedText( multilingualText, { count: 0 } ) === '0 salle de bain' );
+assert( getLocalizedText( multilingualText, { count: 1 } ) === '1 salle de bain' );
+assert( getLocalizedText( multilingualText, { count: 2 } ) === '2 salles de bain' );
+```
+
 ## Version
 
 2.0

@@ -1,0 +1,2 @@
+call yarn outdated
+pause

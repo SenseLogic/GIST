@@ -1,3 +1,7 @@
+## 2.0.19
+
+* Added tests
+
 ## 2.0.18
 
 * Fixed translation functions

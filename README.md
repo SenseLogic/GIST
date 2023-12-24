@@ -60,9 +60,7 @@ setCountryCode( 'BR' );
 assert( getLocalizedText( multilingualText ) === 'porta-malas' );
 ```
 
-Translations can also contain **variables** provided as arguments.
-
-Language specifiers can use those variables to define more specific **conditions**.
+Translations can also include variables, and use them to define additional **conditions**.
 
 ```
 multilingualText = '{count} bathrooms¨en?count=1:{count} bathroom¨fr:{count} salles de bain¨fr?count<2:{count} salle de bain';
