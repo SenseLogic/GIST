@@ -120,18 +120,21 @@ describe(
                 let randomUuid = getRandomUuid();
                 let randomUuidTuid = getTuidFromUuid( randomUuid );
                 let randomUuidTuidUuid = getUuidFromTuid( randomUuidTuid );
+                console.log( randomUuid );
                 console.log( randomUuidTuidUuid );
                 expect( randomUuidTuidUuid ).toBe( randomUuid );
 
                 let timeUuid = getTimeUuid();
                 let tuid = getTuidFromUuid( timeUuid );
                 let uuidFromTuid = getUuidFromTuid( tuid );
+                console.log( timeUuid );
                 console.log( uuidFromTuid );
                 expect( uuidFromTuid ).toBe( timeUuid );
 
                 let randomTuid = getRandomTuid();
                 let randomTuidUuid = getUuidFromTuid( randomTuid );
                 let randomTuidUuidTuid = getTuidFromUuid( randomTuidUuid );
+                console.log( randomTuid );
                 console.log( randomTuidUuidTuid );
                 expect( randomTuidUuidTuid ).toBe( randomTuid );
             }

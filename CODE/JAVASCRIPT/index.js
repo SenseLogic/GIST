@@ -1,6 +1,5 @@
 // -- IMPORTS
 
-import crypto from 'crypto';
 import md5 from 'md5';
 
 // -- CONSTANTS
@@ -983,7 +982,16 @@ export function getRandomByteArray(
     byteCount
     )
 {
-    return crypto.randomBytes( byteCount );
+    let byteArray = new Uint8Array( byteCount );
+
+    for ( let byteIndex = 0;
+          byteIndex < byteCount;
+          ++byteIndex )
+    {
+        byteArray[ byteIndex ] = Math.floor( Math.random() * 256 );
+    }
+
+    return byteArray;
 }
 
 // ~~
@@ -992,7 +1000,17 @@ export function getRandomHexadecimalText(
     byteCount
     )
 {
-    return crypto.randomBytes( byteCount ).toString( 'hex' );
+    let byteArray = getRandomByteArray( byteCount );
+    let hexadecimalText = '';
+
+    for ( let byteIndex = 0;
+          byteIndex < byteArray.length;
+          ++byteIndex )
+    {
+        hexadecimalText += ( '0' + byteArray[ byteIndex ].toString( 16 ) ).slice( -2 );
+    }
+
+    return hexadecimalText;
 }
 
 // ~~
@@ -1011,7 +1029,9 @@ export function getTimeUuid(
 export function getRandomUuid(
     )
 {
-    return crypto.randomUUID();
+    return getUuidFromHexadecimalText(
+        getRandomHexadecimalText( 16 )
+        );
 }
 
 // ~~
