@@ -2938,6 +2938,45 @@ export async function getLocationFromIpAddress(
 
 // ~~
 
+export function isSearchBot(
+    userAgentText
+    )
+{
+    let searchBotNameArray =
+        [
+            'googlebot',
+            'bingbot',
+            'slurp',
+            'duckduckbot',
+            'baiduspider',
+            'yandexbot',
+            'facebookexternalhit',
+            'twitterbot',
+            'rogerbot',
+            'linkedinbot',
+            'embedly',
+            'quora link preview',
+            'showyoubot',
+            'outbrain',
+            'pinterest',
+            'slackbot'
+        ];
+
+    userAgentText = userAgentText.toLowerCase();
+
+    for ( let searchBotName of searchBotNameArray )
+    {
+        if ( userAgentText.indexOf( searchBotName ) >= 0 )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+// ~~
+
 export function getBrowserLanguageCode(
     browserLanguageText,
     validLanguageCodeArray,
@@ -3403,6 +3442,42 @@ export function getTranslationArray(
     }
 
     return translationArray;
+}
+
+// ~~
+
+export function getNextLanguageTag(
+    languageTagArray,
+    translationArray
+    )
+{
+    for ( let languageTagIndex = 1;
+          languageTagIndex < languageTagArray.length;
+          ++languageTagIndex )
+    {
+        let languageTag = languageTagArray[ languageTagIndex ];
+
+        for ( let translationIndex = 0;
+              translationIndex < translationArray.length;
+              ++translationIndex )
+        {
+            let translation = translationArray[ translationIndex ];
+
+            if ( translation.specifier.indexOf( languageTag ) >= 0 )
+            {
+                languageTag = '';
+
+                break;
+            }
+        }
+
+        if ( languageTag !== '' )
+        {
+            return languageTag;
+        }
+    }
+
+    return '';
 }
 
 // ~~

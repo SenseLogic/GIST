@@ -3034,6 +3034,39 @@ List<Map<String, String>> getTranslationArray(
 
 // ~~
 
+String getNextLanguageTag(
+    List<String> languageTagArray,
+    List<Map<String, String>> translationArray
+    )
+{
+    for ( int languageTagIndex = 1; languageTagIndex < languageTagArray.length; ++languageTagIndex )
+    {
+        String languageTag = languageTagArray[ languageTagIndex ];
+
+        for ( int translationIndex = 0; translationIndex < translationArray.length; ++translationIndex )
+        {
+            Map<String, String> translation = translationArray[ translationIndex ];
+            String specifier = translation[ 'specifier' ]!;
+
+            if ( specifier.contains( languageTag ) )
+            {
+                languageTag = '';
+
+                break;
+            }
+        }
+
+        if ( languageTag != '' )
+        {
+            return languageTag;
+        }
+    }
+
+    return '';
+}
+
+// ~~
+
 String getMultilingualText(
     List<Map<String, String>> translationArray
     )
