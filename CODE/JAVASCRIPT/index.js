@@ -1959,6 +1959,44 @@ export function getValidFileName(
 
 // ~~
 
+export function getFileLabel(
+    filePath
+    )
+{
+    let fileName = getFileName( filePath );
+    let lastDotCharacterIndex = fileName.lastIndexOf( '.' );
+    
+    if ( lastDotCharacterIndex >= 0 ) 
+    {
+        return fileName.substring( 0, lastDotCharacterIndex );
+    }
+    else
+    {
+        return fileName;
+    }
+}
+
+// ~~
+
+export function getFileExtension(
+    filePath
+    )
+{
+    let fileName = getFileName( filePath );
+    let lastDotCharacterIndex = fileName.lastIndexOf( '.' );
+    
+    if ( lastDotCharacterIndex >= 0 ) 
+    {
+        return fileName.substring( lastDotCharacterIndex );
+    }
+    else
+    {
+        return '';
+    }
+}
+
+// ~~
+
 export function getCapitalLatitudeFromCountryCode(
     countryCode
     )

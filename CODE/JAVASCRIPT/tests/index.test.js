@@ -79,6 +79,52 @@ describe(
             );
 
         test(
+            'getFolderPath',
+            () =>
+            {
+                expect( getFolderPath( '/folder/subfolder/file.txt' ) ).toBe( '/folder/subfolder' );
+                expect( getFolderPath( '/folder/subfolder/' ) ).toBe( '/folder/subfolder' );
+                expect( getFolderPath( 'file.txt' ) ).toBe( '' );
+                expect( getFolderPath( '' ) ).toBe( '' );
+            }
+            );
+
+        test(
+            'getFilePath',
+            () =>
+            {
+                expect( getFilePath( '/folder/subfolder', 'file.txt' ) ).toBe( '/folder/subfolder/file.txt' );
+                expect( getFilePath( '/folder/subfolder/', 'file.txt' ) ).toBe( '/folder/subfolder/file.txt' );
+                expect( getFilePath( '/folder/subfolder', '.hiddenfile' ) ).toBe( '/folder/subfolder/.hiddenfile' );
+                expect( getFilePath( '', 'file.txt' ) ).toBe( 'file.txt' );
+            }
+            );
+
+        test(
+            'getFileLabel',
+            () =>
+            {
+                expect( getFileLabel( 'file.txt' ) ).toBe( 'file' );
+                expect( getFileLabel( 'archive.tar.gz' ) ).toBe( 'archive.tar' );
+                expect( getFileLabel( 'noextensionfile' ) ).toBe( 'noextensionfile' );
+                expect( getFileLabel( 'filewithdot.' ) ).toBe( 'filewithdot' );
+                expect( getFileLabel( '.hiddenfile' ) ).toBe( '.hiddenfile' );
+            }
+            );
+
+        test(
+            'getFileExtension',
+            () =>
+            {
+                expect( getFileExtension( 'file.txt' ) ).toBe( 'txt' );
+                expect( getFileExtension( 'archive.tar.gz' ) ).toBe( 'gz' );
+                expect( getFileExtension( 'noextensionfile' ) ).toBe( '' );
+                expect( getFileExtension( 'filewithdot.' ) ).toBe( '' );
+                expect( getFileExtension( '.hiddenfile' ) ).toBe( '' );
+            }
+            );
+
+        test(
             'getBrowserLanguageCode',
             () =>
             {
