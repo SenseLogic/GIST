@@ -462,7 +462,7 @@ export function removePrefix(
     if ( prefix !== ''
          && text.startsWith( prefix ) )
     {
-        return text.substring( prefix.length );
+        return text.slice( prefix.length );
     }
     else
     {
@@ -480,7 +480,7 @@ export function removeSuffix(
     if ( suffix !== ''
          && text.endsWith( suffix ) )
     {
-        return text.substring( 0, text.length - suffix.length );
+        return text.slice( 0, text.length - suffix.length );
     }
     else
     {
@@ -498,7 +498,7 @@ export function replacePrefix(
 {
     if ( text.startsWith( oldPrefix ) )
     {
-        return newPrefix + text.substring( oldPrefix.length );
+        return newPrefix + text.slice( oldPrefix.length );
     }
     else
     {
@@ -516,7 +516,7 @@ export function replaceSuffix(
 {
     if ( text.endsWith( oldSuffix ) )
     {
-        return text.substring( 0, text.length - oldSuffix.length ) + newSuffix;
+        return text.slice( 0, text.length - oldSuffix.length ) + newSuffix;
     }
     else
     {
@@ -948,15 +948,15 @@ export function getUuidFromHexadecimalText(
     )
 {
     return (
-        hexadecimalText.substring( 0, 8 )
+        hexadecimalText.slice( 0, 8 )
         + '-'
-        + hexadecimalText.substring( 8, 12 )
+        + hexadecimalText.slice( 8, 12 )
         + '-'
-        + hexadecimalText.substring( 12, 16 )
+        + hexadecimalText.slice( 12, 16 )
         + '-'
-        + hexadecimalText.substring( 16, 20 )
+        + hexadecimalText.slice( 16, 20 )
         + '-'
-        + hexadecimalText.substring( 20, 32 )
+        + hexadecimalText.slice( 20, 32 )
         );
 }
 
@@ -1347,6 +1347,153 @@ export function getDateTimeSuffix(
         + getLeftPaddedText( dateTime.microsecond.toString(), 3, '0' )
         + suffix
         );
+}
+
+// ~~
+
+export function getFormattedNumberText(
+    number,
+    style = undefined
+    )
+{
+    let numberFormat
+        = new Intl.NumberFormat(
+              languageTag,
+              {
+                  style
+              }
+              );
+
+    return numberFormat.format( number );
+}
+
+// ~~
+
+export function getFormattedDateText(
+    date,
+    style = undefined,
+    yearFormat = undefined,
+    monthFormat = undefined,
+    dayFormat = undefined,
+    weekdayFormat = undefined
+    )
+{
+    let dateTimeFormat
+        = new Intl.DateTimeFormat(
+              languageTag,
+              {
+                  dateStyle : style,
+                  year: yearFormat,
+                  month: monthFormat,
+                  day: dayFormat,
+                  weekday: weekdayFormat
+              }
+              );
+
+    return dateTimeFormat.format( date );
+}
+
+// ~~
+
+export function getFormattedTimeText(
+    time,
+    style = undefined,
+    hourFormat = undefined,
+    minuteFormat = undefined,
+    secondFormat = undefined,
+    timeZone = undefined
+    )
+{
+    let dateTimeFormat
+        = new Intl.DateTimeFormat(
+              languageTag,
+              {
+                  timeStyle : style,
+                  hour: hourFormat,
+                  minute: minuteFormat,
+                  second: secondFormat,
+                  timeZone
+              }
+              );
+
+    return dateTimeFormat.format( time );
+}
+
+// ~~
+
+export function getFormattedCountryName(
+    countryCode
+    )
+{
+    let displayNames
+        = new Intl.DisplayNames(
+              [
+                  languageTag
+              ],
+              {
+                  type: 'region'
+              }
+              );
+
+    return displayNames.of( countryCode );
+}
+
+// ~~
+
+export function getFormattedLanguageName(
+    languageCode
+    )
+{
+    let displayNames
+        = new Intl.DisplayNames(
+              [
+                  languageTag
+              ],
+              {
+                  type: 'language'
+              }
+              );
+
+    return displayNames.of( languageCode );
+}
+
+// ~~
+
+export function getFormattedCurrencyName(
+    currencyCode
+    )
+{
+    let displayNames
+        = new Intl.DisplayNames(
+              [
+                  languageTag
+              ],
+              {
+                  type: 'currency'
+              }
+              );
+
+    return displayNames.of( currencyCode );
+}
+
+// ~~
+
+export function getFormattedArrayText(
+    array,
+    style = undefined,
+    type = undefined
+    )
+{
+    let listFormat
+        = new Intl.ListFormat(
+              languageTag,
+              {
+                  style,
+                  type
+              }
+              );
+
+    return listFormat.format( array );
 }
 
 // ~~
@@ -1936,7 +2083,7 @@ export function getFolderPath(
     filePath
     )
 {
-    return filePath.substring( 0, filePath.lastIndexOf( '/' ) + 1 );
+    return filePath.slice( 0, filePath.lastIndexOf( '/' ) + 1 );
 }
 
 // ~~
@@ -1945,7 +2092,7 @@ export function getFileName(
     filePath
     )
 {
-    return filePath.substring( filePath.lastIndexOf( '/' ) + 1 );
+    return filePath.slice( filePath.lastIndexOf( '/' ) + 1 );
 }
 
 // ~~
@@ -1965,10 +2112,10 @@ export function getFileLabel(
 {
     let fileName = getFileName( filePath );
     let lastDotCharacterIndex = fileName.lastIndexOf( '.' );
-    
-    if ( lastDotCharacterIndex >= 0 ) 
+
+    if ( lastDotCharacterIndex >= 0 )
     {
-        return fileName.substring( 0, lastDotCharacterIndex );
+        return fileName.slice( 0, lastDotCharacterIndex );
     }
     else
     {
@@ -1984,10 +2131,10 @@ export function getFileExtension(
 {
     let fileName = getFileName( filePath );
     let lastDotCharacterIndex = fileName.lastIndexOf( '.' );
-    
-    if ( lastDotCharacterIndex >= 0 ) 
+
+    if ( lastDotCharacterIndex >= 0 )
     {
-        return fileName.substring( lastDotCharacterIndex );
+        return fileName.slice( lastDotCharacterIndex );
     }
     else
     {
@@ -3025,7 +3172,7 @@ export function getBrowserLanguageCode(
 
     for ( let browserLanguage of browserLanguageArray )
     {
-        let browserLanguageCode = browserLanguage.substring( 0, 2 );
+        let browserLanguageCode = browserLanguage.slice( 0, 2 );
 
         if ( validLanguageCodeArray.indexOf( browserLanguageCode ) >= 0 )
         {
@@ -3034,6 +3181,26 @@ export function getBrowserLanguageCode(
     }
 
     return defaultLanguageCode;
+}
+
+// ~~
+
+export function getTrimmedLanguageTag(
+    languageTag
+    )
+{
+    if ( languageTag.endsWith( '--' ) )
+    {
+        return languageTag.slice( 0, -2 );
+    }
+    else if ( languageTag.endsWith( '-' ) )
+    {
+        return languageTag.slice( 0, -1 );
+    }
+    else
+    {
+        return languageTag;
+    }
 }
 
 // ~~
@@ -3058,7 +3225,7 @@ export function getLanguageTag(
 export function updateLanguageTag(
     )
 {
-    languageTag = languageCode + '-' + countryCode + '-' + continentCode;
+    languageTag = getTrimmedLanguageTag( languageCode + '-' + countryCode + '-' + continentCode );
 }
 
 // ~~
@@ -3389,9 +3556,9 @@ export function getTranslatedText(
 
             if ( colonCharacterIndex >= 0 )
             {
-                if ( matchesTranslationSpecifier( translatedText.substring( 0, colonCharacterIndex ), valueByNameMap, languageTag_ ) )
+                if ( matchesTranslationSpecifier( translatedText.slice( 0, colonCharacterIndex ), valueByNameMap, languageTag_ ) )
                 {
-                    return getSubstitutedText( translatedText.substring( colonCharacterIndex + 1 ), valueByNameMap );
+                    return getSubstitutedText( translatedText.slice( colonCharacterIndex + 1 ), valueByNameMap );
                 }
             }
         }
@@ -3472,8 +3639,8 @@ export function getTranslationArray(
         {
             translationArray.push(
                 {
-                    specifier : translatedText.substring( 0, colonCharacterIndex ),
-                    data : translatedText.substring( colonCharacterIndex + 1 )
+                    specifier : translatedText.slice( 0, colonCharacterIndex ),
+                    data : translatedText.slice( colonCharacterIndex + 1 )
                 }
                 );
         }
@@ -3710,7 +3877,7 @@ export function getProcessedMultilineText(
 
             while ( line.startsWith( '\n' ) )
             {
-                line = line.substring( 1 );
+                line = line.slice( 1 );
             }
 
             for ( let processedLineTag of processedLineTagArray )
@@ -3719,7 +3886,7 @@ export function getProcessedMultilineText(
                 {
                     lineArray[ lineIndex ]
                         = processedLineTag.openingDefinition
-                          + line.substring( processedLineTag.name.length )
+                          + line.slice( processedLineTag.name.length )
                           + processedLineTag.closingDefinition;
 
                     break;

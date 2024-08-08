@@ -79,6 +79,118 @@ describe(
             );
 
         test(
+            'getFormattedNumberText',
+            () =>
+            {
+                setLanguageCode( 'en' );
+                expect( getFormattedNumberText( 1234567.89 ) ).toBe( '1,234,567.89' );
+                expect( getFormattedNumberText( 1234567.89, 'currency' ) ).toBe( '$1,234,567.89' );
+                expect( getFormattedNumberText( 1234567.89, 'percent' ) ).toBe( '123,456,789%' );
+
+                setLanguageCode( 'fr' );
+                expect( getFormattedNumberText( 1234567.89 ) ).toBe( '1 234 567,89' );
+                expect( getFormattedNumberText( 1234567.89, 'currency' ) ).toBe( '1 234 567,89 €' );
+                expect( getFormattedNumberText( 0.89, 'percent' ) ).toBe( '89 %' );
+            }
+            );
+
+        test(
+            'getFormattedDateText',
+            () =>
+            {
+                let date = new Date( '2024-08-08' );
+
+                setLanguageCode( 'en' );
+                expect( getFormattedDateText( date ) ).toBe( '8/8/24' );
+                expect( getFormattedDateText( date, 'full' ) ).toBe( 'Thursday, August 8, 2024' );
+                expect( getFormattedDateText( date, undefined, 'numeric', 'long', 'numeric', 'long' ) ).toBe( 'Thursday, August 8, 2024' );
+
+                setLanguageCode( 'fr' );
+                expect( getFormattedDateText( date ) ).toBe( '08/08/2024' );
+                expect( getFormattedDateText( date, 'full' ) ).toBe( 'jeudi 8 août 2024' );
+                expect( getFormattedDateText( date, undefined, 'numeric', 'long', 'numeric', 'long' ) ).toBe( 'jeudi 8 août 2024' );
+            }
+            );
+
+        test(
+            'getFormattedTimeText',
+            () =>
+            {
+                let time = new Date( '2024-08-08T14:30:00Z' );
+
+                setLanguageCode( 'en' );
+                expect( getFormattedTimeText( time ) ).toBe( '2:30 PM' );
+                expect( getFormattedTimeText( time, 'full' ) ).toBe( '2:30:00 PM GMT+0' );
+                expect( getFormattedTimeText( time, undefined, '2-digit', '2-digit', '2-digit', 'UTC' ) ).toBe( '14:30:00' );
+
+                setLanguageCode( 'fr' );
+                expect( getFormattedTimeText( time ) ).toBe( '14:30' );
+                expect( getFormattedTimeText( time, 'full' ) ).toBe( '14:30:00 UTC' );
+                expect( getFormattedTimeText( time, undefined, '2-digit', '2-digit', '2-digit', 'UTC' ) ).toBe( '14:30:00' );
+            }
+            );
+
+        test(
+            'getFormattedCountryName',
+            () =>
+            {
+                setLanguageCode( 'en' );
+                expect( getFormattedCountryName( 'US' ) ).toBe( 'United States' );
+                expect( getFormattedCountryName( 'FR' ) ).toBe( 'France' );
+
+                setLanguageCode( 'fr' );
+                expect( getFormattedCountryName( 'US' ) ).toBe( 'États-Unis' );
+                expect( getFormattedCountryName( 'FR' ) ).toBe( 'France' );
+            }
+            );
+
+        test(
+            'getFormattedLanguageName',
+            () =>
+            {
+                setLanguageCode( 'en' );
+                expect( getFormattedLanguageName( 'en' ) ).toBe( 'English' );
+                expect( getFormattedLanguageName( 'fr' ) ).toBe( 'French' );
+
+                setLanguageCode( 'fr' );
+                expect( getFormattedLanguageName( 'en' ) ).toBe( 'anglais' );
+                expect( getFormattedLanguageName( 'fr' ) ).toBe( 'français' );
+            }
+            );
+
+        test(
+            'getFormattedCurrencyName',
+            () =>
+            {
+                setLanguageCode( 'en' );
+                expect( getFormattedCurrencyName( 'USD' ) ).toBe( 'US Dollar' );
+                expect( getFormattedCurrencyName( 'EUR' ) ).toBe( 'Euro' );
+
+                setLanguageCode( 'fr' );
+                expect( getFormattedCurrencyName( 'USD' ) ).toBe( 'dollar des États-Unis' );
+                expect( getFormattedCurrencyName( 'EUR' ) ).toBe( 'euro' );
+            }
+            );
+
+        test(
+            'getFormattedArrayText',
+            () =>
+            {
+                let array = [ 'apple', 'banana', 'cherry' ];
+
+                setLanguageCode( 'en' );
+                expect( getFormattedArrayText( array ) ).toBe( 'apple, banana, and cherry' );
+                expect( getFormattedArrayText( array, 'narrow' ) ).toBe( 'apple, banana, cherry' );
+                expect( getFormattedArrayText( array, 'long', 'disjunction' ) ).toBe( 'apple, banana, or cherry' );
+
+                setLanguageCode( 'fr' );
+                expect( getFormattedArrayText( array ) ).toBe( 'apple, banana et cherry' );
+                expect( getFormattedArrayText( array, 'narrow' ) ).toBe( 'apple, banana, cherry' );
+                expect( getFormattedArrayText( array, 'long', 'disjunction' ) ).toBe( 'apple, banana ou cherry' );
+            }
+            );
+
+        test(
             'getFolderPath',
             () =>
             {
