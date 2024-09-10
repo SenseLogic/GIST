@@ -2144,6 +2144,27 @@ export function getFileExtension(
 
 // ~~
 
+export function addFileLabelSuffix(
+    filePath,
+    fileLabelSuffix
+    )
+{
+    let lastSlashCharacterIndex = filePath.lastIndexOf( '/' );
+    let lastDotCharacterIndex = filePath.lastIndexOf( '.' );
+
+    if ( lastDotCharacterIndex >= 0
+         && lastDotCharacterIndex > lastSlashCharacterIndex )
+    {
+        return filePath.slice( 0, lastDotCharacterIndex ) + fileLabelSuffix + filePath.slice( lastDotCharacterIndex );
+    }
+    else
+    {
+        return filePath + fileLabelSuffix;
+    }
+}
+
+// ~~
+
 export function getCapitalLatitudeFromCountryCode(
     countryCode
     )
