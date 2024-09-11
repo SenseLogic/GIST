@@ -2144,9 +2144,9 @@ export function getFileExtension(
 
 // ~~
 
-export function addFileLabelSuffix(
+export function addFileExtensionPrefix(
     filePath,
-    fileLabelSuffix
+    fileExtensionPrefix
     )
 {
     let lastSlashCharacterIndex = filePath.lastIndexOf( '/' );
@@ -2155,11 +2155,11 @@ export function addFileLabelSuffix(
     if ( lastDotCharacterIndex >= 0
          && lastDotCharacterIndex > lastSlashCharacterIndex )
     {
-        return filePath.slice( 0, lastDotCharacterIndex ) + fileLabelSuffix + filePath.slice( lastDotCharacterIndex );
+        return filePath.slice( 0, lastDotCharacterIndex ) + fileExtensionPrefix + filePath.slice( lastDotCharacterIndex );
     }
     else
     {
-        return filePath + fileLabelSuffix;
+        return filePath + fileExtensionPrefix;
     }
 }
 
