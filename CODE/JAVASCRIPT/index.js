@@ -59,7 +59,6 @@ export let
     processedLineTagArray = [],
     processedDualTagArray = [],
     processedTagArray = [],
-    locationByIpAddressMap = new Map(),
     googleAnalyticsTrackingScript = null,
     googleAnalyticsTrackingIsEnabled = false;
 
