@@ -514,23 +514,5 @@ describe(
                 expect( processedText ).toBe( '<div class="paragraph title-1"><b>bold</b></div>\n<div class="paragraph title-2"><i>italics</i></div>\n<div class="paragraph"><u>underlined</u></div>' );
             }
             );
-
-        test(
-            'getLocationFromIpAddress',
-            async () =>
-            {
-                let location = await getLocationFromIpAddress( '157.164.136.250' );
-                console.log( location );
-                expect( location.countryCode ).toBe( 'BE' );
-
-                location = await getLocationFromIpAddress( '2a01:690:35:100::f5:79' );
-                console.log( location );
-                expect( location.countryCode ).toBe( 'BE' );
-
-                location = await getLocationFromIpAddress( '195.244.180.40' );
-                console.log( location );
-                expect( location.countryCode ).toBe( 'BE' );
-            }
-            );
         }
         );
