@@ -1,6 +1,5 @@
 // -- IMPORTS
 
-import fetch from 'node-fetch';
 import
     {
         defineColorTag,
@@ -10,8 +9,19 @@ import
         getBase64TextFromHexadecimalText,
         getBrowserLanguageCode,
         getDateTimeSuffix,
+        getFileExtension,
+        getFileLabel,
+        getFileName,
+        getFilePath,
+        getFolderPath,
+        getFormattedArrayText,
+        getFormattedCountryName,
+        getFormattedCurrencyName,
+        getFormattedDateText,
+        getFormattedNumberText,
+        getFormattedLanguageName,
+        getFormattedTimeText,
         getHexadecimalTextFromBase64Text,
-        getLocationFromIpAddress,
         getLocalizedText,
         getProcessedMultilineText,
         getProcessedText,
@@ -31,8 +41,6 @@ import
     from '../index';
 
 // -- STATEMENTS
-
-global.fetch = fetch;
 
 describe(
     'base',
@@ -101,7 +109,7 @@ describe(
                 let date = new Date( '2024-08-08' );
 
                 setLanguageCode( 'en' );
-                expect( getFormattedDateText( date ) ).toBe( '8/8/24' );
+                expect( getFormattedDateText( date ) ).toBe( '8/8/2024' );
                 expect( getFormattedDateText( date, 'full' ) ).toBe( 'Thursday, August 8, 2024' );
                 expect( getFormattedDateText( date, undefined, 'numeric', 'long', 'numeric', 'long' ) ).toBe( 'Thursday, August 8, 2024' );
 
@@ -191,24 +199,39 @@ describe(
             );
 
         test(
-            'getFolderPath',
-            () =>
-            {
-                expect( getFolderPath( '/folder/subfolder/file.txt' ) ).toBe( '/folder/subfolder' );
-                expect( getFolderPath( '/folder/subfolder/' ) ).toBe( '/folder/subfolder' );
-                expect( getFolderPath( 'file.txt' ) ).toBe( '' );
-                expect( getFolderPath( '' ) ).toBe( '' );
-            }
-            );
-
-        test(
             'getFilePath',
             () =>
             {
                 expect( getFilePath( '/folder/subfolder', 'file.txt' ) ).toBe( '/folder/subfolder/file.txt' );
                 expect( getFilePath( '/folder/subfolder/', 'file.txt' ) ).toBe( '/folder/subfolder/file.txt' );
                 expect( getFilePath( '/folder/subfolder', '.hiddenfile' ) ).toBe( '/folder/subfolder/.hiddenfile' );
+                expect( getFilePath( '/folder/subfolder/', '' ) ).toBe( '/folder/subfolder/' );
                 expect( getFilePath( '', 'file.txt' ) ).toBe( 'file.txt' );
+                expect( getFilePath( '', '' ) ).toBe( '' );
+            }
+            );
+
+        test(
+            'getFolderPath',
+            () =>
+            {
+                expect( getFolderPath( '/folder/subfolder/file.txt' ) ).toBe( '/folder/subfolder/' );
+                expect( getFolderPath( '/folder/subfolder/' ) ).toBe( '/folder/subfolder/' );
+                expect( getFolderPath( 'file.txt' ) ).toBe( '' );
+                expect( getFolderPath( '' ) ).toBe( '' );
+            }
+            );
+
+        test(
+            'getFileName',
+            () =>
+            {
+                expect( getFileName( '/folder/subfolder/file.txt' ) ).toBe( 'file.txt' );
+                expect( getFileName( '/folder/subfolder/.hiddenfile' ) ).toBe( '.hiddenfile' );
+                expect( getFileName( 'file.txt' ) ).toBe( 'file.txt' );
+                expect( getFileName( '/folder/subfolder/' ) ).toBe( '' );
+                expect( getFileName( '.hiddenfile' ) ).toBe( '.hiddenfile' );
+                expect( getFileName( '' ) ).toBe( '' );
             }
             );
 
@@ -220,7 +243,8 @@ describe(
                 expect( getFileLabel( 'archive.tar.gz' ) ).toBe( 'archive.tar' );
                 expect( getFileLabel( 'noextensionfile' ) ).toBe( 'noextensionfile' );
                 expect( getFileLabel( 'filewithdot.' ) ).toBe( 'filewithdot' );
-                expect( getFileLabel( '.hiddenfile' ) ).toBe( '.hiddenfile' );
+                expect( getFileLabel( '.hiddenfile' ) ).toBe( '' );
+                expect( getFileLabel( '' ) ).toBe( '' );
             }
             );
 
@@ -228,11 +252,12 @@ describe(
             'getFileExtension',
             () =>
             {
-                expect( getFileExtension( 'file.txt' ) ).toBe( 'txt' );
-                expect( getFileExtension( 'archive.tar.gz' ) ).toBe( 'gz' );
+                expect( getFileExtension( 'file.txt' ) ).toBe( '.txt' );
+                expect( getFileExtension( 'archive.tar.gz' ) ).toBe( '.gz' );
                 expect( getFileExtension( 'noextensionfile' ) ).toBe( '' );
-                expect( getFileExtension( 'filewithdot.' ) ).toBe( '' );
-                expect( getFileExtension( '.hiddenfile' ) ).toBe( '' );
+                expect( getFileExtension( 'filewithdot.' ) ).toBe( '.' );
+                expect( getFileExtension( '.hiddenfile' ) ).toBe( '.hiddenfile' );
+                expect( getFileExtension( '' ) ).toBe( '' );
             }
             );
 
