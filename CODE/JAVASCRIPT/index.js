@@ -2041,7 +2041,7 @@ export function getCapitalLongitudeFromCountryCode(
 
 // ~~
 
-function getContinentCodeFromCountryCode(
+export function getContinentCodeFromCountryCode(
     countryCode
     )
 {
