@@ -36,7 +36,8 @@ import
         getUuidFromTuid,
         setDefaultLanguageCode,
         setCountryCode,
-        setLanguageCode
+        setLanguageCode,
+        CappedMap
     }
     from '../index';
 
@@ -46,6 +47,57 @@ describe(
     'base',
     () =>
     {
+        test(
+            'CappedMap',
+            () =>
+            {
+                let cappedMap = new CappedMap( 3 );
+
+                cappedMap.set( 'key1', 'Element 1' );
+                cappedMap.set( 'key2', 'Element 2' );
+                cappedMap.set( 'key3', 'Element 3' );
+
+                expect( cappedMap.has( 'key1' ) ).toBe( true );
+                expect( cappedMap.has( 'key4' ) ).toBe( false );
+
+                expect( cappedMap.get( 'key1' ) ).toBe( 'Element 1' );
+                expect( cappedMap.get( 'key2' ) ).toBe( 'Element 2' );
+                expect( cappedMap.get( 'key3' ) ).toBe( 'Element 3' );
+
+                cappedMap.set( 'key4', 'Element 4' );
+
+                expect( cappedMap.has( 'key1' ) ).toBe( false );
+                expect( cappedMap.has( 'key4' ) ).toBe( true );
+
+                expect( cappedMap.get( 'key1', 'not found' ) ).toBe( 'not found' );
+                expect( cappedMap.get( 'key2' ) ).toBe( 'Element 2' );
+                expect( cappedMap.get( 'key3' ) ).toBe( 'Element 3' );
+                expect( cappedMap.get( 'key4' ) ).toBe( 'Element 4' );
+
+                cappedMap.clear();
+                expect( cappedMap.has( 'key2' ) ).toBe( false );
+                expect( cappedMap.has( 'key3' ) ).toBe( false );
+                expect( cappedMap.has( 'key4' ) ).toBe( false );
+
+                cappedMap = new CappedMap( 2 );
+
+                cappedMap.set( 'key1', 'Element 1' );
+                cappedMap.set( 'key2', 'Element 2' );
+
+                expect( cappedMap.get( 'key1' ) ).toBe( 'Element 1' );
+
+                cappedMap.set( 'key3', 'Element 3' );
+
+                expect( cappedMap.get( 'key2', 'not found' ) ).toBe( 'not found' );
+                expect( cappedMap.get( 'key1' ) ).toBe( 'Element 1' );
+                expect( cappedMap.get( 'key3' ) ).toBe( 'Element 3' );
+
+                expect( cappedMap.has( 'key1' ) ).toBe( true );
+                expect( cappedMap.has( 'key2' ) ).toBe( false );
+                expect( cappedMap.has( 'key3' ) ).toBe( true );
+            }
+            );
+
         test(
             'getQuotedText',
             () =>
@@ -92,12 +144,12 @@ describe(
             {
                 setLanguageCode( 'en' );
                 expect( getFormattedNumberText( 1234567.89 ) ).toBe( '1,234,567.89' );
-                expect( getFormattedNumberText( 1234567.89, 'currency' ) ).toBe( '$1,234,567.89' );
+                expect( getFormattedNumberText( 1234567.89, 'currency', 'USD' ) ).toBe( '$1,234,567.89' );
                 expect( getFormattedNumberText( 1234567.89, 'percent' ) ).toBe( '123,456,789%' );
 
                 setLanguageCode( 'fr' );
                 expect( getFormattedNumberText( 1234567.89 ) ).toBe( '1 234 567,89' );
-                expect( getFormattedNumberText( 1234567.89, 'currency' ) ).toBe( '1 234 567,89 €' );
+                expect( getFormattedNumberText( 1234567.89, 'currency', 'EUR' ) ).toBe( '1 234 567,89 €' );
                 expect( getFormattedNumberText( 0.89, 'percent' ) ).toBe( '89 %' );
             }
             );
@@ -109,14 +161,20 @@ describe(
                 let date = new Date( '2024-08-08' );
 
                 setLanguageCode( 'en' );
-                expect( getFormattedDateText( date ) ).toBe( '8/8/2024' );
-                expect( getFormattedDateText( date, 'full' ) ).toBe( 'Thursday, August 8, 2024' );
-                expect( getFormattedDateText( date, undefined, 'numeric', 'long', 'numeric', 'long' ) ).toBe( 'Thursday, August 8, 2024' );
+                expect( getFormattedDateText( date, undefined, 'GMT' ) ).toBe( '8/8/2024' );
+                expect( getFormattedDateText( date, undefined, 'UTC' ) ).toBe( '8/8/2024' );
+                expect( getFormattedDateText( date, 'full', 'GMT' ) ).toBe( 'Thursday, August 8, 2024' );
+                expect( getFormattedDateText( date, 'full', 'UTC' ) ).toBe( 'Thursday, August 8, 2024' );
+                expect( getFormattedDateText( date, undefined, 'GMT', 'numeric', 'long', 'numeric', 'long' ) ).toBe( 'Thursday, August 8, 2024' );
+                expect( getFormattedDateText( date, undefined, 'UTC', 'numeric', 'long', 'numeric', 'long' ) ).toBe( 'Thursday, August 8, 2024' );
 
                 setLanguageCode( 'fr' );
-                expect( getFormattedDateText( date ) ).toBe( '08/08/2024' );
-                expect( getFormattedDateText( date, 'full' ) ).toBe( 'jeudi 8 août 2024' );
-                expect( getFormattedDateText( date, undefined, 'numeric', 'long', 'numeric', 'long' ) ).toBe( 'jeudi 8 août 2024' );
+                expect( getFormattedDateText( date, undefined, 'GMT' ) ).toBe( '08/08/2024' );
+                expect( getFormattedDateText( date, undefined, 'UTC' ) ).toBe( '08/08/2024' );
+                expect( getFormattedDateText( date, 'full', 'GMT' ) ).toBe( 'jeudi 8 août 2024' );
+                expect( getFormattedDateText( date, 'full', 'UTC' ) ).toBe( 'jeudi 8 août 2024' );
+                expect( getFormattedDateText( date, undefined, 'GMT', 'numeric', 'long', 'numeric', 'long' ) ).toBe( 'jeudi 8 août 2024' );
+                expect( getFormattedDateText( date, undefined, 'UTC', 'numeric', 'long', 'numeric', 'long' ) ).toBe( 'jeudi 8 août 2024' );
             }
             );
 
@@ -127,16 +185,30 @@ describe(
                 let time = new Date( '2024-08-08T14:30:00Z' );
 
                 setLanguageCode( 'en' );
-                expect( getFormattedTimeText( time ) ).toBe( '2:30 PM' );
-                expect( getFormattedTimeText( time, 'full' ) ).toBe( '2:30:00 PM GMT+0' );
-                expect( getFormattedTimeText( time, undefined, '2-digit', '2-digit', '2-digit', 'UTC' ) ).toBe( '14:30:00' );
+                expect( getFormattedTimeText( time, 'short', 'GMT' ) ).toBe( '2:30 PM' );
+                expect( getFormattedTimeText( time, 'short', 'UTC' ) ).toBe( '2:30 PM' );
+                expect( getFormattedTimeText( time, 'medium', 'GMT' ) ).toBe( '2:30:00 PM' );
+                expect( getFormattedTimeText( time, 'medium', 'UTC' ) ).toBe( '2:30:00 PM' );
+                expect( getFormattedTimeText( time, 'long', 'GMT' ) ).toBe( '2:30:00 PM UTC' );
+                expect( getFormattedTimeText( time, 'long', 'UTC' ) ).toBe( '2:30:00 PM UTC' );
+                expect( getFormattedTimeText( time, 'full', 'GMT' ) ).toBe( '2:30:00 PM Coordinated Universal Time' );
+                expect( getFormattedTimeText( time, 'full', 'UTC' ) ).toBe( '2:30:00 PM Coordinated Universal Time' );
+                expect( getFormattedTimeText( time, undefined, 'UTC', '2-digit', '2-digit', '2-digit' ) ).toBe( '02:30:00 PM' );
 
                 setLanguageCode( 'fr' );
-                expect( getFormattedTimeText( time ) ).toBe( '14:30' );
-                expect( getFormattedTimeText( time, 'full' ) ).toBe( '14:30:00 UTC' );
-                expect( getFormattedTimeText( time, undefined, '2-digit', '2-digit', '2-digit', 'UTC' ) ).toBe( '14:30:00' );
+                expect( getFormattedTimeText( time, 'short', 'GMT' ) ).toBe( '14:30' );
+                expect( getFormattedTimeText( time, 'short', 'UTC' ) ).toBe( '14:30' );
+                expect( getFormattedTimeText( time, 'medium', 'GMT' ) ).toBe( '14:30:00' );
+                expect( getFormattedTimeText( time, 'medium', 'UTC' ) ).toBe( '14:30:00' );
+                expect( getFormattedTimeText( time, 'long', 'GMT' ) ).toBe( '14:30:00 UTC' );
+                expect( getFormattedTimeText( time, 'long', 'UTC' ) ).toBe( '14:30:00 UTC' );
+                expect( getFormattedTimeText( time, 'full', 'GMT' ) ).toBe( '14:30:00 temps universel coordonné' );
+                expect( getFormattedTimeText( time, 'full', 'UTC' ) ).toBe( '14:30:00 temps universel coordonné' );
+                expect( getFormattedTimeText( time, undefined, 'GMT', '2-digit', '2-digit', '2-digit' ) ).toBe( '14:30:00' );
+                expect( getFormattedTimeText( time, undefined, 'UTC', '2-digit', '2-digit', '2-digit' ) ).toBe( '14:30:00' );
             }
             );
+
 
         test(
             'getFormattedCountryName',

@@ -45,6 +45,80 @@ export const
     valueExpression = /^(.*?)([<=>]+)(.*)$/,
     invalidCharacterExpression = /[^\p{L}\p{N}\-_.]/gu;
 
+// -- TYPES
+
+export class CappedMap
+{
+    // -- CONSTRUCTORS
+
+    constructor(
+        maximumElementCount
+        )
+    {
+        this.maximumElementCount = maximumElementCount;
+        this.elementByKeyMap = new Map();
+    }
+
+    // -- INQUIRIES
+
+    has(
+        key
+        )
+    {
+        return this.elementByKeyMap.has( key );
+    }
+
+    // -- OPERATIONS
+
+    clear(
+        )
+    {
+        this.elementByKeyMap.clear();
+    }
+
+    // ~~
+
+    set(
+        key,
+        element
+        )
+    {
+        if ( this.elementByKeyMap.has( key ) )
+        {
+            this.elementByKeyMap.delete( key );
+        }
+        else if ( this.elementByKeyMap.size >= this.maximumElementCount )
+        {
+            let oldestKey = this.elementByKeyMap.keys().next().value;
+            this.elementByKeyMap.delete( oldestKey );
+        }
+
+        this.elementByKeyMap.set( key, element );
+    }
+
+    // ~~
+
+    get(
+        key,
+        defaultValue = undefined
+        )
+    {
+        if ( !this.elementByKeyMap.has( key ) )
+        {
+            return defaultValue;
+        }
+        else
+        {
+            let element = this.elementByKeyMap.get( key );
+
+            this.elementByKeyMap.delete( key );
+            this.elementByKeyMap.set( key, element );
+
+            return element;
+        }
+    }
+}
+
 // -- VARIABLES
 
 export let
@@ -1384,16 +1458,33 @@ export function getDateTimeSuffix(
 
 export function getFormattedNumberText(
     number,
-    style = undefined
+    style = undefined,
+    currency = undefined
     )
 {
-    let numberFormat
-        = new Intl.NumberFormat(
-              languageTag,
-              {
-                  style
-              }
-              );
+    let numberFormat;
+
+    if ( style === 'currency' )
+    {
+        numberFormat
+            = new Intl.NumberFormat(
+                  languageTag,
+                  {
+                      style,
+                      currency
+                  }
+                  );
+    }
+    else
+    {
+        numberFormat
+            = new Intl.NumberFormat(
+                  languageTag,
+                  {
+                      style
+                  }
+                  );
+    }
 
     return numberFormat.format( number );
 }
@@ -1403,6 +1494,7 @@ export function getFormattedNumberText(
 export function getFormattedDateText(
     date,
     style = undefined,
+    timeZone = undefined,
     yearFormat = undefined,
     monthFormat = undefined,
     dayFormat = undefined,
@@ -1417,7 +1509,8 @@ export function getFormattedDateText(
                   year: yearFormat,
                   month: monthFormat,
                   day: dayFormat,
-                  weekday: weekdayFormat
+                  weekday: weekdayFormat,
+                  timeZone
               }
               );
 
@@ -1429,10 +1522,10 @@ export function getFormattedDateText(
 export function getFormattedTimeText(
     time,
     style = undefined,
+    timeZone = undefined,
     hourFormat = undefined,
     minuteFormat = undefined,
-    secondFormat = undefined,
-    timeZone = undefined
+    secondFormat = undefined
     )
 {
     let dateTimeFormat
