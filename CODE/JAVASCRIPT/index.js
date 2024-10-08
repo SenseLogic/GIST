@@ -436,20 +436,20 @@ export function isElement(
 // ~~
 
 export function getMapByCode(
-    array,
+    elementArray,
     default_value = null
     )
 {
-    if ( array )
+    if ( elementArray )
     {
-        let map = {};
+        let elementMap = {};
 
-        for ( let element of array )
+        for ( let element of elementArray )
         {
-            map[ element.code ] = element;
+            elementMap[ element.code ] = element;
         }
 
-        return map;
+        return elementMap;
     }
     else
     {
@@ -460,20 +460,20 @@ export function getMapByCode(
 // ~~
 
 export function getMapById(
-    array,
+    elementArray,
     default_value = null
     )
 {
-    if ( array )
+    if ( elementArray )
     {
-        let map = {};
+        let elementMap = {};
 
-        for ( let element of array )
+        for ( let element of elementArray )
         {
-            map[ element.id ] = element;
+            elementMap[ element.id ] = element;
         }
 
-        return map;
+        return elementMap;
     }
     else
     {
@@ -484,21 +484,21 @@ export function getMapById(
 // ~~
 
 export function getMap(
-    array,
+    elementArray,
     keyName = 'id',
     default_value = null
     )
 {
-    if ( array )
+    if ( elementArray )
     {
-        let map = {};
+        let elementMap = {};
 
-        for ( let element of array )
+        for ( let element of elementArray )
         {
-            map[ element[ keyName ] ] = element;
+            elementMap[ element[ keyName ] ] = element;
         }
 
-        return map;
+        return elementMap;
     }
     else
     {
@@ -554,7 +554,7 @@ export function getNaturalTextComparison(
     secondText
     )
 {
-    return firstText.localeCompare( second_text, undefined, { numeric : true } );
+    return firstText.localeCompare( secondText, undefined, { numeric : true } );
 }
 
 // ~~
@@ -723,7 +723,7 @@ export function getUnaccentedCharacter(
         }
         case 'ä':
         {
-            if ( languageCode == 'de' )
+            if ( languageCode === 'de' )
             {
                 return 'ae';
             }
@@ -754,7 +754,7 @@ export function getUnaccentedCharacter(
         }
         case 'ö':
         {
-            if ( languageCode == 'de' )
+            if ( languageCode === 'de' )
             {
                 return 'oe';
             }
@@ -775,7 +775,7 @@ export function getUnaccentedCharacter(
         }
         case 'ü':
         {
-            if ( languageCode == 'de' )
+            if ( languageCode === 'de' )
             {
                 return 'ue';
             }
@@ -804,7 +804,7 @@ export function getUnaccentedCharacter(
         }
         case 'Ä':
         {
-            if ( languageCode == 'de' )
+            if ( languageCode === 'de' )
             {
                 if ( nextCharacterIsLowerCase )
                 {
@@ -842,7 +842,7 @@ export function getUnaccentedCharacter(
         }
         case 'Ö':
         {
-            if ( languageCode == 'de' )
+            if ( languageCode === 'de' )
             {
                 if ( nextCharacterIsLowerCase )
                 {
@@ -870,7 +870,7 @@ export function getUnaccentedCharacter(
         }
         case 'Ü':
         {
-            if ( languageCode == 'de' )
+            if ( languageCode === 'de' )
             {
                 if ( nextCharacterIsLowerCase )
                 {
@@ -1603,7 +1603,7 @@ export function getFormattedCurrencyName(
 // ~~
 
 export function getFormattedArrayText(
-    array,
+    elementArray,
     style = undefined,
     type = undefined
     )
@@ -1617,7 +1617,7 @@ export function getFormattedArrayText(
               }
               );
 
-    return listFormat.format( array );
+    return listFormat.format( elementArray );
 }
 
 // ~~
@@ -3417,7 +3417,7 @@ export function matchesValueSpecifier(
                      || ( operator === '>'
                           && value > otherValue )
                      || ( operator === '<>'
-                          && value != otherValue ) )
+                          && value !== otherValue ) )
                 {
                     return true;
                 }
@@ -3504,7 +3504,7 @@ export function getTranslatedText(
     multilingualText,
     valueByNameMap,
     languageTag_,
-    defaultLanguageTag = 'en'
+    defaultLanguageTag
     )
 {
     if ( languageTag_ !== undefined
@@ -3691,12 +3691,13 @@ export function getMultilingualText(
 export function getLocalizedText(
     text,
     valueByNameMap,
-    languageTag
+    languageTag,
+    defaultLanguageTag
     )
 {
     if ( isMultilingualText( text ) )
     {
-        return getTranslatedText( text, valueByNameMap, languageTag );
+        return getTranslatedText( text, valueByNameMap, languageTag, defaultLanguageTag );
     }
     else
     {
@@ -3709,12 +3710,13 @@ export function getLocalizedText(
 export function getLocalizedTextBySlug(
     textSlug,
     valueByNameMap,
-    languageTag
+    languageTag,
+    defaultLanguageTag
     )
 {
     if ( textBySlugMap.has( textSlug ) )
     {
-        return getLocalizedText( textBySlugMap.get( textSlug ), valueByNameMap, languageTag );
+        return getLocalizedText( textBySlugMap.get( textSlug ), valueByNameMap, languageTag, defaultLanguageTag );
     }
     else
     {
@@ -3795,13 +3797,13 @@ export function defineColorTag(
 // ~~
 
 export function getProcessedText(
-    text
+    text,
+    valueByNameMap,
+    languageTag,
+    defaultLanguageTag
     )
 {
-    if ( !isString( text ) )
-    {
-        text = getLocalizedText( text );
-    }
+    text = getLocalizedText( text, valueByNameMap, languageTag, defaultLanguageTag );
 
     for ( let processedDualTag of processedDualTagArray )
     {
@@ -3830,13 +3832,13 @@ export function getProcessedText(
 // ~~
 
 export function getProcessedMultilineText(
-    text
+    text,
+    valueByNameMap,
+    languageTag,
+    defaultLanguageTag
     )
 {
-    if ( !isString( text ) )
-    {
-        text = getLocalizedText( text );
-    }
+    text = getLocalizedText( text, valueByNameMap, languageTag, defaultLanguageTag );
 
     let processedLineTagCount = processedLineTagArray.length;
 
@@ -3873,18 +3875,21 @@ export function getProcessedMultilineText(
         text = lineArray.join( '\n' );
     }
 
-    return getProcessedText( text );
+    return getProcessedText( text, valueByNameMap, languageTag, defaultLanguageTag );
 }
 
 // ~~
 
 export function getProcessedTextBySlug(
-    textSlug
+    textSlug,
+    valueByNameMap,
+    languageTag,
+    defaultLanguageTag
     )
 {
     if ( textBySlugMap.has( textSlug ) )
     {
-        return getProcessedText( textBySlugMap.get( textSlug ) );
+        return getProcessedText( textBySlugMap.get( textSlug ), valueByNameMap, languageTag, defaultLanguageTag );
     }
     else
     {
@@ -3897,12 +3902,15 @@ export function getProcessedTextBySlug(
 // ~~
 
 export function getProcessedMultilineTextBySlug(
-    textSlug
+    textSlug,
+    valueByNameMap,
+    languageTag,
+    defaultLanguageTag
     )
 {
     if ( textBySlugMap.has( textSlug ) )
     {
-        return getProcessedMultilineText( textBySlugMap.get( textSlug ) );
+        return getProcessedMultilineText( textBySlugMap.get( textSlug ), valueByNameMap, languageTag, defaultLanguageTag );
     }
     else
     {
