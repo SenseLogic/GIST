@@ -602,6 +602,7 @@ describe(
                 defineTag( '((', '<a class="link" href="' );
                 defineTag( ')(', '" target="_blank">' );
                 defineTag( '))', '</a>' );
+                defineTag( '¬', '' );
 
                 defineColorTag( 'red' );
                 defineColorTag( 'green', '#0F0' );
