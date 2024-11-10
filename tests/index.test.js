@@ -583,6 +583,10 @@ describe(
                 defineLineTag( '  * ', '<div class="paragraph bullet-2">', '</div>' );
                 defineLineTag( '    * ', '<div class="paragraph bullet-3">', '</div>' );
                 defineLineTag( '      * ', '<div class="paragraph bullet-4">', '</div>' );
+                defineLineTag( '# ', '<div class="paragraph numbered-bullet-1"><div>', '</div></div>', '</div><div>' );
+                defineLineTag( '  # ', '<div class="paragraph numbered-bullet-2"><div>', '</div></div>', '</div><div>' );
+                defineLineTag( '    # ', '<div class="paragraph numbered-bullet-3"><div>', '</div></div>', '</div><div>' );
+                defineLineTag( '      # ', '<div class="paragraph numbered-bullet-4"><div>', '</div></div>', '</div><div>' );
                 defineLineTag( '', '<div class="paragraph">', '</div>' );
 
                 defineDualTag( '**', '<b>', '</b>' );
@@ -609,6 +613,10 @@ describe(
                 processedText = getProcessedMultilineText( '! **bold**\n!! %%italics%%\n__underlined__' );
                 console.log( processedText );
                 expect( processedText ).toBe( '<div class="paragraph title-1"><b>bold</b></div>\n<div class="paragraph title-2"><i>italics</i></div>\n<div class="paragraph"><u>underlined</u></div>' );
+
+                processedText = getProcessedMultilineText( '- dash\n  - dash\n* bullet\n  * bullet\n# 1. numbered bullet\n  # a. numbered bullet' );
+                console.log( processedText );
+                expect( processedText ).toBe( '<div class="paragraph dash-1">dash</div>\n<div class="paragraph dash-2">dash</div>\n<div class="paragraph bullet-1">bullet</div>\n<div class="paragraph bullet-2">bullet</div>\n<div class="paragraph numbered-bullet-1"><div>1.</div><div>numbered bullet</div></div>\n<div class="paragraph numbered-bullet-2"><div>a.</div><div>numbered bullet</div></div>' );
             }
             );
         }

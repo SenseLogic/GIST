@@ -3731,14 +3731,16 @@ export function getLocalizedTextBySlug(
 export function defineLineTag(
     name,
     openingDefinition,
-    closingDefinition
+    closingDefinition,
+    splittingDefinition = ''
     )
 {
     processedLineTagArray.push(
         {
             name,
             openingDefinition,
-            closingDefinition
+            closingDefinition,
+            splittingDefinition
         }
         );
 }
@@ -3862,10 +3864,35 @@ export function getProcessedMultilineText(
             {
                 if ( line.startsWith( processedLineTag.name ) )
                 {
-                    lineArray[ lineIndex ]
-                        = processedLineTag.openingDefinition
-                          + line.slice( processedLineTag.name.length )
-                          + processedLineTag.closingDefinition;
+                    if ( processedLineTag.splittingDefinition === '' )
+                    {
+                        lineArray[ lineIndex ]
+                            = processedLineTag.openingDefinition
+                              + line.slice( processedLineTag.name.length )
+                              + processedLineTag.closingDefinition;
+                    }
+                    else
+                    {
+                        let spaceCharacterIndex = line.indexOf( ' ', processedLineTag.name.length );
+
+                        if ( spaceCharacterIndex >= 0 )
+                        {
+                            lineArray[ lineIndex ]
+                                = processedLineTag.openingDefinition
+                                  + line.slice( processedLineTag.name.length, spaceCharacterIndex )
+                                  + processedLineTag.splittingDefinition
+                                  + line.slice( spaceCharacterIndex + 1 )
+                                  + processedLineTag.closingDefinition;
+                        }
+                        else
+                        {
+                            lineArray[ lineIndex ]
+                                = processedLineTag.openingDefinition
+                                  + line.slice( processedLineTag.name.length )
+                                  + processedLineTag.splittingDefinition
+                                  + processedLineTag.closingDefinition;
+                        }
+                    }
 
                     break;
                 }
