@@ -583,10 +583,10 @@ describe(
                 defineLineTag( '  * ', '<div class="paragraph bullet-2">', '</div>' );
                 defineLineTag( '    * ', '<div class="paragraph bullet-3">', '</div>' );
                 defineLineTag( '      * ', '<div class="paragraph bullet-4">', '</div>' );
-                defineLineTag( '# ', '<div class="paragraph numbered-bullet-1"><div>', '</div></div>', '</div><div>' );
-                defineLineTag( '  # ', '<div class="paragraph numbered-bullet-2"><div>', '</div></div>', '</div><div>' );
-                defineLineTag( '    # ', '<div class="paragraph numbered-bullet-3"><div>', '</div></div>', '</div><div>' );
-                defineLineTag( '      # ', '<div class="paragraph numbered-bullet-4"><div>', '</div></div>', '</div><div>' );
+                defineLineTag( '# ', '<div class="paragraph numbered-bullet-1"><div>', '</div><div>', '</div></div>' );
+                defineLineTag( '  # ', '<div class="paragraph numbered-bullet-2"><div>', '</div><div>', '</div></div>' );
+                defineLineTag( '    # ', '<div class="paragraph numbered-bullet-3"><div>', '</div><div>', '</div></div>' );
+                defineLineTag( '      # ', '<div class="paragraph numbered-bullet-4"><div>', '</div><div>', '</div></div>' );
                 defineLineTag( '', '<div class="paragraph">', '</div>' );
 
                 defineDualTag( '**', '<b>', '</b>' );

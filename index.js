@@ -3731,16 +3731,22 @@ export function getLocalizedTextBySlug(
 export function defineLineTag(
     name,
     openingDefinition,
-    closingDefinition,
-    splittingDefinition = ''
+    innerDefinition,
+    closingDefinition = ''
     )
 {
+    if ( closingDefinition === '' )
+    {
+        closingDefinition = innerDefinition;
+        innerDefinition = '';
+    }
+
     processedLineTagArray.push(
         {
             name,
             openingDefinition,
-            closingDefinition,
-            splittingDefinition
+            innerDefinition,
+            closingDefinition
         }
         );
 }
@@ -3864,7 +3870,7 @@ export function getProcessedMultilineText(
             {
                 if ( line.startsWith( processedLineTag.name ) )
                 {
-                    if ( processedLineTag.splittingDefinition === '' )
+                    if ( processedLineTag.innerDefinition === '' )
                     {
                         lineArray[ lineIndex ]
                             = processedLineTag.openingDefinition
@@ -3880,7 +3886,7 @@ export function getProcessedMultilineText(
                             lineArray[ lineIndex ]
                                 = processedLineTag.openingDefinition
                                   + line.slice( processedLineTag.name.length, spaceCharacterIndex )
-                                  + processedLineTag.splittingDefinition
+                                  + processedLineTag.innerDefinition
                                   + line.slice( spaceCharacterIndex + 1 )
                                   + processedLineTag.closingDefinition;
                         }
@@ -3889,7 +3895,7 @@ export function getProcessedMultilineText(
                             lineArray[ lineIndex ]
                                 = processedLineTag.openingDefinition
                                   + line.slice( processedLineTag.name.length )
-                                  + processedLineTag.splittingDefinition
+                                  + processedLineTag.innerDefinition
                                   + processedLineTag.closingDefinition;
                         }
                     }
